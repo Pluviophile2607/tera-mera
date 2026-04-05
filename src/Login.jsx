@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import { apiUrl } from './lib/api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Login = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch('/api/login', {
+      const response = await fetch(apiUrl('/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -31,7 +32,7 @@ const Login = () => {
       }
 
       login(data.user);
-      navigate('/');
+      navigate(data.user?.isAdmin ? '/admin' : '/');
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
