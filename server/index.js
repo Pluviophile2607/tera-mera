@@ -389,6 +389,24 @@ const adminRateLimit = createRateLimiter({
   scope: 'user',
 });
 
+app.get('/', (_request, response) => {
+  response.json({
+    ok: true,
+    name: 'TeraMera API',
+    message: 'Backend is running.',
+    docsHint: 'Use /api/health to verify database connectivity.',
+  });
+});
+
+app.get('/api', (_request, response) => {
+  response.json({
+    ok: true,
+    name: 'TeraMera API',
+    message: 'API root is running.',
+    health: '/api/health',
+  });
+});
+
 app.get('/api/health', async (_request, response) => {
   try {
     await connectToDatabase();
