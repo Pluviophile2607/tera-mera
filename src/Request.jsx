@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { useAuth } from './context/AuthContext';
+import { apiUrl } from './lib/api';
 
 const Request = () => {
   const { user, isAuthenticated } = useAuth();
@@ -22,8 +23,6 @@ const Request = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  const API_BASE = 'http://127.0.0.1:5000/api';
-
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login?redirect=mera');
@@ -36,7 +35,7 @@ const Request = () => {
     setError('');
 
     try {
-      const res = await fetch(`${API_BASE}/listings`, {
+      const res = await fetch(apiUrl('/listings'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

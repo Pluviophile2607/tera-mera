@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { useAuth } from './context/AuthContext';
+import { apiUrl } from './lib/api';
 
 const QuickActionCard = ({ title, description, icon, color, textColor, onClick }) => (
   <button 
@@ -111,8 +112,6 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const API_BASE = 'http://127.0.0.1:5000/api';
-
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login?redirect=dashboard');
@@ -123,12 +122,12 @@ const Dashboard = () => {
       setLoading(true);
       try {
         const [impactRes, activityRes, myListingsRes, statsRes, collectedRes, claimsRes] = await Promise.all([
-          fetch(`${API_BASE}/users/${user.id}/impact`),
-          fetch(`${API_BASE}/activities/recent`),
-          fetch(`${API_BASE}/users/${user.id}/listings`),
-          fetch(`${API_BASE}/stats/neighborhood/${encodeURIComponent(user.area)}`),
-          fetch(`${API_BASE}/users/${user.id}/collected`),
-          fetch(`${API_BASE}/users/${user.id}/claim-requests`)
+          fetch(apiUrl(`/users/${user.id}/impact`)),
+          fetch(apiUrl('/activities/recent')),
+          fetch(apiUrl(`/users/${user.id}/listings`)),
+          fetch(apiUrl(`/stats/neighborhood/${encodeURIComponent(user.area)}`)),
+          fetch(apiUrl(`/users/${user.id}/collected`)),
+          fetch(apiUrl(`/users/${user.id}/claim-requests`))
         ]);
 
         if (impactRes.ok) setImpact(await impactRes.json());

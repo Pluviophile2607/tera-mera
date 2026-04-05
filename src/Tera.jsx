@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { useAuth } from './context/AuthContext';
+import { apiUrl } from './lib/api';
 
 const Tera = () => {
   const { user, isAuthenticated } = useAuth();
@@ -32,8 +33,6 @@ const Tera = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  const API_BASE = 'http://127.0.0.1:5000/api';
-
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login?redirect=tera');
@@ -42,7 +41,7 @@ const Tera = () => {
 
     const fetchImpact = async () => {
       try {
-        const res = await fetch(`${API_BASE}/users/${user.id}/impact`);
+        const res = await fetch(apiUrl(`/users/${user.id}/impact`));
         if (res.ok) {
           const data = await res.json();
           setImpact(data);
@@ -86,9 +85,9 @@ const Tera = () => {
           ctx.drawImage(img, 0, 0, width, height);
           resolve(canvas.toDataURL('image/jpeg', 0.6));
         };
-        img.onerror = (err) => reject(new Error('Failed to load image for compression'));
+        img.onerror = () => reject(new Error('Failed to load image for compression'));
       };
-      reader.onerror = (err) => reject(new Error('Failed to read file'));
+      reader.onerror = () => reject(new Error('Failed to read file'));
     });
   };
 
@@ -142,7 +141,7 @@ const Tera = () => {
     setError('');
 
     try {
-      const res = await fetch(`${API_BASE}/listings`, {
+      const res = await fetch(apiUrl('/listings'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -166,7 +165,7 @@ const Tera = () => {
         });
         setImagePreviews([]);
         // Re-fetch impact
-        const impactRes = await fetch(`${API_BASE}/users/${user.id}/impact`);
+        const impactRes = await fetch(apiUrl(`/users/${user.id}/impact`));
         if (impactRes.ok) {
           const impactData = await impactRes.json();
           setImpact(impactData);

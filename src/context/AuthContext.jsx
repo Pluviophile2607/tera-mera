@@ -1,12 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { apiUrl } from '../lib/api';
 
 const AuthContext = createContext(null);
 const ADMIN_EMAIL = 'zedinfo@zed.org';
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
   const normalizeUser = (userData) => {
     if (!userData) return null;
 
@@ -16,19 +14,18 @@ export const AuthProvider = ({ children }) => {
       isAdmin: Boolean(userData.isAdmin) || normalizedEmail === ADMIN_EMAIL,
     };
   };
-
-  useEffect(() => {
-    // Check if user is logged in on mount
+  const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('tera_user');
-    if (savedUser) {
-      try {
-        setUser(normalizeUser(JSON.parse(savedUser)));
-      } catch (e) {
-        localStorage.removeItem('tera_user');
-      }
+    if (!savedUser) return null;
+
+    try {
+      return normalizeUser(JSON.parse(savedUser));
+    } catch {
+      localStorage.removeItem('tera_user');
+      return null;
     }
-    setLoading(false);
-  }, []);
+  });
+  const [loading] = useState(false);
 
   const login = (userData) => {
     const normalizedUser = normalizeUser(userData);
@@ -36,9 +33,14 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('tera_user', JSON.stringify(normalizedUser));
   };
 
-  const logout = () => {
+  const logout = async () => {
     setUser(null);
     localStorage.removeItem('tera_user');
+    try {
+      await fetch(apiUrl('/logout'), { method: 'POST' });
+    } catch {
+      // Ignore logout network failures because local client state is already cleared.
+    }
   };
 
   return (

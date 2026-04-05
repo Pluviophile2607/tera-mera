@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import { apiUrl } from './lib/api';
 
 const navItems = [
   { name: 'Dashboard', icon: 'grid_view' },
@@ -69,23 +70,21 @@ const Admin = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [inspectedItem, setInspectedItem] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-  const [loading, setLoading] = useState(true);
 
   const { logout } = useAuth();
-  const API_BASE = 'http://127.0.0.1:5000/api';
 
   const fetchData = async () => {
     try {
       const [statsRes, flagsRes, activitiesRes, listingsRes, historyRes, matchRes, usersRes, analyticsRes, claimsRes] = await Promise.all([
-        fetch(`${API_BASE}/admin/stats`),
-        fetch(`${API_BASE}/admin/flags`),
-        fetch(`${API_BASE}/admin/activities`),
-        fetch(`${API_BASE}/admin/listings/pending`),
-        fetch(`${API_BASE}/admin/listings`),
-        fetch(`${API_BASE}/admin/matchmaking`),
-        fetch(`${API_BASE}/admin/users`),
-        fetch(`${API_BASE}/admin/analytics`),
-        fetch(`${API_BASE}/admin/claim-requests`)
+        fetch(apiUrl('/admin/stats')),
+        fetch(apiUrl('/admin/flags')),
+        fetch(apiUrl('/admin/activities')),
+        fetch(apiUrl('/admin/listings/pending')),
+        fetch(apiUrl('/admin/listings')),
+        fetch(apiUrl('/admin/matchmaking')),
+        fetch(apiUrl('/admin/users')),
+        fetch(apiUrl('/admin/analytics')),
+        fetch(apiUrl('/admin/claim-requests'))
       ]);
 
       const [statsRaw, flagsRaw, actsRaw, listingsRaw, historyRaw, matchRaw, usersRaw, analyticsRaw, claimsRaw] = await Promise.all([
@@ -115,10 +114,8 @@ const Admin = () => {
         setSelectedUser(usersRaw.find(u => u.isBanned) || usersRaw[0]);
       }
       
-      setLoading(false);
     } catch (error) {
       console.error('Error fetching admin data:', error);
-      setLoading(false);
       showToast('Connection failed. Please check your backend connection.', 'error');
     }
   };
@@ -130,11 +127,13 @@ const Admin = () => {
 
   useEffect(() => {
     fetchData();
+    // Initial admin dashboard bootstrap.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleResolveFlag = async (id, action) => {
     try {
-      await fetch(`${API_BASE}/admin/flags/${id}/resolve`, {
+      await fetch(apiUrl(`/admin/flags/${id}/resolve`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action })
@@ -147,40 +146,40 @@ const Admin = () => {
 
   const handleApproveListing = async (id) => {
     try {
-      await fetch(`${API_BASE}/admin/listings/${id}/approve`, { method: 'POST' });
+      await fetch(apiUrl(`/admin/listings/${id}/approve`), { method: 'POST' });
       fetchData();
       showToast('Item approved and published to the loop!');
-    } catch (err) {
+    } catch (_err) {
       showToast('Failed to approve item.', 'error');
     }
   };
 
   const handleRejectListing = async (id) => {
     try {
-      await fetch(`${API_BASE}/admin/listings/${id}/reject`, { method: 'POST' });
+      await fetch(apiUrl(`/admin/listings/${id}/reject`), { method: 'POST' });
       fetchData();
       showToast('Item rejected and removed from queue.', 'error');
-    } catch (err) {
+    } catch (_err) {
       showToast('Failed to reject listing.', 'error');
     }
   };
 
   const handleApproveClaim = async (id) => {
     try {
-      await fetch(`${API_BASE}/admin/claim-requests/${id}/approve`, { method: 'POST' });
+      await fetch(apiUrl(`/admin/claim-requests/${id}/approve`), { method: 'POST' });
       fetchData();
       showToast('Transfer authorized successfully!');
-    } catch (err) {
+    } catch (_err) {
       showToast('Failed to authorize transfer.', 'error');
     }
   };
 
   const handleRejectClaim = async (id) => {
     try {
-      await fetch(`${API_BASE}/admin/claim-requests/${id}/reject`, { method: 'POST' });
+      await fetch(apiUrl(`/admin/claim-requests/${id}/reject`), { method: 'POST' });
       fetchData();
       showToast('Claim request Declined.');
-    } catch (err) {
+    } catch (_err) {
       showToast('Failed to decline request.', 'error');
     }
   };
@@ -188,7 +187,7 @@ const Admin = () => {
   const handleMatch = async () => {
     if (!selectedItem || !selectedRequest) return;
     try {
-      await fetch(`${API_BASE}/admin/match`, {
+      await fetch(apiUrl('/admin/match'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ itemId: selectedItem, requestId: selectedRequest })
@@ -203,7 +202,7 @@ const Admin = () => {
 
   const handleBanUser = async (id) => {
     try {
-      await fetch(`${API_BASE}/admin/users/${id}/ban`, { method: 'POST' });
+      await fetch(apiUrl(`/admin/users/${id}/ban`), { method: 'POST' });
       fetchData();
     } catch (error) {
       console.error('Error banning user:', error);
@@ -212,7 +211,7 @@ const Admin = () => {
 
   const handleUnbanUser = async (id) => {
     try {
-      await fetch(`${API_BASE}/admin/users/${id}/unban`, { method: 'POST' });
+      await fetch(apiUrl(`/admin/users/${id}/unban`), { method: 'POST' });
       fetchData();
     } catch (error) {
       console.error('Error unbanning user:', error);

@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { useAuth } from './context/AuthContext';
+import { apiUrl } from './lib/api';
 
 const CategoryItem = ({ icon, label, active, onClick }) => (
   <button 
@@ -88,15 +89,13 @@ const Mera = () => {
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState('');
-  const [stats, setStats] = useState({ items: 1240, tons: 8.4, trust: 94 });
-
-  const API_BASE = 'http://127.0.0.1:5000/api';
+  const [stats] = useState({ items: 1240, tons: 8.4, trust: 94 });
 
   useEffect(() => {
     const fetchListings = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${API_BASE}/listings`);
+        const res = await fetch(apiUrl('/listings'));
         if (res.ok) setListings(await res.json());
       } catch (err) {
         console.error('Error fetching listings:', err);
@@ -108,7 +107,7 @@ const Mera = () => {
     const fetchUserRequests = async () => {
       if (!isAuthenticated || !user?.id) return;
       try {
-        const res = await fetch(`${API_BASE}/users/${user.id}/claim-requests`);
+        const res = await fetch(apiUrl(`/users/${user.id}/claim-requests`));
         if (res.ok) {
           const data = await res.json();
           setUserRequests(data.map(req => req.listingId._id || req.listingId));
@@ -120,7 +119,7 @@ const Mera = () => {
 
     fetchListings();
     fetchUserRequests();
-  }, [API_BASE, isAuthenticated, user?.id]);
+  }, [isAuthenticated, user?.id]);
 
   const filteredListings = listings.filter(item => {
     const matchesCategory = category === 'All' || item.category === category;
@@ -135,7 +134,7 @@ const Mera = () => {
     }
 
     try {
-      const res = await fetch(`${API_BASE}/listings/${id}/claim`, {
+      const res = await fetch(apiUrl(`/listings/${id}/claim`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id, message: "Interested in this item." })

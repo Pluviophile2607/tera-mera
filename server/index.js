@@ -1,7 +1,7 @@
 import cors from 'cors';
 import crypto from 'node:crypto';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
 import dotenv from 'dotenv';
 import express from 'express';
@@ -20,6 +20,10 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const app = express();
 const port = Number(process.env.PORT) || 5000;
 const scrypt = promisify(crypto.scrypt);
+const SESSION_COOKIE_NAME = 'tera_session';
+const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7;
+const SESSION_SECRET = process.env.SESSION_SECRET || 'local-dev-session-secret';
+const rateLimitStores = new Map();
 
 app.use(cors());
 app.use(express.json({ limit: '100mb' }));
@@ -116,6 +120,22 @@ async function seedAdminData() {
   }
 }
 
+let initializationPromise;
+
+export async function initializeServer() {
+  if (!initializationPromise) {
+    initializationPromise = (async () => {
+      await connectToDatabase();
+      await seedAdminData();
+    })().catch((error) => {
+      initializationPromise = null;
+      throw error;
+    });
+  }
+
+  return initializationPromise;
+}
+
 async function hashPassword(password) {
   const salt = crypto.randomBytes(16).toString('hex');
   const derivedKey = await scrypt(password, salt, 64);
@@ -127,6 +147,247 @@ async function verifyPassword(password, hashedValue) {
   const derivedKey = await scrypt(password, salt, 64);
   return key === derivedKey.toString('hex');
 }
+
+function toBase64Url(input) {
+  return Buffer.from(input)
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/g, '');
+}
+
+function fromBase64Url(input) {
+  const base64 = input.replace(/-/g, '+').replace(/_/g, '/');
+  const padding = (4 - (base64.length % 4)) % 4;
+  return Buffer.from(`${base64}${'='.repeat(padding)}`, 'base64').toString('utf8');
+}
+
+function signSessionPayload(payload) {
+  return crypto.createHmac('sha256', SESSION_SECRET).update(payload).digest('base64url');
+}
+
+function createSessionToken(user) {
+  const payload = JSON.stringify({
+    id: user._id.toString(),
+    email: user.email,
+    isAdmin: Boolean(user.isAdmin),
+    exp: Date.now() + SESSION_TTL_MS,
+  });
+
+  return `${toBase64Url(payload)}.${signSessionPayload(payload)}`;
+}
+
+function verifySessionToken(token) {
+  try {
+    if (!token || !token.includes('.')) return null;
+
+    const [encodedPayload, signature] = token.split('.');
+    const payload = fromBase64Url(encodedPayload);
+    const expectedSignature = signSessionPayload(payload);
+    const providedSignature = Buffer.from(signature);
+    const validSignature = Buffer.from(expectedSignature);
+
+    if (providedSignature.length !== validSignature.length) {
+      return null;
+    }
+
+    if (!crypto.timingSafeEqual(providedSignature, validSignature)) {
+      return null;
+    }
+
+    const session = JSON.parse(payload);
+    if (!session.exp || session.exp < Date.now()) {
+      return null;
+    }
+
+    return session;
+  } catch {
+    return null;
+  }
+}
+
+function parseCookies(headerValue = '') {
+  return headerValue.split(';').reduce((cookies, part) => {
+    const [rawName, ...rawValue] = part.trim().split('=');
+    if (!rawName) return cookies;
+    cookies[rawName] = decodeURIComponent(rawValue.join('='));
+    return cookies;
+  }, {});
+}
+
+function setSessionCookie(res, token) {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const parts = [
+    `${SESSION_COOKIE_NAME}=${token}`,
+    'HttpOnly',
+    'Path=/',
+    'SameSite=Lax',
+    `Max-Age=${Math.floor(SESSION_TTL_MS / 1000)}`,
+  ];
+
+  if (isProduction) {
+    parts.push('Secure');
+  }
+
+  res.setHeader('Set-Cookie', parts.join('; '));
+}
+
+function clearSessionCookie(res) {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const parts = [
+    `${SESSION_COOKIE_NAME}=`,
+    'HttpOnly',
+    'Path=/',
+    'SameSite=Lax',
+    'Max-Age=0',
+  ];
+
+  if (isProduction) {
+    parts.push('Secure');
+  }
+
+  res.setHeader('Set-Cookie', parts.join('; '));
+}
+
+async function attachCurrentUser(req, _res, next) {
+  try {
+    const cookies = parseCookies(req.headers.cookie);
+    const token = cookies[SESSION_COOKIE_NAME];
+    const session = verifySessionToken(token);
+
+    if (!session?.id) {
+      req.currentUser = null;
+      return next();
+    }
+
+    await connectToDatabase();
+    const user = await User.findById(session.id);
+    req.currentUser = user || null;
+    return next();
+  } catch {
+    req.currentUser = null;
+    return next();
+  }
+}
+
+function requireAuth(req, res, next) {
+  if (!req.currentUser) {
+    return res.status(401).json({ message: 'Authentication required.' });
+  }
+
+  return next();
+}
+
+function requireAdmin(req, res, next) {
+  if (!req.currentUser) {
+    return res.status(401).json({ message: 'Authentication required.' });
+  }
+
+  if (!req.currentUser.isAdmin) {
+    return res.status(403).json({ message: 'Admin access required.' });
+  }
+
+  return next();
+}
+
+function requireSelfOrAdmin(req, res, next) {
+  if (!req.currentUser) {
+    return res.status(401).json({ message: 'Authentication required.' });
+  }
+
+  if (req.currentUser.isAdmin || req.currentUser._id.toString() === req.params.id) {
+    return next();
+  }
+
+  return res.status(403).json({ message: 'You do not have access to this resource.' });
+}
+
+function serializeUser(user) {
+  return {
+    id: user._id,
+    fullName: user.fullName,
+    email: user.email,
+    area: user.area,
+    isVerified: user.isVerified,
+    isAdmin: user.isAdmin,
+  };
+}
+
+function getClientIp(req) {
+  const forwardedFor = req.headers['x-forwarded-for'];
+  if (typeof forwardedFor === 'string' && forwardedFor.length > 0) {
+    return forwardedFor.split(',')[0].trim();
+  }
+
+  return req.ip || req.socket?.remoteAddress || 'unknown';
+}
+
+function createRateLimiter({
+  key = 'global',
+  windowMs,
+  max,
+  message = 'Too many requests. Please try again later.',
+  scope = 'ip',
+} = {}) {
+  if (!rateLimitStores.has(key)) {
+    rateLimitStores.set(key, new Map());
+  }
+
+  const store = rateLimitStores.get(key);
+
+  return (req, res, next) => {
+    const now = Date.now();
+    const identity = scope === 'user'
+      ? req.currentUser?._id?.toString() || getClientIp(req)
+      : getClientIp(req);
+    const bucketKey = `${key}:${identity}`;
+    const entry = store.get(bucketKey);
+
+    if (!entry || entry.resetAt <= now) {
+      store.set(bucketKey, { count: 1, resetAt: now + windowMs });
+      return next();
+    }
+
+    if (entry.count >= max) {
+      const retryAfterSeconds = Math.max(1, Math.ceil((entry.resetAt - now) / 1000));
+      res.setHeader('Retry-After', String(retryAfterSeconds));
+      return res.status(429).json({ message });
+    }
+
+    entry.count += 1;
+    return next();
+  };
+}
+
+const authRateLimit = createRateLimiter({
+  key: 'auth',
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: 'Too many authentication attempts. Please try again in a few minutes.',
+});
+
+const signupRateLimit = createRateLimiter({
+  key: 'signup',
+  windowMs: 60 * 60 * 1000,
+  max: 10,
+  message: 'Too many signup attempts. Please try again later.',
+});
+
+const writeRateLimit = createRateLimiter({
+  key: 'writes',
+  windowMs: 5 * 60 * 1000,
+  max: 30,
+  message: 'Too many write actions. Please slow down and try again shortly.',
+  scope: 'user',
+});
+
+const adminRateLimit = createRateLimiter({
+  key: 'admin-actions',
+  windowMs: 5 * 60 * 1000,
+  max: 60,
+  message: 'Too many admin actions. Please try again shortly.',
+  scope: 'user',
+});
 
 app.get('/api/health', async (_request, response) => {
   try {
@@ -140,9 +401,11 @@ app.get('/api/health', async (_request, response) => {
   }
 });
 
+app.use(attachCurrentUser);
+
 // --- Admin Endpoints ---
 
-app.get('/api/admin/stats', async (_req, res) => {
+app.get('/api/admin/stats', requireAdmin, async (_req, res) => {
   try {
     await connectToDatabase();
     const userCount = await User.countDocuments();
@@ -161,7 +424,7 @@ app.get('/api/admin/stats', async (_req, res) => {
   }
 });
 
-app.get('/api/admin/flags', async (_req, res) => {
+app.get('/api/admin/flags', requireAdmin, async (_req, res) => {
   try {
     await connectToDatabase();
     const flags = await Report.find({ status: 'active' }).sort({ createdAt: -1 });
@@ -171,7 +434,7 @@ app.get('/api/admin/flags', async (_req, res) => {
   }
 });
 
-app.post('/api/admin/flags/:id/resolve', async (req, res) => {
+app.post('/api/admin/flags/:id/resolve', requireAdmin, adminRateLimit, async (req, res) => {
   const { id } = req.params;
   const { action } = req.body; // 'clear' or 'take_down'
   
@@ -193,7 +456,7 @@ app.post('/api/admin/flags/:id/resolve', async (req, res) => {
   }
 });
 
-app.get('/api/admin/activities', async (_req, res) => {
+app.get('/api/admin/activities', requireAdmin, async (_req, res) => {
   try {
     await connectToDatabase();
     const activities = await Activity.find().sort({ createdAt: -1 }).limit(10);
@@ -215,11 +478,15 @@ app.get('/api/activities/recent', async (_req, res) => {
 
 // --- Community Listing Endpoints ---
 
-app.post('/api/listings', async (req, res) => {
+app.post('/api/listings', requireAuth, writeRateLimit, async (req, res) => {
   const { userId, title, category, condition, type, price, location, radius, images } = req.body;
 
   if (!userId || !title || !category || !condition || !type || !location) {
     return res.status(400).json({ message: 'Missing required fields for listing.' });
+  }
+
+  if (!req.currentUser.isAdmin && req.currentUser._id.toString() !== userId) {
+    return res.status(403).json({ message: 'You cannot create listings for another user.' });
   }
 
   try {
@@ -262,7 +529,7 @@ app.get('/api/listings', async (_req, res) => {
 
 // --- Admin Listing Moderation ---
 
-app.get('/api/admin/listings/pending', async (_req, res) => {
+app.get('/api/admin/listings/pending', requireAdmin, async (_req, res) => {
   try {
     await connectToDatabase();
     const pending = await Listing.find({ status: 'pending' }).populate('userId', 'fullName email').sort({ createdAt: -1 });
@@ -272,7 +539,7 @@ app.get('/api/admin/listings/pending', async (_req, res) => {
   }
 });
 
-app.get('/api/admin/listings', async (_req, res) => {
+app.get('/api/admin/listings', requireAdmin, async (_req, res) => {
   try {
     await connectToDatabase();
     const allListings = await Listing.find().populate('userId', 'fullName email').sort({ createdAt: -1 });
@@ -282,7 +549,7 @@ app.get('/api/admin/listings', async (_req, res) => {
   }
 });
 
-app.post('/api/admin/listings/:id/approve', async (req, res) => {
+app.post('/api/admin/listings/:id/approve', requireAdmin, adminRateLimit, async (req, res) => {
   const { id } = req.params;
   try {
     await connectToDatabase();
@@ -301,7 +568,7 @@ app.post('/api/admin/listings/:id/approve', async (req, res) => {
   }
 });
 
-app.post('/api/admin/listings/:id/reject', async (req, res) => {
+app.post('/api/admin/listings/:id/reject', requireAdmin, adminRateLimit, async (req, res) => {
   const { id } = req.params;
   try {
     await connectToDatabase();
@@ -320,7 +587,7 @@ app.post('/api/admin/listings/:id/reject', async (req, res) => {
   }
 });
 
-app.get('/api/users/:id/impact', async (req, res) => {
+app.get('/api/users/:id/impact', requireSelfOrAdmin, async (req, res) => {
   const { id } = req.params;
   try {
     await connectToDatabase();
@@ -338,11 +605,22 @@ app.get('/api/users/:id/impact', async (req, res) => {
   }
 });
 
-app.get('/api/users/:id/listings', async (req, res) => {
+app.get('/api/users/:id/listings', requireSelfOrAdmin, async (req, res) => {
   const { id } = req.params;
   try {
     await connectToDatabase();
     const listings = await Listing.find({ userId: id }).sort({ createdAt: -1 });
+    res.json(listings);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.get('/api/users/:id/collected', requireSelfOrAdmin, async (req, res) => {
+  const { id } = req.params;
+  try {
+    await connectToDatabase();
+    const listings = await Listing.find({ claimedBy: id, status: 'claimed' }).sort({ updatedAt: -1, createdAt: -1 });
     res.json(listings);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -366,7 +644,7 @@ app.get('/api/stats/neighborhood/:area', async (req, res) => {
   }
 });
 
-app.post('/api/admin/users/:id/ban', async (req, res) => {
+app.post('/api/admin/users/:id/ban', requireAdmin, adminRateLimit, async (req, res) => {
   const { id } = req.params;
   try {
     await connectToDatabase();
@@ -385,7 +663,7 @@ app.post('/api/admin/users/:id/ban', async (req, res) => {
   }
 });
 
-app.post('/api/admin/users/:id/unban', async (req, res) => {
+app.post('/api/admin/users/:id/unban', requireAdmin, adminRateLimit, async (req, res) => {
   const { id } = req.params;
   try {
     await connectToDatabase();
@@ -404,7 +682,7 @@ app.post('/api/admin/users/:id/unban', async (req, res) => {
   }
 });
 
-app.get('/api/admin/users', async (_req, res) => {
+app.get('/api/admin/users', requireAdmin, async (_req, res) => {
   try {
     await connectToDatabase();
     const users = await User.find().sort({ createdAt: -1 });
@@ -414,7 +692,7 @@ app.get('/api/admin/users', async (_req, res) => {
   }
 });
 
-app.get('/api/admin/analytics', async (_req, res) => {
+app.get('/api/admin/analytics', requireAdmin, async (_req, res) => {
   try {
     await connectToDatabase();
     const listings = await Listing.find();
@@ -448,7 +726,7 @@ app.get('/api/admin/analytics', async (_req, res) => {
 
 // --- Admin Fulfillment (Matchmaking) ---
 
-app.get('/api/admin/matchmaking', async (_req, res) => {
+app.get('/api/admin/matchmaking', requireAdmin, async (_req, res) => {
   try {
     await connectToDatabase();
     // Get all available items (Gifts/Lends/Sales)
@@ -469,7 +747,7 @@ app.get('/api/admin/matchmaking', async (_req, res) => {
   }
 });
 
-app.post('/api/admin/match', async (req, res) => {
+app.post('/api/admin/match', requireAdmin, adminRateLimit, async (req, res) => {
   const { itemId, requestId } = req.body;
   try {
     await connectToDatabase();
@@ -503,9 +781,13 @@ app.post('/api/admin/match', async (req, res) => {
 
 // --- User-led Claiming ---
 
-app.post('/api/listings/:id/claim', async (req, res) => {
+app.post('/api/listings/:id/claim', requireAuth, writeRateLimit, async (req, res) => {
   const { id } = req.params;
   const { userId, message = "" } = req.body;
+
+  if (!req.currentUser.isAdmin && req.currentUser._id.toString() !== userId) {
+    return res.status(403).json({ message: 'You cannot claim items for another user.' });
+  }
   
   try {
     await connectToDatabase();
@@ -542,7 +824,7 @@ app.post('/api/listings/:id/claim', async (req, res) => {
 
 // --- Admin Claim Mediation (The Transfer Desk) ---
 
-app.get('/api/admin/claim-requests', async (_req, res) => {
+app.get('/api/admin/claim-requests', requireAdmin, async (_req, res) => {
   try {
     await connectToDatabase();
     const requests = await ClaimRequest.find({ status: 'pending' })
@@ -555,7 +837,7 @@ app.get('/api/admin/claim-requests', async (_req, res) => {
   }
 });
 
-app.post('/api/admin/claim-requests/:id/approve', async (req, res) => {
+app.post('/api/admin/claim-requests/:id/approve', requireAdmin, adminRateLimit, async (req, res) => {
   const { id } = req.params;
   try {
     await connectToDatabase();
@@ -591,7 +873,7 @@ app.post('/api/admin/claim-requests/:id/approve', async (req, res) => {
   }
 });
 
-app.post('/api/admin/claim-requests/:id/reject', async (req, res) => {
+app.post('/api/admin/claim-requests/:id/reject', requireAdmin, adminRateLimit, async (req, res) => {
   const { id } = req.params;
   try {
     await connectToDatabase();
@@ -604,7 +886,7 @@ app.post('/api/admin/claim-requests/:id/reject', async (req, res) => {
 
 // --- User Claim History ---
 
-app.get('/api/users/:id/claim-requests', async (req, res) => {
+app.get('/api/users/:id/claim-requests', requireSelfOrAdmin, async (req, res) => {
   const { id } = req.params;
   try {
     await connectToDatabase();
@@ -619,7 +901,7 @@ app.get('/api/users/:id/claim-requests', async (req, res) => {
 
 // --- Existing User Endpoints ---
 
-app.post('/api/users', async (request, response) => {
+app.post('/api/users', signupRateLimit, async (request, response) => {
   const { fullName, email, password, area } = request.body;
 
   if (!fullName || !email || !password || !area) {
@@ -657,16 +939,11 @@ app.post('/api/users', async (request, response) => {
       isVerified,
     });
 
+    setSessionCookie(response, createSessionToken(user));
+
     return response.status(201).json({
       message: 'User created successfully.',
-      user: {
-        id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-        area: user.area,
-        isVerified: user.isVerified,
-        isAdmin: user.isAdmin,
-      },
+      user: serializeUser(user),
     });
   } catch (error) {
     return response.status(500).json({
@@ -675,7 +952,7 @@ app.post('/api/users', async (request, response) => {
   }
 });
 
-app.post('/api/login', async (request, response) => {
+app.post('/api/login', authRateLimit, async (request, response) => {
   const { email, password } = request.body;
 
   if (!email || !password) {
@@ -703,16 +980,11 @@ app.post('/api/login', async (request, response) => {
       });
     }
 
+    setSessionCookie(response, createSessionToken(user));
+
     return response.json({
       message: 'Login successful.',
-      user: {
-        id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-        area: user.area,
-        isVerified: user.isVerified,
-        isAdmin: user.isAdmin,
-      },
+      user: serializeUser(user),
     });
   } catch (error) {
     return response.status(500).json({
@@ -721,8 +993,13 @@ app.post('/api/login', async (request, response) => {
   }
 });
 
+app.post('/api/logout', authRateLimit, (_request, response) => {
+  clearSessionCookie(response);
+  return response.json({ message: 'Logout successful.' });
+});
+
 // --- Error Handling Middleware ---
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   if (err.type === 'entity.too.large') {
     return res.status(413).json({ message: 'Payload too large. Please upload smaller images or fewer of them.' });
   }
@@ -730,12 +1007,21 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message || 'Internal server error.' });
 });
 
-app.listen(port, async () => {
+export async function startServer() {
   try {
-    await connectToDatabase();
-    await seedAdminData();
-    console.log(`API server running on port ${port}`);
+    await initializeServer();
+    app.listen(port, () => {
+      console.log(`API server running on port ${port}`);
+    });
   } catch (error) {
     console.error('MongoDB connection failed:', error.message);
   }
-});
+}
+
+const isDirectRun = process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url;
+
+if (isDirectRun) {
+  startServer();
+}
+
+export default app;

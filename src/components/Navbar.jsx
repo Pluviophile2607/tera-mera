@@ -7,7 +7,6 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
-  const isVision = location.pathname === '/vision';
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
