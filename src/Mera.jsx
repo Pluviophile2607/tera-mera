@@ -202,7 +202,6 @@ const Mera = () => {
   const [viewMode, setViewMode] = useState('All'); // 'All', 'Items', 'Wishes'
   const [search, setSearch] = useState('');
   const [selectedListing, setSelectedListing] = useState(null);
-  const [stats] = useState({ items: 1240, tons: 8.4, trust: 94 });
 
   useEffect(() => {
     if (notification) {
@@ -250,6 +249,12 @@ const Mera = () => {
   });
 
   const neighborhoodWishes = listings.filter(item => item.type === 'Request' && (category === 'All' || item.category === category));
+
+  const stats = {
+    items: filteredListings.length,
+    tons: (filteredListings.length * 0.7).toFixed(1),
+    trust: filteredListings.length > 0 ? Math.min(99, 90 + filteredListings.length) : 85
+  };
 
   const handleAction = (id) => {
     if (!isAuthenticated) {

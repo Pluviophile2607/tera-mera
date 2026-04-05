@@ -400,7 +400,7 @@ const Tera = () => {
                 <div className="bg-secondary-container border-4 border-outline-custom p-6 animate-in fade-in slide-in-from-top-4">
                   <label className="block font-bold uppercase mb-2 text-sm text-on-secondary-container">Listing Price</label>
                   <div className="flex items-center">
-                    <span className="bg-outline-custom text-surface-custom px-4 py-4 font-black text-xl">$</span>
+                    <span className="bg-outline-custom text-surface-custom px-4 py-4 font-black text-xl">₹</span>
                     <input 
                       className="flex-1 bg-surface-container-lowest border-4 border-l-0 border-outline-custom p-4 font-black text-xl outline-none" 
                       placeholder="0.00" 

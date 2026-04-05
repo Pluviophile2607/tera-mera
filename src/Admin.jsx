@@ -419,7 +419,7 @@ const Admin = () => {
                   </div>
                 <div className="text-right">
                   <p className="text-sm font-black text-slate-900">{listing.type}</p>
-                  {listing.type === 'Sell' && <p className="text-teal-600 font-bold text-lg">${listing.price}</p>}
+                  {listing.type === 'Sell' && <p className="text-teal-600 font-bold text-lg">₹{listing.price}</p>}
                 </div>
               </div>
 
