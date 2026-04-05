@@ -197,6 +197,12 @@ const Mera = () => {
   const [userRequests, setUserRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
+  const [claimLoading, setClaimLoading] = useState(false);
+  const [category, setCategory] = useState('All');
+  const [viewMode, setViewMode] = useState('All'); // 'All', 'Items', 'Wishes'
+  const [search, setSearch] = useState('');
+  const [selectedListing, setSelectedListing] = useState(null);
+  const [stats] = useState({ items: 1240, tons: 8.4, trust: 94 });
 
   useEffect(() => {
     if (notification) {
