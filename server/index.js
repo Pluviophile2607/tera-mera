@@ -65,14 +65,45 @@ async function seedAdminData() {
       console.log('Seeded initial activities.');
     }
     const userCount = await User.countDocuments();
-    if (userCount === 0) {
+    if (userCount <= 3) {
       const hashedPassword = await hashPassword('password123');
       await User.create([
-        { fullName: "John Doe", email: "john@example.com", passwordHash: hashedPassword, area: "Area-01", isVerified: true },
-        { fullName: "Jane Smith", email: "jane@example.com", passwordHash: hashedPassword, area: "Area-04", isVerified: true },
-        { fullName: "Shadow Trader", email: "shadow@trader.io", passwordHash: hashedPassword, area: "Outer Rim", isBanned: true, isVerified: true }
+        { fullName: "John Doe", email: "john@example.com", passwordHash: hashedPassword, area: "Palava", isVerified: true },
+        { fullName: "Jane Smith", email: "jane@example.com", passwordHash: hashedPassword, area: "Dombivali", isVerified: true },
+        { fullName: "Shadow Trader", email: "shadow@trader.io", passwordHash: hashedPassword, area: "Thane", isBanned: true, isVerified: true },
+        { fullName: "Anita Desai", email: "anita@example.com", passwordHash: hashedPassword, area: "Palava", isVerified: true },
+        { fullName: "Vikram Singh", email: "vikram@example.com", passwordHash: hashedPassword, area: "Thane", isVerified: true }
       ]);
       console.log('Seeded initial users.');
+    }
+
+    const listingCount = await Listing.countDocuments();
+    if (listingCount === 0) {
+      const users = await User.find();
+      const john = users.find(u => u.email === 'john@example.com');
+      const jane = users.find(u => u.email === 'jane@example.com');
+      const anita = users.find(u => u.email === 'anita@example.com');
+
+      if (john && jane && anita) {
+        await Listing.create([
+          { userId: john._id, title: "Bosch Power Drill", category: "Tools", condition: "Good as New", type: "Lend", location: "Palava", status: "available", images: ["https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&q=80&w=300"] },
+          { userId: jane._id, title: "Modern Ceramic Vase", category: "Home & Decor", condition: "Brand New", type: "Gift", location: "Dombivali", status: "pending", images: ["https://images.unsplash.com/photo-1581783898377-1c85bf937427?auto=format&fit=crop&q=80&w=300"] },
+          { userId: anita._id, title: "KitchenAid Mixer", category: "Kitchen", condition: "Well-loved", type: "Sell", price: 45, location: "Palava", status: "available", images: ["https://images.unsplash.com/photo-1594385208974-2e75f9d863f3?auto=format&fit=crop&q=80&w=300"] },
+          { userId: jane._id, title: "Looking for a Lawn Mower", category: "Garden", condition: "Good as New", type: "Request", location: "Dombivali", status: "available" }
+        ]);
+        console.log('Seeded initial listings.');
+
+        const listings = await Listing.find({ status: 'available', type: { $ne: 'Request' } });
+        if (listings.length > 0) {
+          await ClaimRequest.create({
+            listingId: listings[0]._id,
+            userId: anita._id,
+            message: "I really need this drill for a weekend project. I promise to keep it clean!",
+            status: 'pending'
+          });
+          console.log('Seeded initial claim request.');
+        }
+      }
     }
 
     const adminEmail = 'zedinfo@zed.org';
@@ -442,6 +473,24 @@ app.get('/api/admin/stats', requireAdmin, async (_req, res) => {
   }
 });
 
+app.post('/api/admin/broadcast', requireAdmin, adminRateLimit, async (req, res) => {
+  const { message } = req.body;
+  if (!message) return res.status(400).json({ message: "Message is required." });
+
+  try {
+    await connectToDatabase();
+    await Activity.create({
+      type: 'update',
+      message: `SYSTEM BROADCAST: ${message}`,
+      user: "Admin",
+      time: "Just now"
+    });
+    res.json({ message: "Broadcast sent successfully!" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.get('/api/admin/flags', requireAdmin, async (_req, res) => {
   try {
     await connectToDatabase();
@@ -474,10 +523,11 @@ app.post('/api/admin/flags/:id/resolve', requireAdmin, adminRateLimit, async (re
   }
 });
 
-app.get('/api/admin/activities', requireAdmin, async (_req, res) => {
+app.get('/api/admin/activities', requireAdmin, async (req, res) => {
+  const limit = parseInt(req.query.limit) || 10;
   try {
     await connectToDatabase();
-    const activities = await Activity.find().sort({ createdAt: -1 }).limit(10);
+    const activities = await Activity.find().sort({ createdAt: -1 }).limit(limit);
     res.json(activities);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -958,6 +1008,14 @@ app.post('/api/users', signupRateLimit, async (request, response) => {
     });
 
     setSessionCookie(response, createSessionToken(user));
+    
+    // Log signup as a global activity
+    await Activity.create({
+      type: 'update',
+      message: `New Citizen Registered: ${user.fullName}`,
+      user: user._id.toString(),
+      time: "Just now"
+    });
 
     return response.status(201).json({
       message: 'User created successfully.',

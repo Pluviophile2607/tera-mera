@@ -70,15 +70,33 @@ const Admin = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [inspectedItem, setInspectedItem] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
+  const [allActivities, setAllActivities] = useState([]);
+  const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
+  const [auditData, setAuditData] = useState({ impact: null, listings: [], claims: [] });
+  const [isAuditLoading, setIsAuditLoading] = useState(false);
 
   const { logout } = useAuth();
 
+  const fetchActivities = async (limit = 10) => {
+    try {
+      const res = await fetch(apiUrl(`/admin/activities?limit=${limit}`));
+      const data = await res.json();
+      if (limit > 10) {
+        setAllActivities(data);
+      } else {
+        setActivities(data);
+      }
+    } catch (error) {
+      console.error('Error fetching activities:', error);
+    }
+  };
+
   const fetchData = async () => {
     try {
-      const [statsRes, flagsRes, activitiesRes, listingsRes, historyRes, matchRes, usersRes, analyticsRes, claimsRes] = await Promise.all([
+      const [statsRes, flagsRes, listingsRes, historyRes, matchRes, usersRes, analyticsRes, claimsRes] = await Promise.all([
         fetch(apiUrl('/admin/stats')),
         fetch(apiUrl('/admin/flags')),
-        fetch(apiUrl('/admin/activities')),
         fetch(apiUrl('/admin/listings/pending')),
         fetch(apiUrl('/admin/listings')),
         fetch(apiUrl('/admin/matchmaking')),
@@ -87,10 +105,9 @@ const Admin = () => {
         fetch(apiUrl('/admin/claim-requests'))
       ]);
 
-      const [statsRaw, flagsRaw, actsRaw, listingsRaw, historyRaw, matchRaw, usersRaw, analyticsRaw, claimsRaw] = await Promise.all([
+      const [statsRaw, flagsRaw, listingsRaw, historyRaw, matchRaw, usersRaw, analyticsRaw, claimsRaw] = await Promise.all([
         statsRes.json(),
         flagsRes.json(),
-        activitiesRes.json(),
         listingsRes.json(),
         historyRes.json(),
         matchRes.json(),
@@ -101,7 +118,6 @@ const Admin = () => {
 
       setStatsData(statsRaw);
       setFlaggedItems(flagsRaw);
-      setActivities(actsRaw);
       setPendingListings(listingsRaw);
       setHistoryListings(historyRaw);
       setMatchData(matchRaw);
@@ -109,11 +125,12 @@ const Admin = () => {
       setAnalytics(analyticsRaw);
       setClaimRequests(claimsRaw);
       
-      // Auto-select first banned user or first user for demo
+      // Separate fetch for activities
+      fetchActivities();
+
       if (usersRaw.length > 0 && !selectedUser) {
         setSelectedUser(usersRaw.find(u => u.isBanned) || usersRaw[0]);
       }
-      
     } catch (error) {
       console.error('Error fetching admin data:', error);
       showToast('Connection failed. Please check your backend connection.', 'error');
@@ -127,7 +144,10 @@ const Admin = () => {
 
   useEffect(() => {
     fetchData();
-    // Initial admin dashboard bootstrap.
+    const interval = setInterval(() => {
+      fetchActivities();
+    }, 30000);
+    return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -215,6 +235,54 @@ const Admin = () => {
       fetchData();
     } catch (error) {
       console.error('Error unbanning user:', error);
+    }
+  };
+
+  const handleAuditInfo = async () => {
+    if (!selectedUser) return;
+    setIsAuditLoading(true);
+    try {
+      const [impactRes, listingsRes, claimsRes] = await Promise.all([
+        fetch(apiUrl(`/users/${selectedUser._id}/impact`)),
+        fetch(apiUrl(`/users/${selectedUser._id}/listings`)),
+        fetch(apiUrl(`/users/${selectedUser._id}/claim-requests`))
+      ]);
+      
+      const [impact, listings, claims] = await Promise.all([
+        impactRes.json(),
+        listingsRes.json(),
+        claimsRes.json()
+      ]);
+      
+      setAuditData({ impact, listings, claims });
+      setIsAuditModalOpen(true);
+    } catch (error) {
+      console.error('Audit failed:', error);
+      showToast('Detailed audit failed to load.', 'error');
+    } finally {
+      setIsAuditLoading(false);
+    }
+  };
+
+  const handleBroadcast = async () => {
+    const message = prompt('Enter the broadcast message for all citizens:');
+    if (!message) return;
+
+    try {
+      const res = await fetch(apiUrl('/admin/broadcast'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      });
+      if (res.ok) {
+        showToast('System broadcast sent successfully!');
+        fetchData();
+      } else {
+        showToast('Failed to send broadcast.', 'error');
+      }
+    } catch (error) {
+      console.error('Error sending broadcast:', error);
+      showToast('Error sending broadcast.', 'error');
     }
   };
 
@@ -881,7 +949,10 @@ const Admin = () => {
         </nav>
 
         <div className="p-6 border-t border-slate-800 space-y-6">
-          <button className="w-full bg-teal-600 hover:bg-teal-500 text-white py-3.5 px-4 rounded-xl font-bold transition-all shadow-lg shadow-teal-900/20 active:scale-[0.98]">
+          <button 
+            onClick={handleBroadcast}
+            className="w-full bg-teal-600 hover:bg-teal-500 text-white py-3.5 px-4 rounded-xl font-bold transition-all shadow-lg shadow-teal-900/20 active:scale-[0.98]"
+          >
             New Broadcast
           </button>
           <div className="space-y-4">
@@ -955,6 +1026,7 @@ const Admin = () => {
               {stats.map((stat) => {
                 const liveValue = statsData ? (
                   stat.label === 'Total Citizens' ? statsData.users :
+                  stat.label === 'Total Loop Cards' ? statsData.totalCards :
                   stat.label === 'Active Flags' ? statsData.activeFlags :
                   stat.label === 'Trust Index' ? `${statsData.trustScore}%` :
                   statsData.systemHealth
@@ -1050,7 +1122,13 @@ const Admin = () => {
                 </div>
                 
                 <div className="mt-10 grid grid-cols-2 gap-4">
-                  <button className="bg-slate-800 hover:bg-slate-700 text-white py-4 rounded-2xl text-xs font-bold transition-colors border border-slate-700">Audit Info</button>
+                  <button 
+                    onClick={handleAuditInfo}
+                    disabled={!selectedUser || isAuditLoading}
+                    className={`bg-slate-800 hover:bg-slate-700 text-white py-4 rounded-2xl text-xs font-bold transition-colors border border-slate-700 ${isAuditLoading ? 'opacity-50 cursor-wait' : ''}`}
+                  >
+                    {isAuditLoading ? 'Loading...' : 'Audit Info'}
+                  </button>
                   <button 
                     onClick={() => selectedUser?.isBanned ? handleUnbanUser(selectedUser._id) : handleBanUser(selectedUser._id)}
                     className={`py-4 rounded-2xl text-xs font-bold transition-all shadow-lg ${selectedUser?.isBanned ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/20' : 'bg-rose-600 hover:bg-rose-500 shadow-rose-900/20'}`}
@@ -1094,7 +1172,13 @@ const Admin = () => {
                   ))}
                 </div>
 
-                <button className="w-full mt-10 py-3 text-xs font-bold text-slate-400 hover:text-teal-600 hover:bg-gray-50 rounded-xl border border-dashed border-gray-200 transition-all">
+                <button 
+                  onClick={() => {
+                    fetchActivities(50);
+                    setIsActivityModalOpen(true);
+                  }}
+                  className="w-full mt-10 py-3 text-xs font-bold text-slate-400 hover:text-teal-600 hover:bg-gray-50 rounded-xl border border-dashed border-gray-200 transition-all"
+                >
                   Show All Activities
                 </button>
               </div>
@@ -1102,6 +1186,57 @@ const Admin = () => {
           </div>
         </div>
       </main>
+
+      {/* Activities History Modal */}
+      {isActivityModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-2xl overflow-hidden shadow-2xl border border-gray-100 flex flex-col h-auto max-h-[85vh]">
+            <div className="p-8 border-b border-gray-100 flex justify-between items-center">
+              <div>
+                 <h2 className="text-xl font-bold text-slate-900 tracking-tight">Audit Trail</h2>
+                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Global activity history logs</p>
+              </div>
+              <button 
+                onClick={() => setIsActivityModalOpen(false)}
+                className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-all text-slate-400"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            
+            <div className="p-8 overflow-y-auto custom-scrollbar flex-1 space-y-6">
+              {allActivities.length > 0 ? allActivities.map((log, index) => (
+                <div key={index} className="flex gap-4 border-l-2 border-gray-100 pl-4 py-1">
+                  <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
+                    log.type === 'alert' ? 'bg-rose-500' : log.type === 'update' ? 'bg-amber-500' : 'bg-emerald-500'
+                  }`} />
+                  <div>
+                    <p className="text-sm font-bold text-slate-700 leading-tight mb-1">{log.message}</p>
+                    <div className="flex items-center gap-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                       <span>{new Date(log.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                       <span className="w-1 h-1 bg-gray-200 rounded-full" />
+                       <span className="text-teal-600">{log.user || 'System'}</span>
+                    </div>
+                  </div>
+                </div>
+              )) : (
+                <div className="py-20 text-center">
+                   <p className="text-gray-400 font-bold uppercase tracking-widest">No activities found</p>
+                </div>
+              )}
+            </div>
+            
+            <div className="p-6 bg-gray-50 border-t border-gray-100">
+               <button 
+                 onClick={() => setIsActivityModalOpen(false)}
+                 className="w-full py-4 bg-white border border-gray-200 rounded-2xl text-xs font-bold text-slate-500 hover:bg-gray-100 transition-all uppercase tracking-widest"
+               >
+                 Close Archive
+               </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Mobile Footer Nav */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex justify-around p-4 z-40">
@@ -1185,6 +1320,115 @@ const Admin = () => {
                   Approve and Publish
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Audit Modal */}
+      {isAuditModalOpen && auditData && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-5xl overflow-hidden shadow-2xl border border-gray-100 flex flex-col h-auto max-h-[90vh]">
+            <div className="p-10 border-b border-gray-100 flex justify-between items-start bg-slate-50/50">
+              <div>
+                 <div className="flex items-center gap-3 mb-2">
+                   <h2 className="text-2xl font-black text-slate-900 tracking-tight">Citizen Audit: {selectedUser.fullName}</h2>
+                   <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${selectedUser.isBanned ? 'bg-rose-100 text-rose-600' : 'bg-emerald-100 text-emerald-600'}`}>
+                     {selectedUser.isBanned ? 'Banned' : 'Active'}
+                   </span>
+                 </div>
+                 <p className="text-xs text-gray-500 font-medium">Comprehensive behavior analysis & ecosystem contribution report</p>
+              </div>
+              <button 
+                onClick={() => setIsAuditModalOpen(false)}
+                className="w-12 h-12 bg-white border border-gray-200 rounded-2xl flex items-center justify-center hover:bg-gray-50 transition-all text-slate-800 shadow-sm"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-10 custom-scrollbar">
+               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                  <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center">
+                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Karma Score</p>
+                     <h4 className="text-4xl font-black text-slate-900">{auditData.impact?.karmaScore || 0}</h4>
+                     <p className="text-[10px] text-teal-600 font-bold mt-2 uppercase">Verified Citizen</p>
+                  </div>
+                  <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center">
+                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Carbon Saved</p>
+                     <h4 className="text-4xl font-black text-emerald-600">{auditData.impact?.carbonSaved || 0}kg</h4>
+                     <p className="text-[10px] text-gray-400 font-bold mt-2 uppercase">Eco Impact</p>
+                  </div>
+                  <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center">
+                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Neighbors Helped</p>
+                     <h4 className="text-4xl font-black text-indigo-600">{auditData.impact?.neighborsHelped || 0}</h4>
+                     <p className="text-[10px] text-gray-400 font-bold mt-2 uppercase">Circle Closure</p>
+                  </div>
+               </div>
+
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  <section className="space-y-6">
+                     <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 bg-teal-500 rounded-full" />
+                        Tera History (Shared)
+                     </h3>
+                     <div className="space-y-3">
+                        {auditData.listings.length > 0 ? auditData.listings.slice(0, 5).map(item => (
+                           <div key={item._id} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-between">
+                              <div>
+                                 <p className="text-sm font-bold text-slate-800">{item.title}</p>
+                                 <p className="text-[10px] text-gray-400 font-bold uppercase">{item.category} • {item.type}</p>
+                              </div>
+                              <span className={`px-2 py-1 rounded-md text-[9px] font-black uppercase ${item.status === 'claimed' ? 'bg-indigo-100 text-indigo-600' : 'bg-emerald-100 text-emerald-600'}`}>
+                                 {item.status}
+                              </span>
+                           </div>
+                        )) : (
+                           <p className="text-xs text-gray-400 italic">No community contributions yet.</p>
+                        )}
+                     </div>
+                  </section>
+
+                  <section className="space-y-6">
+                     <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 bg-amber-500 rounded-full" />
+                        Mera History (Interests)
+                     </h3>
+                     <div className="space-y-3">
+                        {auditData.claims.length > 0 ? auditData.claims.slice(0, 5).map(req => (
+                           <div key={req._id} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-between">
+                              <div>
+                                 <p className="text-sm font-bold text-slate-800">{req.listingId?.title || 'Unknown Item'}</p>
+                                 <p className="text-[10px] text-gray-400 font-bold uppercase">Requested on {new Date(req.createdAt).toLocaleDateString()}</p>
+                              </div>
+                              <span className={`px-2 py-1 rounded-md text-[9px] font-black uppercase ${req.status === 'approved' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'}`}>
+                                 {req.status}
+                              </span>
+                           </div>
+                        )) : (
+                           <p className="text-xs text-gray-400 italic">No community requests yet.</p>
+                        )}
+                     </div>
+                  </section>
+               </div>
+            </div>
+            
+            <div className="p-10 bg-slate-900 flex items-center justify-between">
+               <div className="flex gap-4">
+                 <button 
+                   onClick={() => { selectedUser?.isBanned ? handleUnbanUser(selectedUser._id) : handleBanUser(selectedUser._id); setIsAuditModalOpen(false); }}
+                   className={`px-8 py-4 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${selectedUser.isBanned ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-rose-600 hover:bg-rose-500'} text-white`}
+                 >
+                   {selectedUser.isBanned ? 'Lift Ban' : 'Restrict User'}
+                 </button>
+                 <button className="px-8 py-4 rounded-xl text-xs font-black uppercase tracking-widest bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all">Download Audit PDF</button>
+               </div>
+               <button 
+                 onClick={() => setIsAuditModalOpen(false)}
+                 className="text-white text-xs font-black uppercase tracking-[0.2em] hover:text-teal-400 transition-colors"
+               >
+                 Close Report
+               </button>
             </div>
           </div>
         </div>
