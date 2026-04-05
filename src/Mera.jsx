@@ -333,7 +333,7 @@ const Mera = () => {
         {/* Sidebar Categories */}
         <aside className="hidden lg:flex flex-col w-72 bg-surface-container-lowest border-r-[3px] border-outline-custom p-8 space-y-8 h-[calc(100vh-80px)] sticky top-20 overflow-y-auto">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-primary-custom mb-2">Loop Filters</p>
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-primary-custom mb-2">Mera Filters</p>
             <h2 className="text-3xl font-headline font-black uppercase leading-none italic">Discover<br/>Local</h2>
           </div>
 
@@ -401,7 +401,7 @@ const Mera = () => {
                     <div className="relative group">
                        <input 
                           type="text" 
-                          placeholder="Search Loop..."
+                          placeholder="Search Mera..."
                           className="w-full bg-white border-[3px] border-outline-custom p-4 font-bold uppercase text-sm focus:bg-primary-container outline-none transition-all brutalist-shadow"
                           value={search}
                           onChange={(e) => setSearch(e.target.value)}

@@ -149,7 +149,7 @@ const Navbar = () => {
                 onClick={toggleMenu}
                 className="text-4xl sm:text-5xl font-black uppercase tracking-tighter relative group"
               >
-                <span className="relative z-10 group-hover:text-primary-custom transition-colors">THE LOOP</span>
+                <span className="relative z-10 group-hover:text-primary-custom transition-colors">MERA</span>
                 <span className="absolute left-0 -bottom-2 w-full h-4 bg-primary-container -z-0 translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all"></span>
               </Link>
             )}
@@ -195,10 +195,10 @@ const Navbar = () => {
             )}
 
             <button 
-              onClick={() => { toggleMenu(); window.location.href = isAuthenticated ? '/tera' : '/waitlist'; }}
+              onClick={() => { toggleMenu(); window.location.href = isAuthenticated ? '/mera' : '/waitlist'; }}
               className="mt-8 w-full max-w-sm py-6 bg-primary-custom text-on-primary text-2xl font-black uppercase border-[4px] border-black shadow-[8px_8px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_#000] active:translate-y-0 active:shadow-none transition-all"
             >
-              {isAuthenticated ? 'GO TO THE LOOP' : 'JOIN THE LOOP'}
+              {isAuthenticated ? 'GO TO MERA' : 'JOIN THE LOOP'}
             </button>
           </div>
 
