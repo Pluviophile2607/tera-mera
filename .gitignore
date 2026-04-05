@@ -26,3 +26,4 @@ dist-ssr
 public
 features.md
 .gitignore
+tests

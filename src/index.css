@@ -214,29 +214,28 @@
 }
 
 /* Custom Scrollbar Utility */
+/* Custom Scrollbar Utility - Vibrant Brutalist */
 .custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(203, 213, 225, 0.4) transparent;
+  scrollbar-width: auto;
+  scrollbar-color: #ffd709 #000000;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
+  width: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f1f1f1;
+  border-left: 2px solid #000000;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(203, 213, 225, 0.2);
-  border-radius: 20px;
+  background-color: #ffd709;
+  border: 2px solid #000000;
+  border-radius: 0px;
   transition: all 0.2s ease;
 }
 
-.custom-scrollbar:hover::-webkit-scrollbar-thumb {
-  background-color: rgba(203, 213, 225, 0.5);
-}
-
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(148, 163, 184, 0.8);
+  background-color: #000000;
 }

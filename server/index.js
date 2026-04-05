@@ -547,7 +547,7 @@ app.get('/api/activities/recent', async (_req, res) => {
 // --- Community Listing Endpoints ---
 
 app.post('/api/listings', requireAuth, writeRateLimit, async (req, res) => {
-  const { userId, title, category, condition, type, price, location, radius, images } = req.body;
+  const { userId, title, category, condition, type, price, location, radius, images, description, urgency } = req.body;
 
   if (!userId || !title || !category || !condition || !type || !location) {
     return res.status(400).json({ message: 'Missing required fields for listing.' });
@@ -569,6 +569,8 @@ app.post('/api/listings', requireAuth, writeRateLimit, async (req, res) => {
       location,
       radius: radius || 5,
       images: images || [],
+      description,
+      urgency: urgency || 'Anytime',
     });
 
     // Log this action for community activity feed

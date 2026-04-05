@@ -12,11 +12,13 @@ const Request = () => {
   const [formData, setFormData] = useState({
     title: '',
     category: 'Tools',
-    condition: 'Good as New', // For requested items, this could mean "preferred condition"
+    condition: 'Good as New',
     type: 'Request',
     location: user?.area || 'Palava',
     description: '',
-    urgency: 'Medium',
+    urgency: 'This Week',
+    budget: 'Free / Gift',
+    radius: 5,
   });
 
   const [loading, setLoading] = useState(false);
@@ -41,8 +43,8 @@ const Request = () => {
         body: JSON.stringify({
           userId: user.id,
           ...formData,
-          // Placeholder for images if needed, but not required for requests
           images: [], 
+          urgency: formData.urgency,
         }),
       });
 
@@ -55,7 +57,9 @@ const Request = () => {
           type: 'Request',
           location: user?.area || 'Palava',
           description: '',
-          urgency: 'Medium',
+          urgency: 'This Week',
+          budget: 'Free / Gift',
+          radius: 5,
         });
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
@@ -70,109 +74,225 @@ const Request = () => {
   };
 
   return (
-    <div className="bg-background-custom text-on-surface font-body selection:bg-secondary-container min-h-screen">
+    <div className="bg-[#f0f1f1] text-on-surface font-body selection:bg-secondary-container min-h-screen">
       <Navbar />
       
-      <main className="max-w-4xl mx-auto px-6 py-12">
-        <header className="mb-12">
-          <span className="bg-secondary-container text-on-secondary-container px-3 py-1 font-bold uppercase text-sm inline-block mb-4 border-2 border-outline-custom">Mera Mode (Receiver)</span>
-          <h1 className="text-5xl md:text-7xl font-headline font-black uppercase leading-[0.9] tracking-tight text-primary-custom mb-4">
-            Broadcast <span className="bg-primary-container px-2">What You Need.</span>
-          </h1>
-          <p className="text-xl font-medium opacity-80">The neighborhood is full of surplus. Let your neighbors know what you're looking for, and close the loop together.</p>
-        </header>
+      <main className="max-w-[1400px] mx-auto px-6 md:px-12 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-16">
+          
+          {/* Left Column: Form */}
+          <section>
+            <header className="mb-12 relative">
+               <div className="absolute -top-4 -left-4 w-32 h-12 bg-[#FACC15] -z-0"></div>
+               <h1 className="text-7xl font-headline font-black uppercase leading-[0.9] tracking-tighter relative z-10">
+                  BROADCAST <br/> YOUR NEED
+               </h1>
+            </header>
 
-        {success && (
-          <div className="brutalist-card bg-emerald-500 text-white p-6 mb-8 border-4 border-outline-custom flex items-center justify-between animate-in fade-in zoom-in">
-            <div className="flex items-center gap-4">
-              <span className="material-symbols-outlined text-4xl">campaign</span>
-              <div className="flex flex-col">
-                <p className="font-headline font-black uppercase text-2xl">Request Broadcasted!</p>
-                <p className="font-bold opacity-90 text-sm">Your neighbors are now seeing your request in the loop.</p>
-              </div>
-            </div>
-            <button onClick={() => setSuccess(false)} className="bg-white/20 p-2 rounded-lg hover:bg-white/30 transition-colors">
-              <span className="material-symbols-outlined">close</span>
-            </button>
-          </div>
-        )}
-
-        {error && (
-          <div className="brutalist-card bg-rose-500 text-white p-6 mb-8 border-4 border-outline-custom">
-            <p className="font-black uppercase tracking-tight text-lg">Wait a minute!</p>
-            <p className="font-bold opacity-90">{error}</p>
-          </div>
-        )}
-
-        <form className="space-y-12" onSubmit={handleSubmit}>
-          <section className="brutalist-card bg-surface-container-lowest p-8 relative">
-            <div className="absolute -top-6 -left-4 bg-primary-custom text-on-primary px-4 py-2 font-black text-2xl border-4 border-outline-custom">!</div>
-            <h2 className="text-3xl font-headline font-black uppercase mb-6 mt-2">Request Details</h2>
-            <div className="space-y-6">
-              <div>
-                <label className="block font-bold uppercase mb-2 text-sm">What do you need?</label>
-                <input 
-                  className="w-full bg-surface-container-highest border-4 border-outline-custom p-4 font-bold text-lg focus:bg-primary-container outline-none transition-colors" 
-                  placeholder="e.g., A sturdy ladder for the weekend" 
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({...formData, title: e.target.value})}
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block font-bold uppercase mb-2 text-sm">Category</label>
-                  <select 
-                    className="w-full bg-surface-container-highest border-4 border-outline-custom p-4 font-bold outline-none"
-                    value={formData.category}
-                    onChange={(e) => setFormData({...formData, category: e.target.value})}
-                  >
-                    <option>Tools</option>
-                    <option>Home & Decor</option>
-                    <option>Garden</option>
-                    <option>Kitchen</option>
-                    <option>Electronics</option>
-                  </select>
+            {success && (
+              <div className="bg-emerald-500 text-white p-6 mb-8 border-4 border-black shadow-[6px_6px_0px_#000] flex items-center justify-between animate-in fade-in zoom-in">
+                <div className="flex items-center gap-4">
+                  <span className="material-symbols-outlined text-4xl font-black">check_circle</span>
+                  <div>
+                    <p className="font-headline font-black uppercase text-xl">WISH BROADCASTED!</p>
+                    <p className="font-bold opacity-90 text-sm">Neighbors are looking for you now.</p>
+                  </div>
                 </div>
-                <div>
-                  <label className="block font-bold uppercase mb-2 text-sm">Urgency</label>
-                  <select 
-                    className="w-full bg-surface-container-highest border-4 border-outline-custom p-4 font-bold outline-none"
-                    value={formData.urgency}
-                    onChange={(e) => setFormData({...formData, urgency: e.target.value})}
-                  >
-                    <option>Low (Anytime)</option>
-                    <option>Medium (This week)</option>
-                    <option>High (ASAP)</option>
-                  </select>
-                </div>
+                <button onClick={() => setSuccess(false)} className="bg-white/20 p-2 rounded-lg hover:bg-white/30 transition-colors">
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+            )}
+
+            {error && (
+              <div className="bg-rose-500 text-white p-6 mb-8 border-4 border-black shadow-[6px_6px_0px_#000]">
+                <p className="font-black uppercase tracking-tight text-lg">Wait a minute!</p>
+                <p className="font-bold opacity-90">{error}</p>
+              </div>
+            )}
+
+            <form className="space-y-8" onSubmit={handleSubmit}>
+              {/* What do you need? */}
+              <div className="bg-white border-[3px] border-black p-8 shadow-[8px_8px_0px_#000] relative">
+                 <label className="block text-xl font-headline font-black uppercase mb-4 tracking-tight">WHAT DO YOU NEED?</label>
+                 <input 
+                    className="w-full bg-[#E5E7EB] border-[3px] border-[#9CA3AF] p-6 font-bold text-2xl focus:border-black outline-none transition-all placeholder:text-gray-400" 
+                    placeholder="e.g. Lawn Mower, Folding Chairs, Heavy Duty Drill" 
+                    type="text"
+                    value={formData.title}
+                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    required
+                 />
+                 
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div>
+                       <label className="block text-xs font-black uppercase mb-2 tracking-widest text-gray-500">CATEGORY</label>
+                       <div className="relative">
+                          <select 
+                             className="w-full bg-[#E5E7EB] border-[3px] border-[#9CA3AF] p-4 font-bold appearance-none outline-none focus:border-black"
+                             value={formData.category}
+                             onChange={(e) => setFormData({...formData, category: e.target.value})}
+                          >
+                             <option>Tools</option>
+                             <option>Home & Decor</option>
+                             <option>Garden</option>
+                             <option>Kitchen</option>
+                             <option>Electronics</option>
+                          </select>
+                          <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+                       </div>
+                    </div>
+                    <div>
+                       <label className="block text-xs font-black uppercase mb-2 tracking-widest text-gray-500">URGENCY</label>
+                       <div className="flex border-[3px] border-[#9CA3AF]">
+                          {['Today', 'This Week', 'Anytime'].map((u) => (
+                             <button
+                                key={u}
+                                type="button"
+                                onClick={() => setFormData({...formData, urgency: u})}
+                                className={`flex-1 p-4 font-bold text-sm transition-all ${formData.urgency === u ? 'bg-[#0E676F] text-white' : 'bg-white hover:bg-gray-100'}`}
+                             >
+                                {u}
+                             </button>
+                          ))}
+                       </div>
+                    </div>
+                 </div>
               </div>
 
-              <div>
-                <label className="block font-bold uppercase mb-2 text-sm">Why do you need it? (Optional)</label>
-                <textarea 
-                  className="w-full bg-surface-container-highest border-4 border-outline-custom p-4 font-bold outline-none min-h-[120px] focus:bg-primary-container transition-colors"
-                  placeholder="Tell your neighbors how they can help..."
-                  value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                />
+              {/* Budget & Range */}
+              <div className="bg-white border-[3px] border-black p-8 shadow-[8px_8px_0px_#000]">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                       <label className="block text-xl font-headline font-black uppercase mb-6 tracking-tight">BUDGET PREFERENCE</label>
+                       <div className="space-y-4">
+                          {[
+                             { id: 'free', label: 'Free / Gift' },
+                             { id: 'borrow', label: 'Borrow (Temporary)' },
+                             { id: 'budget', label: 'Set Budget (Negotiable)' }
+                          ].map((opt) => (
+                             <label key={opt.id} className="flex items-center gap-4 cursor-pointer group">
+                                <input 
+                                   type="radio" 
+                                   name="budget" 
+                                   className="hidden"
+                                   checked={formData.budget === opt.label}
+                                   onChange={() => setFormData({...formData, budget: opt.label})}
+                                />
+                                <div className={`w-8 h-8 rounded-full border-[3px] border-black flex items-center justify-center transition-all ${formData.budget === opt.label ? 'bg-[#0E676F]' : 'bg-white'}`}>
+                                   {formData.budget === opt.label && <div className="w-3 h-3 rounded-full bg-white"></div>}
+                                </div>
+                                <span className="font-bold text-lg group-hover:underline">{opt.label}</span>
+                             </label>
+                          ))}
+                       </div>
+                    </div>
+                    <div>
+                       <label className="block text-xl font-headline font-black uppercase mb-2 tracking-tight">BROADCAST RANGE</label>
+                       <div className="pt-10 pb-8 relative">
+                          <input 
+                             type="range" 
+                             min="1" 
+                             max="15" 
+                             step="1"
+                             className="w-full h-1 bg-black appearance-none cursor-pointer accent-[#0E676F]"
+                             value={formData.radius}
+                             onChange={(e) => setFormData({...formData, radius: parseInt(e.target.value)})}
+                          />
+                          <div className="flex justify-between mt-4 font-black text-[#0E676F] text-sm">
+                             <span>1km</span>
+                             <span>15km</span>
+                          </div>
+                          <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-[#FACC15] border-2 border-black p-2 font-black text-xl shadow-[4px_4px_0px_#000]">
+                             {formData.radius}km
+                          </div>
+                          <p className="mt-8 text-[10px] font-black uppercase tracking-widest text-gray-500 text-center">REACHING APPROXIMATELY 450 NEIGHBORS IN YOUR AREA.</p>
+                       </div>
+                    </div>
+                 </div>
               </div>
-            </div>
+
+              {/* Details & Photo */}
+              <div className="bg-white border-[3px] border-black p-8 shadow-[8px_8px_0px_#000] relative">
+                 <div className="absolute -top-4 -left-4 bg-white border-2 border-black px-3 py-1 font-black text-xs uppercase tracking-widest italic opacity-40">Circular</div>
+                 <div className="grid grid-cols-1 md:grid-cols-[1fr_200px] gap-8">
+                    <div>
+                       <label className="block text-xl font-headline font-black uppercase mb-4 tracking-tight">ADD DETAILS</label>
+                       <textarea 
+                          className="w-full bg-[#E5E7EB] border-[3px] border-[#9CA3AF] p-6 font-bold outline-none min-h-[160px] focus:border-black transition-all"
+                          placeholder="Mention why you need it or any specifics (e.g. 'Needed for a weekend garage project', 'Must be cordless')."
+                          value={formData.description}
+                          onChange={(e) => setFormData({...formData, description: e.target.value})}
+                       />
+                    </div>
+                    <div>
+                       <label className="block text-xl font-headline font-black uppercase mb-4 tracking-tight text-center">PHOTO</label>
+                       <div className="aspect-square border-[4px] border-dashed border-[#9CA3AF] flex flex-col items-center justify-center text-center p-4 group hover:border-black cursor-pointer transition-colors bg-gray-50">
+                          <span className="material-symbols-outlined text-4xl mb-2 transition-transform group-hover:scale-110">add_a_photo</span>
+                          <span className="text-[10px] font-black uppercase tracking-tighter leading-tight opacity-60">REFERENCE IMAGE</span>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+
+              {/* Submit */}
+              <button 
+                className="w-full bg-[#FACC15] text-black border-[4px] border-black py-10 font-headline font-black text-4xl uppercase shadow-[10px_10px_0px_#000] hover:-translate-y-1 hover:shadow-[14px_14px_0px_#000] active:translate-y-0 active:shadow-none transition-all flex items-center justify-center gap-6 disabled:opacity-50" 
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? 'BROADCASTING...' : 'BROADCAST WISH TO NEIGHBORHOOD'}
+              </button>
+            </form>
           </section>
 
-          <div className="pt-8 flex justify-center">
-            <button 
-              className="w-full md:w-auto px-12 py-8 bg-primary-custom text-on-primary font-headline font-black text-4xl uppercase border-4 border-on-surface shadow-[8px_8px_0px_#000] hover:-translate-y-1 hover:-translate-x-1 active:translate-y-0 active:translate-x-0 transition-all flex items-center justify-center gap-4 group disabled:opacity-50" 
-              type="submit"
-              disabled={loading}
-            >
-              {loading ? 'Broadcasting...' : 'Broadcast Request'}
-              <span className="material-symbols-outlined text-4xl group-hover:scale-125 transition-transform">campaign</span>
-            </button>
-          </div>
-        </form>
+          {/* Right Column: Sidebar */}
+          <aside className="space-y-12 pt-12">
+             <section className="bg-white border-[3px] border-black p-8 shadow-[8px_8px_0px_#000]">
+                <div className="flex items-center gap-3 mb-8">
+                   <div className="w-3 h-3 bg-rose-500"></div>
+                   <h2 className="text-xl font-headline font-black uppercase tracking-tight">ACTIVE NEIGHBOR WISHES</h2>
+                </div>
+                
+                <div className="space-y-6">
+                   {[
+                      { title: 'HAMMER DRILL', distance: '300m away', category: 'Tool', tag: 'BORROW', tagColor: '#0E676F', time: 'TODAY' },
+                      { title: 'EXTRA CHAIRS (10)', distance: '1.2km away', category: 'Event', tag: 'FREE', tagColor: '#FACC15', time: 'WED' },
+                      { title: 'LAWN EDGER', distance: '0.8km away', category: 'Garden', tag: '$20 BUDGET', tagColor: 'transparent', borderColor: '#E11D48', time: 'FRI' },
+                   ].map((wish, i) => (
+                      <div key={i} className="bg-gray-100 border-[2px] border-[#9CA3AF] p-4 relative flex items-center gap-4 transition-transform hover:scale-[1.02] cursor-pointer">
+                         <div className="absolute -top-2 -right-2 bg-gray-400 text-white px-2 py-0.5 text-[8px] font-black">{wish.time}</div>
+                         <div className="w-16 h-16 bg-white border-2 border-gray-300 flex items-center justify-center">
+                            <span className="material-symbols-outlined text-2xl opacity-40">
+                               {wish.category === 'Tool' ? 'construction' : wish.category === 'Event' ? 'event_seat' : 'grass'}
+                            </span>
+                         </div>
+                         <div className="flex-1">
+                            <h4 className="font-black text-sm uppercase leading-tight">{wish.title}</h4>
+                            <p className="text-[10px] font-bold text-gray-500 uppercase">{wish.distance} • {wish.category}</p>
+                            <div className="mt-2 inline-block px-3 py-0.5 text-[9px] font-black uppercase border-2" style={{ backgroundColor: wish.tagColor === 'transparent' ? 'white' : wish.tagColor, color: wish.tagColor === '#FACC15' ? 'black' : wish.tagColor === '#0E676F' ? 'white' : wish.borderColor, borderColor: wish.borderColor || 'transparent' }}>
+                               {wish.tag}
+                            </div>
+                         </div>
+                      </div>
+                   ))}
+                </div>
+             </section>
+
+             <section className="bg-white border-[3px] border-black p-8 shadow-[8px_8px_0px_#000]">
+                <div className="flex justify-between items-end mb-4">
+                   <h2 className="text-4xl font-headline font-black leading-none text-[#0E676F]">84%</h2>
+                   <div className="text-right">
+                      <p className="text-[9px] font-black uppercase tracking-tighter leading-tight">WISHES FULFILLED</p>
+                      <p className="text-[9px] font-black uppercase tracking-tighter leading-tight">THIS MONTH</p>
+                   </div>
+                </div>
+                <div className="h-4 bg-gray-200 border-2 border-black relative overflow-hidden">
+                   <div className="absolute inset-0 bg-[#0E676F]" style={{ width: '84%' }}></div>
+                </div>
+             </section>
+          </aside>
+        </div>
       </main>
 
       <Footer />

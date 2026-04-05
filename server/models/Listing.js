@@ -42,6 +42,15 @@ const listingSchema = new mongoose.Schema(
     images: [{
       type: String,
     }],
+    urgency: {
+      type: String,
+      enum: ['Today', 'This Week', 'Anytime'],
+      default: 'Anytime',
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
     status: {
       type: String,
       default: 'pending',
