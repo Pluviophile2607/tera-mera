@@ -93,12 +93,12 @@ const FeaturesGrid = () => (
 
         <div className="bg-surface-container-lowest border-[4px] border-outline-custom p-10 shadow-[8px_8px_0px_0px_#757777] relative group hover:-translate-y-3 hover:-translate-x-3 hover:shadow-[16px_16px_0px_0px_#757777] transition-all duration-300 lg:mt-24">
           <div className="bg-tertiary-fixed w-20 h-20 border-[3px] border-outline-custom flex items-center justify-center mb-8 shadow-[4px_4px_0px_0px_#757777]">
-            <span className="material-symbols-outlined text-5xl text-on-tertiary-fixed" style={{ fontVariationSettings: "'FILL' 1" }}>money_off</span>
+            <span className="material-symbols-outlined text-5xl text-on-tertiary-fixed" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
           </div>
           <div className="bg-surface-container-low border-y-[3px] border-outline-custom py-4 mb-6 -mx-10 px-10">
-            <h3 className="font-headline text-3xl font-black uppercase leading-[0.9] text-on-surface">Zero Lifetime Fees</h3>
+            <h3 className="font-headline text-3xl font-black uppercase leading-[0.9] text-on-surface">Verified Founder Status</h3>
           </div>
-          <p className="font-body font-bold text-on-surface-variant text-xl leading-snug">As an early adopter, you'll never pay transaction fees on the platform. Ever.</p>
+          <p className="font-body font-bold text-on-surface-variant text-xl leading-snug">Be among the first 200 members to receive an exclusive 'Verified Founder' badge on your profile.</p>
         </div>
       </div>
     </div>
