@@ -32,6 +32,17 @@ const Tera = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.custom-dropdown')) {
+        setShowCategoryDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -248,19 +259,35 @@ const Tera = () => {
                     required
                   />
                 </div>
-                <div>
+                <div className="custom-dropdown">
                   <label className="block font-bold uppercase mb-2 text-sm">Category</label>
-                  <select 
-                    className="w-full bg-surface-container-highest border-4 border-outline-custom p-4 font-bold outline-none appearance-none"
-                    value={formData.category}
-                    onChange={(e) => setFormData({...formData, category: e.target.value})}
-                  >
-                    <option>Tools</option>
-                    <option>Home & Decor</option>
-                    <option>Garden</option>
-                    <option>Kitchen</option>
-                    <option>Electronics</option>
-                  </select>
+                  <div className="relative">
+                    <button 
+                      type="button"
+                      onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                      className="w-full bg-surface-container-highest border-4 border-outline-custom p-4 font-bold outline-none flex justify-between items-center cursor-pointer hover:bg-primary-container transition-colors"
+                    >
+                      {formData.category}
+                      <span className={`material-symbols-outlined transition-transform ${showCategoryDropdown ? 'rotate-180' : ''}`}>expand_more</span>
+                    </button>
+                    
+                    {showCategoryDropdown && (
+                      <div className="absolute top-full left-0 right-0 bg-surface-container-highest border-4 border-t-0 border-outline-custom z-20 shadow-[4px_4px_0px_black] max-h-[240px] overflow-y-auto animate-in fade-in slide-in-from-top-2 custom-scrollbar">
+                        {['Tools', 'Home & Decor', 'Garden', 'Kitchen', 'Electronics', 'Books', 'Stationary'].map(cat => (
+                          <div 
+                            key={cat}
+                            className={`p-4 font-bold border-b border-outline-custom/20 hover:bg-primary-custom hover:text-on-primary cursor-pointer transition-colors ${formData.category === cat ? 'bg-primary-container' : ''}`}
+                            onClick={() => {
+                              setFormData({...formData, category: cat});
+                              setShowCategoryDropdown(false);
+                            }}
+                          >
+                            {cat}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <label className="block font-bold uppercase mb-2 text-sm">Condition</label>
