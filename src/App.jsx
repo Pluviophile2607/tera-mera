@@ -27,9 +27,11 @@ function ScrollToTop() {
 }
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, isAdmin, loading } = useAuth();
   if (loading) return null;
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (isAdmin) return <Navigate to="/admin" replace />;
+  return children;
 };
 
 const AdminRoute = ({ children }) => {

@@ -32,7 +32,8 @@ const Login = () => {
       }
 
       login(data.user);
-      navigate(data.user?.isAdmin ? '/admin' : '/');
+      // Redirect to admin dashboard if admin, otherwise to user dashboard
+      navigate(data.user?.isAdmin ? '/admin' : '/dashboard');
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
@@ -131,6 +132,10 @@ const Login = () => {
           >
             New Here? Create Account
           </Link>
+          <div className="w-full mt-4 p-2 border-2 border-dashed border-outline-custom bg-surface-container-low text-[10px] font-bold uppercase text-on-surface-variant flex flex-col gap-1 items-center">
+            <span>Admin Access: zedinfo@zed.org</span>
+            <span>Password: Zed@org</span>
+          </div>
         </footer>
       </main>
     </div>
