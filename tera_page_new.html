@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TeraMera | Share Your Surplus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800;900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ff9476",
+                        "primary-fixed-dim": "#67e1e1",
+                        "on-tertiary-container": "#601400",
+                        "surface-container": "#e7e8e8",
+                        "on-surface-variant": "#5a5c5c",
+                        "error-dim": "#9f0519",
+                        "on-primary-fixed": "#004343",
+                        "on-error": "#ffefee",
+                        "surface": "#f6f6f6",
+                        "surface-dim": "#d2d5d5",
+                        "error-container": "#fb5151",
+                        "primary-fixed": "#76efef",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#fff2cd",
+                        "primary-dim": "#005959",
+                        "secondary-fixed": "#ffd709",
+                        "tertiary-fixed-dim": "#ff7d58",
+                        "on-secondary-container": "#5b4b00",
+                        "on-surface": "#2d2f2f",
+                        "surface-tint": "#006666",
+                        "tertiary-dim": "#972500",
+                        "outline-variant": "#acadad",
+                        "on-secondary-fixed-variant": "#665500",
+                        "inverse-on-surface": "#9c9d9d",
+                        "surface-variant": "#dbdddd",
+                        "on-secondary-fixed": "#453900",
+                        "tertiary": "#ac2c00",
+                        "on-tertiary-fixed": "#350700",
+                        "secondary-fixed-dim": "#efc900",
+                        "secondary": "#6c5a00",
+                        "background": "#f6f6f6",
+                        "on-primary-fixed-variant": "#006262",
+                        "secondary-container": "#ffd709",
+                        "on-background": "#2d2f2f",
+                        "primary": "#006666",
+                        "surface-container-low": "#f0f1f1",
+                        "on-primary": "#bbfffe",
+                        "surface-bright": "#f6f6f6",
+                        "on-primary-container": "#005858",
+                        "inverse-surface": "#0c0f0f",
+                        "on-error-container": "#570008",
+                        "on-tertiary": "#ffefec",
+                        "secondary-dim": "#5e4e00",
+                        "primary-container": "#76efef",
+                        "inverse-primary": "#76efef",
+                        "error": "#b31b25",
+                        "tertiary-container": "#ff9476",
+                        "outline": "#757777",
+                        "surface-container-highest": "#dbdddd",
+                        "on-tertiary-fixed-variant": "#701900",
+                        "surface-container-high": "#e1e3e3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Bricolage Grotesque", "sans-serif"],
+                        "body": ["Space Grotesk", "sans-serif"],
+                        "label": ["Space Grotesk", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .brutalist-card {
+            border: 4px solid #757777;
+            box-shadow: 4px 4px 0px 0px #757777;
+        }
+        .brutalist-button {
+            border: 2px solid #757777;
+            box-shadow: 4px 4px 0px 0px #757777;
+            transition: all 0.1s ease;
+        }
+        .brutalist-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #757777;
+        }
+        .heavy-shadow {
+            box-shadow: 6px 6px 0px 0px #2d2f2f;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-secondary-container">
+<!-- TopNavBar -->
+<nav class="bg-[#f6f6f6] dark:bg-slate-900 border-b-4 border-[#757777] shadow-[4px_4px_0px_0px_rgba(117,119,119,1)] sticky top-0 z-50 flex justify-between items-center w-full px-6 py-4">
+<div class="text-3xl font-black text-teal-600 dark:text-teal-400 italic font-headline uppercase tracking-tight">TeraMera</div>
+<div class="hidden md:flex gap-8 items-center font-['Bricolage_Grotesque'] uppercase tracking-tight font-black">
+<a class="text-[#2d2f2f] dark:text-slate-300 hover:bg-yellow-400 hover:text-black transition-all px-2 py-1" href="#">Home</a>
+<a class="text-[#2d2f2f] dark:text-slate-300 hover:bg-yellow-400 hover:text-black transition-all px-2 py-1" href="#">Explore</a>
+<a class="text-teal-600 border-b-4 border-teal-600 pb-1" href="#">Activity</a>
+<a class="text-[#2d2f2f] dark:text-slate-300 hover:bg-yellow-400 hover:text-black transition-all px-2 py-1" href="#">Community</a>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-teal-600 cursor-pointer text-2xl" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-teal-600 cursor-pointer text-2xl" data-icon="account_circle">account_circle</span>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Main Form Column -->
+<div class="lg:col-span-8">
+<header class="mb-12">
+<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 font-bold uppercase text-sm inline-block mb-4 border-2 border-outline">Giver Mode</span>
+<h1 class="text-5xl md:text-7xl font-headline font-black uppercase leading-[0.9] tracking-tight text-primary mb-4">
+                    Share Your Surplus, <span class="bg-secondary-container px-2">Build Your Neighborhood.</span>
+</h1>
+<p class="text-xl max-w-2xl font-medium opacity-80">List an item to keep the local loop spinning. Whether you're gifting, lending, or selling, every share strengthens the community.</p>
+</header>
+<form class="space-y-12">
+<!-- Step 1: Item Details -->
+<section class="brutalist-card bg-surface-container-lowest p-8 relative">
+<div class="absolute -top-6 -left-4 bg-primary text-on-primary px-4 py-2 font-black text-2xl border-4 border-outline">01</div>
+<h2 class="text-3xl font-headline font-black uppercase mb-6 mt-2">Item Details</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="col-span-2">
+<label class="block font-bold uppercase mb-2 text-sm">Item Title</label>
+<input class="w-full bg-surface-container-highest border-4 border-outline p-4 font-bold text-lg focus:bg-primary-container outline-none transition-colors" placeholder="e.g., Heavy Duty Power Drill" type="text"/>
+</div>
+<div>
+<label class="block font-bold uppercase mb-2 text-sm">Category</label>
+<select class="w-full bg-surface-container-highest border-4 border-outline p-4 font-bold outline-none appearance-none">
+<option>Tools</option>
+<option>Home &amp; Decor</option>
+<option>Garden</option>
+<option>Kitchen</option>
+<option>Electronics</option>
+</select>
+</div>
+<div>
+<label class="block font-bold uppercase mb-2 text-sm">Condition</label>
+<select class="w-full bg-surface-container-highest border-4 border-outline p-4 font-bold outline-none appearance-none">
+<option>Brand New</option>
+<option>Good as New</option>
+<option>Well-loved</option>
+<option>Vintage/Relic</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Step 2: Photo Upload -->
+<section class="brutalist-card bg-surface-container-low p-8 relative">
+<div class="absolute -top-6 -left-4 bg-primary text-on-primary px-4 py-2 font-black text-2xl border-4 border-outline">02</div>
+<h2 class="text-3xl font-headline font-black uppercase mb-6 mt-2">Visual Proof</h2>
+<div class="border-4 border-dashed border-outline bg-surface-container p-12 flex flex-col items-center justify-center text-center group hover:bg-primary-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-6xl mb-4" data-icon="add_a_photo">add_a_photo</span>
+<p class="text-xl font-bold uppercase">Drag &amp; Drop or Click to Upload</p>
+<p class="text-sm opacity-60 mt-2 font-medium">Up to 5 high-res photos. Show the details!</p>
+</div>
+<div class="grid grid-cols-5 gap-4 mt-6">
+<div class="aspect-square bg-surface-variant border-2 border-outline flex items-center justify-center">
+<span class="material-symbols-outlined opacity-30" data-icon="image">image</span>
+</div>
+<div class="aspect-square bg-surface-variant border-2 border-outline flex items-center justify-center">
+<span class="material-symbols-outlined opacity-30" data-icon="image">image</span>
+</div>
+<div class="aspect-square bg-surface-variant border-2 border-outline flex items-center justify-center">
+<span class="material-symbols-outlined opacity-30" data-icon="image">image</span>
+</div>
+<div class="aspect-square bg-surface-variant border-2 border-outline flex items-center justify-center">
+<span class="material-symbols-outlined opacity-30" data-icon="image">image</span>
+</div>
+<div class="aspect-square bg-surface-variant border-2 border-outline flex items-center justify-center">
+<span class="material-symbols-outlined opacity-30" data-icon="image">image</span>
+</div>
+</div>
+</section>
+<!-- Step 3: Exchange Terms -->
+<section class="brutalist-card bg-surface-container-lowest p-8 relative">
+<div class="absolute -top-6 -left-4 bg-primary text-on-primary px-4 py-2 font-black text-2xl border-4 border-outline">03</div>
+<h2 class="text-3xl font-headline font-black uppercase mb-6 mt-2">Exchange Terms</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+<button class="p-6 border-4 border-outline bg-primary text-on-primary font-black uppercase text-center flex flex-col items-center gap-2" type="button">
+<span class="material-symbols-outlined text-3xl" data-icon="card_giftcard" style="font-variation-settings: 'FILL' 1;">card_giftcard</span>
+                            Gift
+                        </button>
+<button class="p-6 border-4 border-outline bg-surface-container-highest hover:bg-primary-container transition-colors font-black uppercase text-center flex flex-col items-center gap-2" type="button">
+<span class="material-symbols-outlined text-3xl" data-icon="handshake">handshake</span>
+                            Lend
+                        </button>
+<button class="p-6 border-4 border-outline bg-surface-container-highest hover:bg-primary-container transition-colors font-black uppercase text-center flex flex-col items-center gap-2" type="button">
+<span class="material-symbols-outlined text-3xl" data-icon="sell">sell</span>
+                            Sell
+                        </button>
+</div>
+<div class="bg-secondary-container border-4 border-outline p-6">
+<label class="block font-bold uppercase mb-2 text-sm text-on-secondary-container">Listing Price (If selling)</label>
+<div class="flex items-center">
+<span class="bg-outline text-surface px-4 py-4 font-black text-xl">$</span>
+<input class="flex-1 bg-surface-container-lowest border-4 border-l-0 border-outline p-4 font-black text-xl outline-none" placeholder="0.00" type="number"/>
+</div>
+</div>
+</section>
+<!-- Step 4: Location & Privacy -->
+<section class="brutalist-card bg-surface-container p-8 relative">
+<div class="absolute -top-6 -left-4 bg-primary text-on-primary px-4 py-2 font-black text-2xl border-4 border-outline">04</div>
+<h2 class="text-3xl font-headline font-black uppercase mb-6 mt-2">Location</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block font-bold uppercase mb-2 text-sm">Neighborhood Area</label>
+<select class="w-full bg-surface-container-lowest border-4 border-outline p-4 font-bold outline-none">
+<option>Silver Lake, CA</option>
+<option>Echo Park, CA</option>
+<option>Los Feliz, CA</option>
+</select>
+</div>
+<div>
+<label class="block font-bold uppercase mb-2 text-sm">Visibility Radius</label>
+<input class="w-full h-8 accent-primary cursor-pointer mt-4" type="range"/>
+<div class="flex justify-between text-xs font-black uppercase mt-2">
+<span>1 Mile</span>
+<span>5 Miles</span>
+<span>10 Miles</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Verification -->
+<div class="flex items-start gap-4 p-4 border-4 border-teal-600 bg-primary-container/30">
+<input class="w-8 h-8 border-4 border-outline bg-surface-container-lowest text-primary focus:ring-0 rounded-none cursor-pointer" id="verify" type="checkbox"/>
+<label class="font-bold uppercase text-lg leading-tight cursor-pointer" for="verify">
+                        I verify this item is <span class="text-primary underline">Safe &amp; Clean</span> and I am authorized to share it with my neighbors.
+                    </label>
+</div>
+<!-- Action Area -->
+<div class="pt-8 flex justify-center">
+<button class="w-full md:w-auto px-12 py-8 bg-secondary-container text-on-secondary-container font-headline font-black text-4xl uppercase heavy-shadow border-4 border-[#2d2f2f] hover:-translate-y-1 hover:-translate-x-1 active:translate-y-0 active:translate-x-0 transition-all flex items-center justify-center gap-4 group" type="submit">
+                        Publish To The Loop
+                        <span class="material-symbols-outlined text-4xl group-hover:translate-x-2 transition-transform" data-icon="rocket_launch">rocket_launch</span>
+</button>
+</div>
+</form>
+</div>
+<!-- Sidebar / Dashboard Preview -->
+<aside class="lg:col-span-4 space-y-8">
+<div class="brutalist-card bg-tertiary-container p-6">
+<h3 class="text-2xl font-headline font-black uppercase mb-4 border-b-4 border-outline pb-2">Your Impact</h3>
+<div class="space-y-6">
+<div class="flex justify-between items-end">
+<div>
+<p class="text-xs font-black uppercase opacity-70">Carbon Saved</p>
+<p class="text-4xl font-black">12.4 <span class="text-sm">KG</span></p>
+</div>
+<span class="material-symbols-outlined text-4xl" data-icon="eco">eco</span>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<p class="text-xs font-black uppercase opacity-70">Neighbors Helped</p>
+<p class="text-4xl font-black">28</p>
+</div>
+<span class="material-symbols-outlined text-4xl" data-icon="volunteer_activism">volunteer_activism</span>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<p class="text-xs font-black uppercase opacity-70">Waste Diverted</p>
+<p class="text-4xl font-black">45 <span class="text-sm">LBS</span></p>
+</div>
+<span class="material-symbols-outlined text-4xl" data-icon="delete_sweep">delete_sweep</span>
+</div>
+</div>
+</div>
+<div class="brutalist-card bg-surface-container-highest p-6">
+<h3 class="text-2xl font-headline font-black uppercase mb-4">Giver Pro-Tips</h3>
+<ul class="space-y-4 font-bold text-sm uppercase">
+<li class="flex gap-3">
+<span class="text-primary">●</span>
+                        Take photos in natural daylight for 3x faster pick-ups.
+                    </li>
+<li class="flex gap-3">
+<span class="text-primary">●</span>
+                        Mention the original retail price for context.
+                    </li>
+<li class="flex gap-3">
+<span class="text-primary">●</span>
+                        Respond to inquiries within 2 hours to keep your "Loop Rating" high.
+                    </li>
+</ul>
+</div>
+<div class="border-4 border-outline p-1 overflow-hidden">
+<img class="w-full grayscale hover:grayscale-0 transition-all duration-500" data-alt="colorful variety of shared community tools and household items on a bright graphic background in neobrutalist style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUtICb5UJegN7gaLkKCjPz0X0_WENCCJjvZQV2SSbkhsDcTetPs75r8WM5ja0S_W76PqLEThnNCKfPce_gyN7kM0SoChoaomXvQg2pBndPpJOGqtcdD_4cUEs957DVDcOVZnW4w6B8kcyGpIWzbrwnyn33JYR9BHqePhzRFkhvC1yWm1p2YmrtwE2hiC0MFlxWxV5dhmEfAqlECNyqVrzJN9diU8671SSD97gJ42SJ_AxobdaaRop8fqcd-W6yTGLtttUXG818Fw"/>
+</div>
+</aside>
+</main>
+<!-- BottomNavBar Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center bg-[#f6f6f6] dark:bg-slate-900 border-t-4 border-[#757777] bg-opacity-70 backdrop-blur-xl h-20">
+<a class="flex flex-col items-center justify-center text-[#2d2f2f] dark:text-slate-400 px-4 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['Space_Grotesk'] text-xs font-bold uppercase">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2d2f2f] dark:text-slate-400 px-4 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-['Space_Grotesk'] text-xs font-bold uppercase">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-yellow-400 text-black border-2 border-black px-4 py-1 translate-y-[-4px]" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-['Space_Grotesk'] text-xs font-bold uppercase">Activity</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2d2f2f] dark:text-slate-400 px-4 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-['Space_Grotesk'] text-xs font-bold uppercase">Community</span>
+</a>
+</nav>
+<footer class="bg-inverse-surface text-background p-12 mt-20 mb-20 md:mb-0">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-8">
+<div class="max-w-md">
+<h4 class="text-4xl font-headline font-black uppercase mb-4 italic text-primary-container">TeraMera</h4>
+<p class="font-medium opacity-60">The future of ownership is shared. TeraMera is the layer for the circular economy in your neighborhood.</p>
+</div>
+<div class="grid grid-cols-2 gap-12 font-bold uppercase text-sm">
+<div class="flex flex-col gap-2">
+<a class="hover:text-primary-container" href="#">Manifesto</a>
+<a class="hover:text-primary-container" href="#">Safety Guidelines</a>
+<a class="hover:text-primary-container" href="#">The Loop API</a>
+</div>
+<div class="flex flex-col gap-2">
+<a class="hover:text-primary-container" href="#">Terms</a>
+<a class="hover:text-primary-container" href="#">Privacy</a>
+<a class="hover:text-primary-container" href="#">Contact</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

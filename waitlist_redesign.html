@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TeraMera - Join Waitlist</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&amp;family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "error-dim": "#9f0519",
+                        "surface-container-highest": "#dbdddd",
+                        "tertiary-fixed": "#ff9476",
+                        "on-surface-variant": "#5a5c5c",
+                        "surface": "#f6f6f6",
+                        "surface-variant": "#dbdddd",
+                        "on-secondary-container": "#5b4b00",
+                        "error": "#b31b25",
+                        "tertiary-dim": "#972500",
+                        "surface-container-low": "#f0f1f1",
+                        "tertiary": "#ac2c00",
+                        "on-surface": "#2d2f2f",
+                        "tertiary-container": "#ff9476",
+                        "secondary": "#6c5a00",
+                        "on-primary-fixed-variant": "#006262",
+                        "on-secondary-fixed-variant": "#665500",
+                        "tertiary-fixed-dim": "#ff7d58",
+                        "secondary-fixed-dim": "#efc900",
+                        "on-tertiary-fixed": "#350700",
+                        "primary-dim": "#005959",
+                        "on-error-container": "#570008",
+                        "surface-container": "#e7e8e8",
+                        "primary": "#006666",
+                        "background": "#f6f6f6",
+                        "secondary-dim": "#5e4e00",
+                        "surface-container-high": "#e1e3e3",
+                        "on-primary-container": "#005858",
+                        "outline-variant": "#acadad",
+                        "on-error": "#ffefee",
+                        "on-tertiary-fixed-variant": "#701900",
+                        "surface-bright": "#f6f6f6",
+                        "inverse-primary": "#76efef",
+                        "secondary-fixed": "#ffd709",
+                        "primary-fixed-dim": "#67e1e1",
+                        "on-tertiary": "#ffefec",
+                        "primary-fixed": "#76efef",
+                        "primary-container": "#76efef",
+                        "on-secondary-fixed": "#453900",
+                        "surface-tint": "#006666",
+                        "error-container": "#fb5151",
+                        "on-primary-fixed": "#004343",
+                        "on-tertiary-container": "#601400",
+                        "on-background": "#2d2f2f",
+                        "inverse-on-surface": "#9c9d9d",
+                        "secondary-container": "#ffd709",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d2d5d5",
+                        "inverse-surface": "#0c0f0f",
+                        "outline": "#757777",
+                        "on-secondary": "#fff2cd",
+                        "on-primary": "#bbfffe"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    fontFamily: {
+                        "display": ["Bricolage Grotesque", "sans-serif"],
+                        "headline": ["Bricolage Grotesque", "sans-serif"],
+                        "body": ["Space Grotesk", "sans-serif"],
+                        "label": ["Space Grotesk", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Base brutalist resets */
+        * {
+            border-radius: 0 !important;
+        }
+        body {
+            background-image: radial-gradient(theme('colors.surface-variant') 1px, transparent 0);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col overflow-x-hidden selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Navigation -->
+<nav class="border-b-[3px] border-outline bg-surface px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary border-[2px] border-outline flex items-center justify-center transform -rotate-6">
+<span class="material-symbols-outlined text-on-primary text-xl" style="font-variation-settings: 'FILL' 1;">change_history</span>
+</div>
+<a class="font-display text-2xl font-black uppercase tracking-tighter text-on-surface" href="#">TeraMera</a>
+</div>
+<div class="flex items-center gap-6 font-label font-bold uppercase text-sm">
+<a class="text-on-surface hover:bg-secondary-container px-2 py-1 transition-colors border-[2px] border-transparent hover:border-outline" href="#">Early Access</a>
+<a class="bg-surface-container-lowest border-[2px] border-outline px-4 py-2 text-on-surface hover:bg-primary hover:text-on-primary transition-colors shadow-[2px_2px_0px_0px_theme(colors.outline)] active:shadow-none active:translate-y-[2px] active:translate-x-[2px]" href="#">Login</a>
+</div>
+</nav>
+<main class="flex-grow flex flex-col">
+<!-- Hero Section -->
+<section class="flex flex-col items-start px-6 py-24 md:py-32 md:px-20 lg:px-32 w-full max-w-7xl mx-auto relative">
+<!-- Ecosystem Tag -->
+<div class="absolute top-10 right-20 bg-tertiary-fixed text-on-tertiary-fixed font-label font-bold text-xs uppercase px-3 py-1 border-[2px] border-outline transform rotate-3 shadow-[2px_2px_0px_0px_theme(colors.outline)] hidden md:block">
+                Beta v0.9
+            </div>
+<h1 class="font-display text-[3.5rem] md:text-[5.5rem] lg:text-[7rem] font-black uppercase tracking-[-0.03em] leading-[0.9] mb-8 max-w-5xl">
+                Be the first to <br class="hidden md:block"/>
+<span class="bg-secondary-container inline-block px-4 py-1 border-[3px] border-outline shadow-[4px_4px_0px_0px_theme(colors.outline)] transform -rotate-1 mt-2">close the loop</span>
+</h1>
+<p class="text-xl md:text-2xl font-medium max-w-2xl mb-12 border-l-[4px] border-outline pl-6 py-2 bg-surface-container-low relative">
+<span class="absolute -left-[14px] top-1/2 -translate-y-1/2 w-6 h-6 bg-secondary border-[2px] border-outline rotate-45"></span>
+                Spots are filling up by neighborhood. Don't let your street be last.
+            </p>
+<!-- Brutalist Form -->
+<form class="flex flex-col md:flex-row w-full max-w-4xl gap-0 border-[3px] border-outline shadow-[8px_8px_0px_0px_theme(colors.outline)] bg-surface-container-lowest focus-within:-translate-y-1 focus-within:-translate-x-1 focus-within:shadow-[12px_12px_0px_0px_theme(colors.outline)] transition-all duration-200">
+<div class="flex-grow flex items-center bg-surface-container-highest px-4 border-b-[3px] md:border-b-0 md:border-r-[3px] border-outline focus-within:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant text-2xl mr-3">mail</span>
+<input class="w-full bg-transparent border-none p-4 font-label font-bold text-lg uppercase text-on-surface placeholder:text-on-surface-variant focus:ring-0 focus:outline-none" placeholder="YOUR EMAIL ADDRESS" required="" type="email"/>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-8 py-5 md:py-0 font-display font-black text-xl uppercase tracking-wider hover:bg-primary-dim transition-colors flex items-center justify-center gap-2 group whitespace-nowrap" type="button">
+                    Join the Waitlist
+                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</form>
+</section>
+<!-- Social Proof Banner -->
+<section class="bg-secondary-container border-y-[3px] border-outline py-6 px-6 overflow-hidden relative">
+<div class="max-w-7xl mx-auto flex items-center justify-center gap-4">
+<span class="material-symbols-outlined text-on-secondary-container text-3xl" style="font-variation-settings: 'FILL' 1;">group</span>
+<p class="font-display text-2xl md:text-3xl font-black uppercase tracking-tight text-on-secondary-container">
+                    Join 2,400+ neighbors already in the loop.
+                </p>
+</div>
+</section>
+<!-- Why Join Early Section -->
+<section class="bg-surface border-b-[3px] border-outline px-6 py-24 md:px-20 lg:px-32 relative">
+<div class="max-w-7xl mx-auto">
+<div class="flex items-end gap-6 mb-16">
+<h2 class="font-display text-4xl md:text-6xl font-black uppercase tracking-[-0.02em] leading-none border-b-[4px] border-outline pb-2 inline-block">
+                        Why Join Early
+                    </h2>
+<div class="w-16 h-4 bg-tertiary-fixed border-[2px] border-outline shadow-[2px_2px_0px_0px_theme(colors.outline)] mb-2 hidden md:block"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest border-[3px] border-outline p-8 shadow-[6px_6px_0px_0px_theme(colors.outline)] relative group hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[12px_12px_0px_0px_theme(colors.outline)] transition-all duration-300">
+<!-- Decorative element -->
+<div class="absolute -top-4 -right-4 w-12 h-12 bg-secondary border-[3px] border-outline rounded-full flex items-center justify-center shadow-[2px_2px_0px_0px_theme(colors.outline)] z-10 group-hover:rotate-12 transition-transform">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+<div class="bg-surface-variant w-16 h-16 border-[2px] border-outline flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-4xl text-on-surface" style="font-variation-settings: 'FILL' 1;">badge</span>
+</div>
+<div class="bg-surface-container-low border-y-[2px] border-outline py-3 mb-4 -mx-8 px-8">
+<h3 class="font-display text-2xl font-black uppercase leading-tight text-on-surface">Exclusive Karma Badge</h3>
+</div>
+<p class="font-body font-bold text-on-surface-variant text-lg">For founding members.</p>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest border-[3px] border-outline p-8 shadow-[6px_6px_0px_0px_theme(colors.outline)] relative group hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[12px_12px_0px_0px_theme(colors.outline)] transition-all duration-300 md:mt-8">
+<div class="bg-primary-container w-16 h-16 border-[2px] border-outline flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-4xl text-on-primary-container" style="font-variation-settings: 'FILL' 1;">hub</span>
+</div>
+<div class="bg-surface-container-low border-y-[2px] border-outline py-3 mb-4 -mx-8 px-8">
+<h3 class="font-display text-2xl font-black uppercase leading-tight text-on-surface">Founding Hub Access</h3>
+</div>
+<p class="font-body font-bold text-on-surface-variant text-lg">Shape the rules of your local loop.</p>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest border-[3px] border-outline p-8 shadow-[6px_6px_0px_0px_theme(colors.outline)] relative group hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[12px_12px_0px_0px_theme(colors.outline)] transition-all duration-300 md:mt-16">
+<div class="bg-tertiary-fixed w-16 h-16 border-[2px] border-outline flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-4xl text-on-tertiary-fixed" style="font-variation-settings: 'FILL' 1;">money_off</span>
+</div>
+<div class="bg-surface-container-low border-y-[2px] border-outline py-3 mb-4 -mx-8 px-8">
+<h3 class="font-display text-2xl font-black uppercase leading-tight text-on-surface">Zero Lifetime Fees</h3>
+</div>
+<p class="font-body font-bold text-on-surface-variant text-lg">For early adopters.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

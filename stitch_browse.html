@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Space+Grotesk:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#2d2f2f",
+                        "inverse-on-surface": "#9c9d9d",
+                        "secondary-container": "#ffd709",
+                        "on-secondary": "#fff2cd",
+                        "on-primary": "#bbfffe",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d2d5d5",
+                        "inverse-surface": "#0c0f0f",
+                        "outline": "#757777",
+                        "primary-container": "#76efef",
+                        "on-tertiary": "#ffefec",
+                        "secondary-fixed": "#ffd709",
+                        "primary-fixed-dim": "#67e1e1",
+                        "inverse-primary": "#76efef",
+                        "primary-fixed": "#76efef",
+                        "on-tertiary-container": "#601400",
+                        "surface-tint": "#006666",
+                        "on-secondary-fixed": "#453900",
+                        "on-primary-fixed": "#004343",
+                        "error-container": "#fb5151",
+                        "surface-container": "#e7e8e8",
+                        "primary": "#006666",
+                        "outline-variant": "#acadad",
+                        "on-error": "#ffefee",
+                        "surface-bright": "#f6f6f6",
+                        "on-tertiary-fixed-variant": "#701900",
+                        "background": "#f6f6f6",
+                        "surface-container-high": "#e1e3e3",
+                        "secondary-dim": "#5e4e00",
+                        "on-primary-container": "#005858",
+                        "on-secondary-container": "#5b4b00",
+                        "error": "#b31b25",
+                        "surface-variant": "#dbdddd",
+                        "tertiary-dim": "#972500",
+                        "tertiary": "#ac2c00",
+                        "surface-container-low": "#f0f1f1",
+                        "error-dim": "#9f0519",
+                        "surface-container-highest": "#dbdddd",
+                        "tertiary-fixed": "#ff9476",
+                        "surface": "#f6f6f6",
+                        "on-surface-variant": "#5a5c5c",
+                        "tertiary-fixed-dim": "#ff7d58",
+                        "secondary-fixed-dim": "#efc900",
+                        "on-secondary-fixed-variant": "#665500",
+                        "primary-dim": "#005959",
+                        "on-tertiary-fixed": "#350700",
+                        "on-error-container": "#570008",
+                        "on-surface": "#2d2f2f",
+                        "tertiary-container": "#ff9476",
+                        "on-primary-fixed-variant": "#006262",
+                        "secondary": "#6c5a00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Bricolage Grotesque", "sans-serif"],
+                        "body": ["Space Grotesk", "sans-serif"],
+                        "label": ["Space Grotesk", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .brutalist-shadow { box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); }
+        .brutalist-shadow-hover:hover { box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); transform: translate(-2px, -2px); }
+        .brutalist-shadow-active:active { box-shadow: 0px 0px 0px 0px rgba(0,0,0,1); transform: translate(4px, 4px); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 z-50 w-full bg-white dark:bg-neutral-900 border-b-4 border-black flex justify-between items-center px-6 py-4 brutalist-shadow">
+<div class="flex items-center gap-8">
+<h1 class="text-3xl font-black text-teal-600 dark:text-teal-400 italic font-headline uppercase tracking-tight">TeraMera</h1>
+<div class="hidden md:flex relative items-center">
+<span class="material-symbols-outlined absolute left-3 text-neutral-500">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-highest border-2 border-black focus:bg-primary-container outline-none w-80 font-medium" placeholder="Search neighborhood..." type="text"/>
+</div>
+</div>
+<nav class="flex items-center gap-6">
+<div class="hidden md:flex gap-6 font-bold uppercase tracking-widest text-sm">
+<a class="text-teal-600 border-b-4 border-teal-600 py-1" href="#">Browse</a>
+<a class="text-neutral-600 hover:bg-yellow-400 hover:text-black transition-all px-2 py-1" href="#">Activity</a>
+<a class="text-neutral-600 hover:bg-yellow-400 hover:text-black transition-all px-2 py-1" href="#">Messages</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 hover:bg-yellow-400 border-2 border-transparent hover:border-black transition-all">notifications</button>
+<button class="material-symbols-outlined p-2 hover:bg-yellow-400 border-2 border-transparent hover:border-black transition-all">account_circle</button>
+</div>
+</nav>
+</header>
+<div class="flex pt-20 min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col w-64 bg-neutral-50 dark:bg-neutral-800 border-r-4 border-black p-6 space-y-4 h-[calc(100vh-80px)] sticky top-20">
+<div class="mb-6">
+<p class="text-xs font-black uppercase tracking-widest text-teal-600">Categories</p>
+<h2 class="text-xl font-headline font-bold">Browse Local</h2>
+</div>
+<nav class="flex flex-col space-y-2">
+<a class="flex items-center gap-3 p-2 text-neutral-700 dark:text-neutral-300 hover:translate-x-1 hover:bg-yellow-300 transition-transform font-medium" href="#">
+<span class="material-symbols-outlined">construction</span> Tools &amp; Gear
+                </a>
+<a class="flex items-center gap-3 p-2 bg-yellow-400 text-black font-black border-2 border-black brutalist-shadow" href="#">
+<span class="material-symbols-outlined">potted_plant</span> Botany
+                </a>
+<a class="flex items-center gap-3 p-2 text-neutral-700 dark:text-neutral-300 hover:translate-x-1 hover:bg-yellow-300 transition-transform font-medium" href="#">
+<span class="material-symbols-outlined">home</span> Habitat
+                </a>
+<a class="flex items-center gap-3 p-2 text-neutral-700 dark:text-neutral-300 hover:translate-x-1 hover:bg-yellow-300 transition-transform font-medium" href="#">
+<span class="material-symbols-outlined">handyman</span> Hardware
+                </a>
+<a class="flex items-center gap-3 p-2 text-neutral-700 dark:text-neutral-300 hover:translate-x-1 hover:bg-yellow-300 transition-transform font-medium" href="#">
+<span class="material-symbols-outlined">restaurant</span> Culinary
+                </a>
+</nav>
+<div class="mt-auto pt-6 border-t-2 border-black">
+<button class="w-full bg-primary text-on-primary border-2 border-black py-3 font-bold uppercase brutalist-shadow-hover brutalist-shadow-active transition-all">
+                    List an Item
+                </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 p-6 md:p-12 overflow-x-hidden pb-24">
+<header class="mb-12 max-w-4xl">
+<div class="inline-block bg-secondary-container px-4 py-1 border-2 border-black mb-4 brutalist-shadow">
+<span class="text-xs font-black uppercase tracking-tighter">Live Ecosystem</span>
+</div>
+<h2 class="text-6xl md:text-8xl font-headline font-extrabold leading-none -ml-1 mb-4">
+                    NEIGHBORHOOD <br/> <span class="text-teal-600">TREASURES</span>
+</h2>
+<p class="text-xl font-medium max-w-2xl text-on-surface-variant">
+                    Discover local resources shared by your community. Borrow, claim, or trade to keep the cycle moving.
+                </p>
+</header>
+<!-- Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
+<!-- Card 1: WANTED -->
+<div class="group bg-white border-4 border-black brutalist-shadow p-4 flex flex-col h-full transform transition-all hover:-translate-y-1">
+<div class="relative overflow-hidden border-2 border-black mb-4">
+<img alt="Power drill" class="w-full aspect-square object-cover" data-alt="Close-up of a heavy-duty industrial yellow power drill on a workshop bench with tools in soft focus background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAeVcskmeVvQfGhwZmzpcA_SFlYOJXxZmzjLmgA-nZxiriMVnuQk_E1V5a3KJPaWuY4TJvmngJSsrnqp9NH-vApKKnIA1_-8uCGPpU4b6_NxQhsTX2TpTqMYMLhKdAAxrBrME3NAkTYhlpevLE8zF37V42DpZ4eZ4q93Su_Hn4F16xtjCcxQxZeHtCZwmQreA3BxE2cfqsiFl9D97nrgPyBVnQ9WLKiEe4-SV-04G1ZZ4Lnj19DcJuxB76isKxW5K9JiLVDhHYYQ"/>
+<div class="absolute top-2 left-2 bg-yellow-400 border-2 border-black px-3 py-1 font-black text-sm uppercase">WANTED</div>
+</div>
+<div class="flex-1">
+<h3 class="text-2xl font-headline font-bold mb-1">Heavy Duty Drill</h3>
+<div class="flex items-center gap-2 mb-4 text-sm font-medium text-on-surface-variant">
+<span class="material-symbols-outlined text-base">location_on</span> 0.4km away
+                        </div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-low border-2 border-black mb-6">
+<div class="w-10 h-10 bg-teal-200 border-2 border-black flex items-center justify-center font-bold">M</div>
+<div>
+<p class="text-xs font-bold uppercase opacity-60">Posted by</p>
+<p class="font-bold">Marcus R. <span class="text-teal-600 text-xs ml-1">(1,420 Karma)</span></p>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary border-2 border-black py-4 font-black uppercase brutalist-shadow-hover brutalist-shadow-active transition-all">
+                        I HAVE THIS
+                    </button>
+</div>
+<!-- Card 2: GIFT -->
+<div class="group bg-white border-4 border-black brutalist-shadow p-4 flex flex-col h-full transform transition-all hover:-translate-y-1 lg:mt-12">
+<div class="relative overflow-hidden border-2 border-black mb-4">
+<img alt="Potted plant" class="w-full aspect-square object-cover" data-alt="Small spider plant babies in ceramic pots sitting on a sun-drenched windowsill with bright, high-contrast lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvGjaJqft--MVH9kCLwIYpGQL03dWFLgpgaozS9h4SiPwH0gw6AvaqbdaFuHgfjrBdqm7JQbZJGFL8gyA_k-7nqo5knfcQkDUFrMLaShjJrthjlE8QDfjsimnfP1gbH_U1yjihPLFBJfBrFJL2ttDw9D0Et14T04QBe8wctawx2xsY9etl2eSbzoIjLHHZn8yK2You8LuRWHxu0GYWLa34PrivUwmhNGkn_w9TqgVKmPHjCsAF-JHX82dbXPzOEXr5Crnox_svuQ"/>
+<div class="absolute top-2 left-2 bg-primary-container border-2 border-black px-3 py-1 font-black text-sm uppercase">GIFT</div>
+</div>
+<div class="flex-1">
+<h3 class="text-2xl font-headline font-bold mb-1">Spider Plant Babies</h3>
+<div class="flex items-center gap-2 mb-4 text-sm font-medium text-on-surface-variant">
+<span class="material-symbols-outlined text-base">location_on</span> 1.2km away
+                        </div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-low border-2 border-black mb-6">
+<div class="w-10 h-10 bg-yellow-200 border-2 border-black flex items-center justify-center font-bold">E</div>
+<div>
+<p class="text-xs font-bold uppercase opacity-60">Posted by</p>
+<p class="font-bold">Elena V. <span class="text-teal-600 text-xs ml-1">(890 Karma)</span></p>
+</div>
+</div>
+</div>
+<button class="w-full bg-secondary-container text-black border-2 border-black py-4 font-black uppercase brutalist-shadow-hover brutalist-shadow-active transition-all">
+                        CLAIM ITEM
+                    </button>
+</div>
+<!-- Card 3: TRADE -->
+<div class="group bg-white border-4 border-black brutalist-shadow p-4 flex flex-col h-full transform transition-all hover:-translate-y-1">
+<div class="relative overflow-hidden border-2 border-black mb-4">
+<img alt="Turntable" class="w-full aspect-square object-cover" data-alt="Vintage retro turntable with wood finish and metallic details, playing a vinyl record with atmospheric warm indoor lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcTuJMhaKoXgrQMY3g4iqd-Qd4tbJQ81lSoE5sUI6e7Yni4Fauh9i_gbgqM7IbovA9lDFXiGyDFjVc98d9V3WJ0UQqSBz6wSe3M8Jyg4DcFUb9rcupwT6N4ICu9mDuXsInGr04V7INWxNQ8t-7Yr32rMv_FEiq7agKqq7n3sfHwxsYnReHq_wqTAIL0n4nug9NjGl-Mkf65owUSYJUE0AxQjuZK24p7hLsPjPkyr5wlUtjfaJZsjLFbEW1ifUiqL4k43zDZc6lSw"/>
+<div class="absolute top-2 left-2 bg-tertiary-container border-2 border-black px-3 py-1 font-black text-sm uppercase text-white">TRADE</div>
+</div>
+<div class="flex-1">
+<h3 class="text-2xl font-headline font-bold mb-1">Retro Turntable</h3>
+<div class="flex items-center gap-2 mb-4 text-sm font-medium text-on-surface-variant">
+<span class="material-symbols-outlined text-base">location_on</span> 2.1km away
+                        </div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-low border-2 border-black mb-6">
+<div class="w-10 h-10 bg-primary-container border-2 border-black flex items-center justify-center font-bold">D</div>
+<div>
+<p class="text-xs font-bold uppercase opacity-60">Posted by</p>
+<p class="font-bold">David K. <span class="text-teal-600 text-xs ml-1">(2,110 Karma)</span></p>
+</div>
+</div>
+</div>
+<button class="w-full bg-on-surface text-white border-2 border-black py-4 font-black uppercase brutalist-shadow-hover brutalist-shadow-active transition-all">
+                        MAKE OFFER
+                    </button>
+</div>
+</div>
+<!-- Impact Stats Footer -->
+<footer class="mt-24 bg-teal-600 text-on-primary p-8 md:p-12 border-4 border-black brutalist-shadow">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="text-center md:text-left">
+<p class="text-6xl font-headline font-extrabold mb-2">1,240</p>
+<p class="uppercase font-black text-sm tracking-widest border-t-2 border-black pt-2">Items Shared This Month</p>
+</div>
+<div class="text-center md:text-left">
+<p class="text-6xl font-headline font-extrabold mb-2">8.4<span class="text-3xl">tons</span></p>
+<p class="uppercase font-black text-sm tracking-widest border-t-2 border-black pt-2">Waste Diverted Locally</p>
+</div>
+<div class="text-center md:text-left">
+<p class="text-6xl font-headline font-extrabold mb-2">94%</p>
+<p class="uppercase font-black text-sm tracking-widest border-t-2 border-black pt-2">Neighborhood Trust Score</p>
+</div>
+</div>
+</footer>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-stretch h-16 bg-white border-t-4 border-black z-50">
+<a class="flex flex-col items-center justify-center bg-yellow-400 text-black p-2 border-x-2 border-black flex-1" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px] font-black uppercase">Browse</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-500 p-2 flex-1 hover:bg-teal-50 transition-all" href="#">
+<span class="material-symbols-outlined">swap_horiz</span>
+<span class="text-[10px] font-black uppercase">Activity</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-500 p-2 flex-1 hover:bg-teal-50 transition-all" href="#">
+<span class="material-symbols-outlined">chat</span>
+<span class="text-[10px] font-black uppercase">Messages</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-500 p-2 flex-1 hover:bg-teal-50 transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-black uppercase">Profile</span>
+</a>
+</nav>
+</body></html>

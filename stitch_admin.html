@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TeraMera Admin | Moderation Desk</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&amp;family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#ffd709",
+                    "on-surface": "#2d2f2f",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-container": "#601400",
+                    "surface-variant": "#dbdddd",
+                    "secondary-fixed-dim": "#efc900",
+                    "primary-fixed": "#76efef",
+                    "on-error-container": "#570008",
+                    "secondary-fixed": "#ffd709",
+                    "on-background": "#2d2f2f",
+                    "inverse-primary": "#76efef",
+                    "on-primary": "#bbfffe",
+                    "inverse-surface": "#0c0f0f",
+                    "surface": "#f6f6f6",
+                    "surface-dim": "#d2d5d5",
+                    "on-secondary-fixed-variant": "#665500",
+                    "on-primary-container": "#005858",
+                    "surface-bright": "#f6f6f6",
+                    "primary-container": "#76efef",
+                    "on-surface-variant": "#5a5c5c",
+                    "inverse-on-surface": "#9c9d9d",
+                    "on-secondary-fixed": "#453900",
+                    "on-primary-fixed-variant": "#006262",
+                    "on-primary-fixed": "#004343",
+                    "on-tertiary-fixed-variant": "#701900",
+                    "on-secondary-container": "#5b4b00",
+                    "surface-container-low": "#f0f1f1",
+                    "on-secondary": "#fff2cd",
+                    "tertiary-fixed": "#ff9476",
+                    "surface-tint": "#006666",
+                    "primary-fixed-dim": "#67e1e1",
+                    "error-container": "#fb5151",
+                    "tertiary-container": "#ff9476",
+                    "tertiary-dim": "#972500",
+                    "error-dim": "#9f0519",
+                    "error": "#b31b25",
+                    "background": "#f6f6f6",
+                    "surface-container-highest": "#dbdddd",
+                    "secondary-dim": "#5e4e00",
+                    "on-tertiary": "#ffefec",
+                    "on-tertiary-fixed": "#350700",
+                    "surface-container": "#e7e8e8",
+                    "primary-dim": "#005959",
+                    "outline-variant": "#acadad",
+                    "secondary": "#6c5a00",
+                    "on-error": "#ffefee",
+                    "tertiary-fixed-dim": "#ff7d58",
+                    "surface-container-high": "#e1e3e3",
+                    "tertiary": "#ac2c00",
+                    "primary": "#006666",
+                    "outline": "#757777"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Bricolage Grotesque"],
+                    "body": ["Space Grotesk"],
+                    "label": ["Space Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neo-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+        }
+        .neo-shadow-teal {
+            box-shadow: 4px 4px 0px 0px rgba(0,102,102,1);
+        }
+        .active-tab-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-container">
+<div class="flex min-h-screen">
+<!-- SideNavBar from JSON -->
+<aside class="h-screen w-64 border-r-4 border-neutral-800 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 flex flex-col h-full p-4 sticky top-0 hidden md:flex">
+<div class="mb-8">
+<div class="text-xl font-black text-teal-600 font-headline uppercase">Admin Desk</div>
+<div class="text-xs text-neutral-500 font-label">Circular Economy</div>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Dashboard Active -->
+<a class="flex items-center gap-3 bg-yellow-400 text-black border-2 border-neutral-800 -translate-y-1 -translate-x-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-['Space_Grotesk'] font-bold text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-neutral-700 dark:text-neutral-300 p-3 hover:bg-teal-500 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-['Space_Grotesk'] font-bold text-sm">Users</span>
+</a>
+<a class="flex items-center gap-3 text-neutral-700 dark:text-neutral-300 p-3 hover:bg-teal-500 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-['Space_Grotesk'] font-bold text-sm">Listings</span>
+</a>
+<a class="flex items-center gap-3 text-neutral-700 dark:text-neutral-300 p-3 hover:bg-teal-500 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">flag</span>
+<span class="font-['Space_Grotesk'] font-bold text-sm">Reports</span>
+</a>
+<a class="flex items-center gap-3 text-neutral-700 dark:text-neutral-300 p-3 hover:bg-teal-500 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-['Space_Grotesk'] font-bold text-sm">Analytics</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t-2 border-neutral-200">
+<button class="w-full bg-primary text-on-primary py-3 px-4 font-bold border-2 border-black neo-shadow hover:bg-primary-dim active:translate-x-0.5 active:translate-y-0.5 transition-all mb-4">
+                    New Broadcast
+                </button>
+<div class="space-y-1">
+<a class="flex items-center gap-3 text-neutral-600 p-2 text-sm hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">help</span>
+<span>Help</span>
+</a>
+<a class="flex items-center gap-3 text-neutral-600 p-2 text-sm hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- TopNavBar from JSON -->
+<header class="bg-white dark:bg-neutral-900 border-b-4 border-neutral-800 dark:border-neutral-700 shadow-[4px_4px_0px_0px_rgba(117,119,119,1)] flex justify-between items-center w-full px-6 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<h1 class="text-2xl font-black italic text-teal-600 dark:text-teal-400 font-headline uppercase tracking-tight">Circular Admin</h1>
+<div class="hidden lg:flex items-center gap-6 font-['Bricolage_Grotesque'] uppercase tracking-tight">
+<a class="text-neutral-600 dark:text-neutral-400 hover:bg-yellow-400 hover:text-black transition-all px-2" href="#">Logs</a>
+<a class="text-neutral-600 dark:text-neutral-400 hover:bg-yellow-400 hover:text-black transition-all px-2" href="#">Audit</a>
+<a class="text-neutral-600 dark:text-neutral-400 hover:bg-yellow-400 hover:text-black transition-all px-2" href="#">System</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-neutral-500">search</span>
+<input class="bg-surface-container-highest border-2 border-outline pl-10 pr-4 py-1.5 focus:border-primary-container focus:ring-0 outline-none w-64 font-label" placeholder="Search MOD desk..." type="text"/>
+</div>
+<button class="material-symbols-outlined p-2 hover:bg-yellow-400 hover:text-black transition-all">notifications</button>
+<button class="material-symbols-outlined p-2 hover:bg-yellow-400 hover:text-black transition-all">settings</button>
+<img alt="Admin profile" class="w-10 h-10 border-2 border-black neo-shadow" data-alt="Close up portrait of a professional administrator in a brightly lit modern office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHvZUjWwsAfGF2Zyef9c4M2Xm8-EEOxDpwCA1gDXcFDywvakI9N2CdzTfJt7qd5HGRiffKbr_6OUyJnKv0O97iFZqwVenacpV-QmilWNH7f0XNCq0WtuSStRQO7ptt96PRYVf4on79uXKYk8YruUXBdcuumbTztu9627-7zeDhZh-RNi9smcXC1hKceJpKP2U2jD1Que5Ztq-7hNuHcFGHXLDrtmQ_kyEXrI_uVVauUXNrPqkc-YPW4CmNZ3psxqVblD5innnt7w"/>
+</div>
+</header>
+<div class="p-6 lg:p-8 space-y-8 max-w-[1600px]">
+<!-- Ecosystem Health Stats: Bento Grid -->
+<section>
+<div class="flex items-center gap-2 mb-6">
+<div class="w-2 h-8 bg-primary"></div>
+<h2 class="text-3xl font-black font-headline uppercase tracking-tighter">Ecosystem Health</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-surface-container-lowest border-4 border-outline neo-shadow p-6 group hover:-translate-y-1 transition-transform">
+<p class="text-sm font-bold text-outline-variant font-label mb-2">Active Neighbors</p>
+<div class="flex items-end justify-between">
+<h3 class="text-5xl font-black font-headline leading-none">12,842</h3>
+<span class="bg-primary-container px-2 py-1 text-xs font-black border-2 border-black">+4.2%</span>
+</div>
+</div>
+<div class="bg-secondary-container border-4 border-outline neo-shadow p-6 group hover:-translate-y-1 transition-transform">
+<p class="text-sm font-bold text-on-secondary-container font-label mb-2">Verified Hubs</p>
+<div class="flex items-end justify-between">
+<h3 class="text-5xl font-black font-headline leading-none">428</h3>
+<span class="material-symbols-outlined text-4xl">hub</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border-4 border-outline neo-shadow p-6 group hover:-translate-y-1 transition-transform">
+<p class="text-sm font-bold text-outline-variant font-label mb-2">Carbon Saved (Tons)</p>
+<div class="flex items-end justify-between">
+<h3 class="text-5xl font-black font-headline leading-none text-primary">1.2K</h3>
+<span class="material-symbols-outlined text-4xl text-primary">eco</span>
+</div>
+</div>
+<div class="bg-tertiary-container border-4 border-outline neo-shadow p-6 group hover:-translate-y-1 transition-transform">
+<p class="text-sm font-bold text-on-tertiary-container font-label mb-2">Landfill Diversion</p>
+<div class="flex items-end justify-between">
+<h3 class="text-5xl font-black font-headline leading-none">89%</h3>
+<div class="w-12 h-12 rounded-full border-4 border-black flex items-center justify-center font-black">!</div>
+</div>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+<!-- Flagged Content Queue: Data Table -->
+<section class="xl:col-span-8 space-y-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-2 h-8 bg-error"></div>
+<h2 class="text-3xl font-black font-headline uppercase tracking-tighter">Flagged Queue</h2>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 border-2 border-black bg-surface-container-highest font-bold text-xs uppercase neo-shadow active:translate-x-0.5 active:translate-y-0.5 transition-all">Bulk Clear</button>
+<button class="px-4 py-2 border-2 border-black bg-error text-on-error font-bold text-xs uppercase neo-shadow active:translate-x-0.5 active:translate-y-0.5 transition-all">Urgent (12)</button>
+</div>
+</div>
+<div class="border-4 border-black bg-white overflow-hidden neo-shadow">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high border-b-4 border-black">
+<th class="p-4 font-black uppercase text-sm font-headline">Item</th>
+<th class="p-4 font-black uppercase text-sm font-headline">Reporter</th>
+<th class="p-4 font-black uppercase text-sm font-headline">Violation</th>
+<th class="p-4 font-black uppercase text-sm font-headline">Status</th>
+<th class="p-4 font-black uppercase text-sm font-headline">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y-2 divide-neutral-200">
+<tr class="hover:bg-primary-container/10 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<img alt="Luxury Watch" class="w-12 h-12 border-2 border-black object-cover" data-alt="Detailed macro photo of a premium silver wristwatch with complex dial details on a dark reflective surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPSAODuzbB-3H1oRyiSdc7rv6UWvFngr2JWtet3zoLLiItprJjhYfBFLAX0MUeUd2A-HLQMu1mmSQAlNAlLyPXoHgI_g3D6pwWT8Z7NWflGqpjcRRk9heOvyyA-TxlOPugbz_lNTKJZNGtWpeWrysbMI3XpMB-ntYxO0IJdHzQMOTEsZ6V3cZx9zE5JveGCOWfqFwFcce7OSZlfDYI_6faQq-4d4EFptGXOvizj79xLsn0BjaxegRHTQtIQiNZG8i3WoPJm-i2wQ"/>
+<div>
+<div class="font-black text-sm">Vintage Rolex Sub...</div>
+<div class="text-xs text-outline-variant">ID: #892-TM</div>
+</div>
+</div>
+</td>
+<td class="p-4">
+<div class="font-bold text-sm">KarmaKing_99</div>
+<div class="text-[10px] uppercase font-black text-primary">Karma: 452</div>
+</td>
+<td class="p-4">
+<span class="bg-secondary-container px-2 py-0.5 text-[10px] font-black border border-black uppercase">Commercial Listing</span>
+</td>
+<td class="p-4">
+<div class="flex items-center gap-2 text-xs font-bold uppercase italic text-primary">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                                                Under Review
+                                            </div>
+</td>
+<td class="p-4">
+<div class="flex gap-1">
+<button class="w-8 h-8 flex items-center justify-center border-2 border-black bg-error text-white hover:bg-error-dim transition-colors"><span class="material-symbols-outlined text-sm">gavel</span></button>
+<button class="w-8 h-8 flex items-center justify-center border-2 border-black bg-surface-container-highest hover:bg-primary-container transition-colors"><span class="material-symbols-outlined text-sm">check</span></button>
+<button class="w-8 h-8 flex items-center justify-center border-2 border-black bg-surface-container-highest hover:bg-secondary-container transition-colors"><span class="material-symbols-outlined text-sm">warning</span></button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-primary-container/10 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<img alt="Interior Decor" class="w-12 h-12 border-2 border-black object-cover" data-alt="Interior shot of a minimalist wooden chair next to a large potted plant in a bright airy room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZIzU_Jp1-oGQYIjLi_ACEKQneB339U70C42U31YD3yhEkx3y7TRJXi59FY-4bB2x08bug1qHT3UmYe-8rH8ciQ5aOaOyEVj3oVpTP3w76PkoBZk4DSYEo3R0Uif66KOZ1WgTocCbXFiViLmxyf6FvX2JSatLwKUmX11aOYVlpI4X27T6Ot8WZUGJSGg-mB_0LznYz8TfnuXDbka2AgmijrXC6Dr55rVMjbRvZMdktCeqZ-GXa3kGOURSmBQnp5t0YeSZMmbFAQQ"/>
+<div>
+<div class="font-black text-sm">Nordic Lounge Chair</div>
+<div class="text-xs text-outline-variant">ID: #412-XZ</div>
+</div>
+</div>
+</td>
+<td class="p-4">
+<div class="font-bold text-sm">EcoWarrior_Jen</div>
+<div class="text-[10px] uppercase font-black text-primary">Karma: 1,208</div>
+</td>
+<td class="p-4">
+<span class="bg-error-container text-on-error-container px-2 py-0.5 text-[10px] font-black border border-black uppercase">Prohibited Product</span>
+</td>
+<td class="p-4">
+<div class="flex items-center gap-2 text-xs font-bold uppercase italic text-error">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                                                Escalated
+                                            </div>
+</td>
+<td class="p-4">
+<div class="flex gap-1">
+<button class="w-8 h-8 flex items-center justify-center border-2 border-black bg-error text-white hover:bg-error-dim transition-colors"><span class="material-symbols-outlined text-sm">gavel</span></button>
+<button class="w-8 h-8 flex items-center justify-center border-2 border-black bg-surface-container-highest hover:bg-primary-container transition-colors"><span class="material-symbols-outlined text-sm">check</span></button>
+<button class="w-8 h-8 flex items-center justify-center border-2 border-black bg-surface-container-highest hover:bg-secondary-container transition-colors"><span class="material-symbols-outlined text-sm">warning</span></button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-primary-container/10 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<img alt="Sneakers" class="w-12 h-12 border-2 border-black object-cover" data-alt="Single bright red athletic sneaker floating against a clean white studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz0B_3ThW0HcRGuJ7hJxSnRG6yXnjnOZ0DGKnFtthh_dVRdVPVjGVdXUZt-IaRwAE3vl1QTs13kx5ukaRZRSNid02AoYUdtzmq4N1SWPkh2wLgAQZy1wBG1kuUVMuZLsldcaKefj9EN9wwSj-OeOUQVBVB3A_wAyZkcZkq-uGdRngUMAeTPIzFTqvt5EyVw4nJ2iWzfiePKbzFRyaCKNnvDzDYMOEeS-vFNW2UFzmeQdp_6Hh5LgRcdtV89G2ddCtvyN3rXgGKbw"/>
+<div>
+<div class="font-black text-sm">Limited Edition Kicks</div>
+<div class="text-xs text-outline-variant">ID: #102-LL</div>
+</div>
+</div>
+</td>
+<td class="p-4">
+<div class="font-bold text-sm">mod_bot_01</div>
+<div class="text-[10px] uppercase font-black text-neutral-500">SYSTEM AI</div>
+</td>
+<td class="p-4">
+<span class="bg-secondary-container px-2 py-0.5 text-[10px] font-black border border-black uppercase">Duplicate Listing</span>
+</td>
+<td class="p-4">
+<div class="flex items-center gap-2 text-xs font-bold uppercase italic text-primary">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                                                Under Review
+                                            </div>
+</td>
+<td class="p-4">
+<div class="flex gap-1">
+<button class="w-8 h-8 flex items-center justify-center border-2 border-black bg-error text-white hover:bg-error-dim transition-colors"><span class="material-symbols-outlined text-sm">gavel</span></button>
+<button class="w-8 h-8 flex items-center justify-center border-2 border-black bg-surface-container-highest hover:bg-primary-container transition-colors"><span class="material-symbols-outlined text-sm">check</span></button>
+<button class="w-8 h-8 flex items-center justify-center border-2 border-black bg-surface-container-highest hover:bg-secondary-container transition-colors"><span class="material-symbols-outlined text-sm">warning</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="bg-surface-container p-4 flex justify-between items-center border-t-4 border-black">
+<span class="text-xs font-bold uppercase font-label">Showing 1-3 of 142 flagged items</span>
+<div class="flex gap-2">
+<button class="w-10 h-10 border-2 border-black bg-white flex items-center justify-center neo-shadow active:translate-y-0.5 transition-all"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="w-10 h-10 border-2 border-black bg-white flex items-center justify-center neo-shadow active:translate-y-0.5 transition-all"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+</div>
+</section>
+<!-- User Trust Panel: Sticky Right Sidebar -->
+<aside class="xl:col-span-4 sticky top-24 space-y-6">
+<div class="bg-white border-4 border-black neo-shadow p-6">
+<div class="flex items-center gap-2 mb-6">
+<div class="w-2 h-8 bg-secondary-container"></div>
+<h2 class="text-2xl font-black font-headline uppercase tracking-tighter">User Trust Panel</h2>
+</div>
+<div class="flex flex-col items-center mb-8 bg-surface-container-low p-6 border-2 border-black relative">
+<div class="absolute top-2 right-2 bg-error text-white text-[10px] font-black px-2 py-1 border border-black uppercase">High Risk</div>
+<img alt="shadow_trader_42" class="w-24 h-24 border-4 border-black mb-4" data-alt="Moody low-light portrait of a mysterious man with partial shadows over his face, urban street style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR4HBtHzk9eZlnm5OR8P5jc4ru3zzi4WZVBhnEfeIoKF9UyMyLuFA_psAckTzcl8AX9U2Y-5zYVj1PbCMGenPdP1FAw6jkbpkYWVJFyMMi5CLvmkCr1ypw8Q3OhpcvdudjM_wGfwWe8ZwnMOuHR3pd21TZl5ReMA_fHFKuRabC6xGL8t2vZNejGFSFqapqzELm5vvlsMIqYmsHElV3P_GyuW5HJXburEnAbPl4KCXJsTaMj_bkqzaHYznKh6NCnWRKRERfRX6F1Q"/>
+<h3 class="text-xl font-black font-headline">shadow_trader_42</h3>
+<p class="text-xs font-bold text-outline-variant font-label mb-4">Member since Feb 2024</p>
+<div class="w-full bg-surface-container-highest border-2 border-black h-8 relative mb-2">
+<div class="h-full bg-error" style="width: 24%"></div>
+<span class="absolute inset-0 flex items-center justify-center font-black text-xs mix-blend-difference text-white">Trust Score: 24/100</span>
+</div>
+</div>
+<div class="space-y-4 mb-8">
+<h4 class="text-sm font-black uppercase font-headline">Previous Violations</h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-variant border border-black px-2 py-1 text-[10px] font-bold uppercase">Spam (3x)</span>
+<span class="bg-surface-variant border border-black px-2 py-1 text-[10px] font-bold uppercase">Duplicate</span>
+<span class="bg-surface-variant border border-black px-2 py-1 text-[10px] font-bold uppercase">False Reporting</span>
+</div>
+</div>
+<div class="space-y-3">
+<button class="w-full py-4 border-4 border-black bg-surface-container-highest font-black uppercase tracking-widest hover:bg-secondary-container hover:-translate-y-1 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">ac_unit</span> Freeze Account
+                                </button>
+<button class="w-full py-4 border-4 border-black bg-surface-container-highest font-black uppercase tracking-widest hover:bg-primary-container hover:-translate-y-1 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">history</span> View Deep History
+                                </button>
+<button class="w-full py-4 border-4 border-black bg-error text-on-error font-black uppercase tracking-widest neo-shadow active:translate-x-1 active:translate-y-1 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">block</span> Ban (Perm)
+                                </button>
+</div>
+</div>
+<!-- System Logs: Bottom-up Timeline -->
+<div class="bg-neutral-800 text-neutral-200 border-4 border-black neo-shadow p-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-black uppercase tracking-widest font-headline">System Logs</h3>
+<span class="bg-primary text-[10px] px-2 py-0.5 font-bold uppercase animate-pulse">Live</span>
+</div>
+<div class="space-y-4 font-label text-xs">
+<div class="flex gap-3 border-l-2 border-primary pl-3">
+<div class="flex-1">
+<span class="text-primary font-bold">14:02:11</span>
+<p class="text-neutral-400">Admin <span class="text-white">sarah_m</span> banned user <span class="text-error">scam_bot_9</span></p>
+</div>
+</div>
+<div class="flex gap-3 border-l-2 border-neutral-600 pl-3">
+<div class="flex-1">
+<span class="text-neutral-500 font-bold">13:58:45</span>
+<p class="text-neutral-400">System <span class="text-white">auto_mod</span> flagged item #2940 (Prohibited)</p>
+</div>
+</div>
+<div class="flex gap-3 border-l-2 border-neutral-600 pl-3">
+<div class="flex-1">
+<span class="text-neutral-500 font-bold">13:45:22</span>
+<p class="text-neutral-400">Bulk action performed: <span class="text-secondary-container">12 listings cleared</span></p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar for Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t-4 border-neutral-800 flex justify-around p-4 z-50">
+<button class="flex flex-col items-center gap-1 text-teal-600 font-bold underline decoration-4">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-headline uppercase">Dash</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-neutral-600">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-headline uppercase">Users</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-neutral-600">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[10px] font-headline uppercase">Items</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-neutral-600">
+<span class="material-symbols-outlined">flag</span>
+<span class="text-[10px] font-headline uppercase">Reports</span>
+</button>
+</nav>
+</body></html>

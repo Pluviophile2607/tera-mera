@@ -1,0 +1,20 @@
+[0m[0m
+[0m[4mC:\Users\Admin\Documents\earlyaccess-tera_mera\server\db.js[24m[0m
+[0m  [2m4:20[22m  [31merror[39m  'process' is not defined  [2mno-undef[22m[0m
+[0m  [2m5:18[22m  [31merror[39m  'process' is not defined  [2mno-undef[22m[0m
+[0m[0m
+[0m[4mC:\Users\Admin\Documents\earlyaccess-tera_mera\server\index.js[24m[0m
+[0m  [2m17:21[22m  [31merror[39m  'process' is not defined  [2mno-undef[22m[0m
+[0m[0m
+[0m[4mC:\Users\Admin\Documents\earlyaccess-tera_mera\server\initUserDatabase.js[24m[0m
+[0m  [2m12:18[22m  [31merror[39m  'process' is not defined  [2mno-undef[22m[0m
+[0m  [2m13:16[22m  [31merror[39m  'process' is not defined  [2mno-undef[22m[0m
+[0m[0m
+[0m[4mC:\Users\Admin\Documents\earlyaccess-tera_mera\src\Signup.jsx[24m[0m
+[0m  [2m23:9[22m  [31merror[39m  'navigate' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  [2mno-unused-vars[22m[0m
+[0m[0m
+[0m[4mC:\Users\Admin\Documents\earlyaccess-tera_mera\src\components\Navbar.jsx[24m[0m
+[0m  [2m7:9[22m  [31merror[39m  'isVision' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  [2mno-unused-vars[22m[0m
+[0m[0m
+[0m[31m[1m✖ 7 problems (7 errors, 0 warnings)[22m[39m[0m
+[0m[31m[1m[22m[39m[0m

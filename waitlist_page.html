@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700;800&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#76efef",
+                    "surface-tint": "#006666",
+                    "primary-fixed-dim": "#67e1e1",
+                    "surface-container-highest": "#dbdddd",
+                    "on-primary-container": "#005858",
+                    "outline-variant": "#acadad",
+                    "secondary-container": "#ffd709",
+                    "tertiary-dim": "#972500",
+                    "on-surface-variant": "#5a5c5c",
+                    "on-secondary-fixed-variant": "#665500",
+                    "secondary-fixed-dim": "#efc900",
+                    "inverse-surface": "#0c0f0f",
+                    "on-surface": "#2d2f2f",
+                    "surface-bright": "#f6f6f6",
+                    "on-primary-fixed": "#004343",
+                    "error-container": "#fb5151",
+                    "on-error": "#ffefee",
+                    "surface-dim": "#d2d5d5",
+                    "tertiary-container": "#ff9476",
+                    "tertiary": "#ac2c00",
+                    "primary-fixed": "#76efef",
+                    "surface-container": "#e7e8e8",
+                    "on-primary-fixed-variant": "#006262",
+                    "secondary-fixed": "#ffd709",
+                    "secondary-dim": "#5e4e00",
+                    "on-background": "#2d2f2f",
+                    "surface-container-low": "#f0f1f1",
+                    "primary-dim": "#005959",
+                    "error": "#b31b25",
+                    "on-secondary": "#fff2cd",
+                    "on-tertiary-container": "#601400",
+                    "on-tertiary-fixed-variant": "#701900",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-container": "#5b4b00",
+                    "surface-variant": "#dbdddd",
+                    "on-primary": "#bbfffe",
+                    "secondary": "#6c5a00",
+                    "on-secondary-fixed": "#453900",
+                    "inverse-on-surface": "#9c9d9d",
+                    "on-error-container": "#570008",
+                    "tertiary-fixed-dim": "#ff7d58",
+                    "outline": "#757777",
+                    "on-tertiary-fixed": "#350700",
+                    "surface": "#f6f6f6",
+                    "tertiary-fixed": "#ff9476",
+                    "background": "#f6f6f6",
+                    "surface-container-high": "#e1e3e3",
+                    "primary-container": "#76efef",
+                    "on-tertiary": "#ffefec",
+                    "primary": "#006666",
+                    "error-dim": "#9f0519"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Bricolage Grotesque"],
+                    "body": ["Space Grotesk"],
+                    "label": ["Space Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .brutalist-shadow {
+            box-shadow: 6px 6px 0px 0px rgba(117,119,119,1);
+        }
+        .brutalist-shadow-sm {
+            box-shadow: 4px 4px 0px 0px rgba(117,119,119,1);
+        }
+        .brutalist-shadow-hover:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px 0px rgba(117,119,119,1);
+        }
+        .active-nav-border {
+            border-bottom: 4px solid #ffd709;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 border-b-4 border-zinc-800 bg-white/70 backdrop-blur-md">
+<div class="flex justify-between items-center px-6 py-4 w-full max-w-full mx-auto">
+<div class="text-2xl font-black text-teal-600 italic tracking-tighter uppercase font-headline">
+                TeraMera
+            </div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-headline text-lg font-bold tracking-tight uppercase text-zinc-800 hover:text-teal-500 hover:-translate-y-0.5 transition-transform duration-150 active:translate-y-1 active:translate-x-1" href="#">The Vision</a>
+<a class="font-headline text-lg font-bold tracking-tight uppercase text-zinc-800 hover:text-teal-500 hover:-translate-y-0.5 transition-transform duration-150 active:translate-y-1 active:translate-x-1" href="#">Giver (Tera)</a>
+<a class="font-headline text-lg font-bold tracking-tight uppercase text-zinc-800 hover:text-teal-500 hover:-translate-y-0.5 transition-transform duration-150 active:translate-y-1 active:translate-x-1" href="#">Receiver (Mera)</a>
+<a class="font-headline text-lg font-bold tracking-tight uppercase text-zinc-800 hover:text-teal-500 hover:-translate-y-0.5 transition-transform duration-150 active:translate-y-1 active:translate-x-1" href="#">Neighborhoods</a>
+</div>
+<button class="bg-primary text-on-primary border-2 border-outline px-6 py-2 font-headline font-bold uppercase tracking-tight hover:-translate-y-1 transition-transform brutalist-shadow-sm active:translate-y-0.5 active:translate-x-0.5">
+                Join Waitlist
+            </button>
+</div>
+</nav>
+<main class="pt-24 min-h-screen">
+<!-- Hero Section -->
+<section class="px-6 py-16 md:py-24 max-w-7xl mx-auto flex flex-col items-center text-center">
+<div class="bg-secondary-container px-4 py-1 border-2 border-outline mb-8 inline-block -rotate-1 brutalist-shadow-sm">
+<span class="font-headline font-extrabold uppercase text-on-secondary-container">2,400+ neighbors already in the loop</span>
+</div>
+<h1 class="font-headline text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none mb-6">
+                BE THE FIRST TO <br/> <span class="text-primary bg-primary-container px-4">CLOSE THE LOOP</span>
+</h1>
+<p class="max-w-2xl text-xl md:text-2xl font-medium mb-12 text-on-surface-variant">
+                Spots are filling up by neighborhood. <span class="bg-secondary-container/30 px-1 border-b-4 border-secondary-container">Don't let your street be last.</span>
+</p>
+<div class="w-full max-w-3xl flex flex-col md:flex-row gap-0 border-4 border-outline brutalist-shadow bg-surface-container-lowest overflow-hidden">
+<input class="flex-grow p-6 text-xl font-bold uppercase placeholder:text-outline outline-none focus:bg-primary-container/20 transition-colors border-b-4 md:border-b-0 md:border-r-4 border-outline" placeholder="ENTER YOUR EMAIL ADDRESS" type="email"/>
+<button class="bg-primary text-on-primary px-10 py-6 font-headline text-2xl font-black uppercase tracking-widest hover:bg-primary-dim transition-colors active:translate-y-1 active:translate-x-1">
+                    JOIN THE WAITLIST
+                </button>
+</div>
+<div class="mt-8 flex items-center gap-4 text-outline font-bold uppercase text-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified</span>
+                No spam. Ever. Just neighborhood updates.
+            </div>
+</section>
+<!-- Features Bento Grid -->
+<section class="bg-surface-container-low border-y-4 border-outline py-20 px-6">
+<div class="max-w-7xl mx-auto">
+<h2 class="font-headline text-4xl md:text-6xl font-black uppercase mb-16 italic">WHY JOIN EARLY?</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Feature Card 1 -->
+<div class="bg-surface-container-lowest border-4 border-outline p-8 flex flex-col gap-6 brutalist-shadow-hover transition-all">
+<div class="w-16 h-16 bg-primary-container flex items-center justify-center border-4 border-outline rotate-3">
+<span class="material-symbols-outlined text-4xl font-bold" data-icon="military_tech">military_tech</span>
+</div>
+<div>
+<h3 class="font-headline text-2xl font-black uppercase mb-3">Exclusive Karma Badge</h3>
+<p class="text-lg text-on-surface-variant leading-tight">Verified founding member status on your profile. The ultimate signal of trust in your neighborhood.</p>
+</div>
+</div>
+<!-- Feature Card 2 -->
+<div class="bg-surface-container-lowest border-4 border-outline p-8 flex flex-col gap-6 brutalist-shadow-hover transition-all md:-translate-y-4">
+<div class="w-16 h-16 bg-secondary-container flex items-center justify-center border-4 border-outline -rotate-2">
+<span class="material-symbols-outlined text-4xl font-bold" data-icon="hub">hub</span>
+</div>
+<div>
+<h3 class="font-headline text-2xl font-black uppercase mb-3">Founding Hub Access</h3>
+<p class="text-lg text-on-surface-variant leading-tight">Direct line to the founders. Shape the rules and features of your local loop before we launch.</p>
+</div>
+</div>
+<!-- Feature Card 3 -->
+<div class="bg-surface-container-lowest border-4 border-outline p-8 flex flex-col gap-6 brutalist-shadow-hover transition-all">
+<div class="w-16 h-16 bg-tertiary-container flex items-center justify-center border-4 border-outline rotate-6">
+<span class="material-symbols-outlined text-4xl font-bold" data-icon="receipt_long">receipt_long</span>
+</div>
+<div>
+<h3 class="font-headline text-2xl font-black uppercase mb-3">Zero Lifetime Fees</h3>
+<p class="text-lg text-on-surface-variant leading-tight">Waitlist members get a "Forever Free" tier. No matter how much we grow, your access remains unlocked.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Social Proof Section -->
+<section class="py-24 px-6 overflow-hidden">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+<div class="w-full md:w-1/2 relative">
+<div class="border-4 border-outline brutalist-shadow rotate-2 overflow-hidden aspect-video bg-zinc-300">
+<img alt="Neighbors gathered together" class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500" data-alt="Group of diverse, smiling neighbors talking together on a sunny suburban street sidewalk with soft bokeh background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl6E3p3DkNvi2W7xVlRhqg5oCOklStc9CKz4GZ6a1-g_H9Uxb1UM05CmpFvOS8C9SAZXqVE0ngeAkLabt5skDRCGtO-CI4c9VrTw1GixCMPxaT3EdX-DJMdd3VWYYml6vi7x3-GrK6G67HDzVqNXs-RdCnPPH-mnZP8uiXAT8iKscgn3HOP3J_-MHy0Yf7nPuAolsfuC772z0z31Euvqqb84SlHfmVCWzeogBmBF1Lf2t4QRCPtcoh02Wphe4yBm-89krAmpdeFw"/>
+</div>
+<div class="absolute -bottom-6 -right-6 bg-secondary-container border-4 border-outline p-4 -rotate-3 hidden md:block">
+<p class="font-headline font-black uppercase">Your neighborhood is waiting</p>
+</div>
+</div>
+<div class="w-full md:w-1/2">
+<div class="flex flex-col gap-8">
+<h2 class="font-headline text-5xl font-black uppercase leading-none">JOIN 2,400+ NEIGHBORS ALREADY IN THE LOOP.</h2>
+<div class="flex flex-col gap-4">
+<div class="flex gap-2 items-center bg-surface-container px-4 py-2 border-2 border-outline w-fit">
+<div class="flex -space-x-4">
+<div class="w-10 h-10 rounded-full border-2 border-outline bg-zinc-400"></div>
+<div class="w-10 h-10 rounded-full border-2 border-outline bg-zinc-500"></div>
+<div class="w-10 h-10 rounded-full border-2 border-outline bg-zinc-600"></div>
+</div>
+<span class="font-bold uppercase text-xs ml-2">+72 in the last 24h</span>
+</div>
+</div>
+<p class="text-xl text-on-surface-variant italic">"I've lived here for 4 years and didn't know half my neighbors. TeraMera changed that in the first weekend of the beta. Get in early, it's worth it."</p>
+<p class="font-headline font-bold uppercase">— Sarah K., Green Valley Neighborhood</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="bg-primary py-20 px-6 border-t-4 border-outline">
+<div class="max-w-4xl mx-auto text-center flex flex-col items-center gap-8">
+<h2 class="font-headline text-4xl md:text-6xl font-black text-on-primary uppercase leading-none">DON'T GET LEFT BEHIND.</h2>
+<button class="bg-secondary-container text-on-secondary-container px-12 py-6 font-headline text-3xl font-black uppercase border-4 border-outline brutalist-shadow hover:translate-y-[-4px] active:translate-y-[2px] transition-transform">
+                    SECURE MY SPOT NOW
+                </button>
+<p class="text-on-primary/80 font-bold uppercase tracking-widest text-sm">LIMITED FOUNDING SPOTS REMAINING FOR FALL 2024</p>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t-4 border-zinc-800 bg-zinc-100">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 py-12 gap-6 w-full max-w-7xl mx-auto">
+<div class="font-['Space_Grotesk'] text-sm font-medium uppercase tracking-widest text-zinc-600">
+                © 2024 TeraMera. All Rights Reserved.
+            </div>
+<div class="flex gap-8">
+<a class="font-['Space_Grotesk'] text-sm font-medium uppercase tracking-widest text-zinc-600 hover:text-yellow-500 transition-colors cursor-pointer" href="#">Privacy</a>
+<a class="font-['Space_Grotesk'] text-sm font-medium uppercase tracking-widest text-zinc-600 hover:text-yellow-500 transition-colors cursor-pointer" href="#">Terms</a>
+<a class="font-['Space_Grotesk'] text-sm font-medium uppercase tracking-widest text-zinc-600 hover:text-yellow-500 transition-colors cursor-pointer" href="#">Contact</a>
+</div>
+<div class="flex gap-4">
+<div class="w-10 h-10 border-2 border-outline flex items-center justify-center hover:bg-secondary-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="share">share</span>
+</div>
+<div class="w-10 h-10 border-2 border-outline flex items-center justify-center hover:bg-secondary-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="public">public</span>
+</div>
+</div>
+</div>
+</footer>
+</body></html>
