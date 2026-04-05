@@ -35,6 +35,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    mobile: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,

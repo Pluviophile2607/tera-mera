@@ -11,6 +11,7 @@ import { Report } from './models/Report.js';
 import { Activity } from './models/Activity.js';
 import { Listing } from './models/Listing.js';
 import { ClaimRequest } from './models/ClaimRequest.js';
+import { Message } from './models/Message.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -144,6 +145,27 @@ async function seedAdminData() {
         await user.save();
       }
       console.log(`Backfilled verification status for ${usersToBackfill.length} users.`);
+    }
+
+    const messageCount = await Message.countDocuments();
+    if (messageCount === 0) {
+      await Message.create([
+        {
+          name: "Rohan Khanna",
+          email: "rohan@gmail.com",
+          mobile: "9876543210",
+          message: "Love the platform! How can I start a hub in South Mumbai?",
+          status: "unread"
+        },
+        {
+          name: "Priya Sharma",
+          email: "priya.s@outlook.com",
+          mobile: "9123456789",
+          message: "I'm having trouble uploading images for my listing. Can you help?",
+          status: "read"
+        }
+      ]);
+      console.log('Seeded initial messages.');
     }
 
   } catch (error) {
@@ -310,14 +332,18 @@ function requireAuth(req, res, next) {
 }
 
 function requireAdmin(req, res, next) {
+  console.log(`Checking admin for ${req.method} ${req.url}`);
   if (!req.currentUser) {
+    console.log('No currentUser found');
     return res.status(401).json({ message: 'Authentication required.' });
   }
 
   if (!req.currentUser.isAdmin) {
+    console.log(`User ${req.currentUser.email} is NOT admin`);
     return res.status(403).json({ message: 'Admin access required.' });
   }
 
+  console.log(`Admin access granted for ${req.currentUser.email}`);
   return next();
 }
 
@@ -473,6 +499,28 @@ app.get('/api/admin/stats', requireAdmin, async (_req, res) => {
   }
 });
 
+app.get('/api/admin/messages', requireAdmin, async (_req, res) => {
+  console.log('GET /api/admin/messages requested');
+  try {
+    await connectToDatabase();
+    const messages = await Message.find().sort({ createdAt: -1 });
+    res.json(messages);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post('/api/admin/messages/:id/read', requireAdmin, adminRateLimit, async (req, res) => {
+  const { id } = req.params;
+  try {
+    await connectToDatabase();
+    await Message.findByIdAndUpdate(id, { status: 'read' });
+    res.json({ message: "Message marked as read." });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.post('/api/admin/broadcast', requireAdmin, adminRateLimit, async (req, res) => {
   const { message } = req.body;
   if (!message) return res.status(400).json({ message: "Message is required." });
@@ -539,6 +587,32 @@ app.get('/api/activities/recent', async (_req, res) => {
     await connectToDatabase();
     const activities = await Activity.find().sort({ createdAt: -1 }).limit(10);
     res.json(activities);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// --- Contact & Messaging Endpoints ---
+
+app.post('/api/contact', writeRateLimit, async (req, res) => {
+  const { name, email, mobile, message } = req.body;
+  if (!name || !email || !mobile || !message) {
+    return res.status(400).json({ message: "Missing required contact fields." });
+  }
+
+  try {
+    await connectToDatabase();
+    const newMessage = await Message.create({ name, email, mobile, message });
+    
+    // Log contact activity for admins
+    await Activity.create({
+      type: 'action',
+      message: `New inquiry from ${name}`,
+      user: "System",
+      time: "Just now"
+    });
+
+    res.status(201).json({ message: "Message sent! We'll be in touch soon.", id: newMessage._id });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -972,44 +1046,40 @@ app.get('/api/users/:id/claim-requests', requireSelfOrAdmin, async (req, res) =>
 // --- Existing User Endpoints ---
 
 app.post('/api/users', signupRateLimit, async (request, response) => {
-  const { fullName, email, password, area } = request.body;
+  const { fullName, email, password, area, mobile } = request.body;
 
   if (!fullName || !email || !password || !area) {
     return response.status(400).json({
-      message: 'Full name, email, password, and area are required.',
-    });
-  }
-
-  if (password.length < 8) {
-    return response.status(400).json({
-      message: 'Password must be at least 8 characters long.',
+      ok: false,
+      message: 'Missing required signup fields.',
     });
   }
 
   try {
     await connectToDatabase();
-
-    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    const existingUser = await User.findOne({ email });
 
     if (existingUser) {
       return response.status(409).json({
-        message: 'An account with this email already exists.',
+        ok: false,
+        message: 'A user with this email already exists.',
       });
     }
 
     const passwordHash = await hashPassword(password);
-    const userCount = await User.countDocuments();
+    const userCount = await User.countDocuments({ isVerified: true });
     const isVerified = userCount < 200;
-    
-    const user = await User.create({
+
+    const newUser = await User.create({
       fullName,
       email,
       passwordHash,
       area,
       isVerified,
+      mobile,
     });
 
-    setSessionCookie(response, createSessionToken(user));
+    setSessionCookie(response, createSessionToken(newUser));
     
     // Log signup as a global activity
     await Activity.create({

@@ -12,6 +12,7 @@ const navItems = [
   { name: 'Matchmaking', icon: 'handshake' },
   { name: 'Reports', icon: 'flag' },
   { name: 'Analytics', icon: 'bar_chart' },
+  { name: 'Messages', icon: 'mail' },
 ];
 
 const Admin = () => {
@@ -66,6 +67,7 @@ const Admin = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [users, setUsers] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [analytics, setAnalytics] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [inspectedItem, setInspectedItem] = useState(null);
@@ -94,7 +96,7 @@ const Admin = () => {
 
   const fetchData = async () => {
     try {
-      const [statsRes, flagsRes, listingsRes, historyRes, matchRes, usersRes, analyticsRes, claimsRes] = await Promise.all([
+      const [statsRes, flagsRes, listingsRes, historyRes, matchRes, usersRes, analyticsRes, claimsRes, messagesRes] = await Promise.all([
         fetch(apiUrl('/admin/stats')),
         fetch(apiUrl('/admin/flags')),
         fetch(apiUrl('/admin/listings/pending')),
@@ -102,10 +104,11 @@ const Admin = () => {
         fetch(apiUrl('/admin/matchmaking')),
         fetch(apiUrl('/admin/users')),
         fetch(apiUrl('/admin/analytics')),
-        fetch(apiUrl('/admin/claim-requests'))
+        fetch(apiUrl('/admin/claim-requests')),
+        fetch(apiUrl('/admin/messages'))
       ]);
 
-      const [statsRaw, flagsRaw, listingsRaw, historyRaw, matchRaw, usersRaw, analyticsRaw, claimsRaw] = await Promise.all([
+      const [statsRaw, flagsRaw, listingsRaw, historyRaw, matchRaw, usersRaw, analyticsRaw, claimsRaw, messagesRaw] = await Promise.all([
         statsRes.json(),
         flagsRes.json(),
         listingsRes.json(),
@@ -113,7 +116,8 @@ const Admin = () => {
         matchRes.json(),
         usersRes.json(),
         analyticsRes.json(),
-        claimsRes.json()
+        claimsRes.json(),
+        messagesRes.json()
       ]);
 
       setStatsData(statsRaw);
@@ -124,6 +128,7 @@ const Admin = () => {
       setUsers(usersRaw);
       setAnalytics(analyticsRaw);
       setClaimRequests(claimsRaw);
+      setMessages(messagesRaw);
       
       // Separate fetch for activities
       fetchActivities();
@@ -235,6 +240,15 @@ const Admin = () => {
       fetchData();
     } catch (error) {
       console.error('Error unbanning user:', error);
+    }
+  };
+
+  const handleReadMessage = async (id) => {
+    try {
+      await fetch(apiUrl(`/admin/messages/${id}/read`), { method: 'POST' });
+      fetchData();
+    } catch (error) {
+      console.error('Error marking message as read:', error);
     }
   };
 
@@ -884,6 +898,88 @@ const Admin = () => {
     </div>
   );
 
+  const renderMessages = () => (
+    <div className="space-y-8 animate-in fade-in duration-500">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h2 className="text-xl font-black text-slate-900 flex items-center gap-3">
+          <span className="w-2 h-8 bg-indigo-600 rounded-full" />
+          COMMUNITY INQUIRIES
+        </h2>
+        <div className="flex items-center gap-2 bg-indigo-50 px-4 py-2 rounded-full border border-indigo-100">
+          <span className="text-xs font-black text-indigo-600 uppercase tracking-widest">
+            {messages.filter(m => m.status === 'unread').length} UNREAD
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6">
+        {messages.length === 0 ? (
+          <div className="py-20 text-center bg-white rounded-3xl border-2 border-dashed border-gray-200">
+            <span className="material-symbols-outlined text-6xl text-gray-200 mb-4">mail_outline</span>
+            <p className="text-gray-400 font-bold uppercase tracking-widest">No messages yet</p>
+          </div>
+        ) : (
+          messages.map((msg) => (
+            <div 
+              key={msg._id} 
+              className={`bg-white rounded-3xl border p-8 transition-all hover:shadow-xl group relative overflow-hidden ${
+                msg.status === 'unread' ? 'border-l-[6px] border-l-indigo-600 border-gray-200 shadow-md' : 'border-gray-100 shadow-sm opacity-80'
+              }`}
+            >
+              <div className="flex flex-col lg:flex-row gap-8">
+                <div className="shrink-0">
+                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center font-black text-2xl ${
+                    msg.status === 'unread' ? 'bg-indigo-600 text-white shadow-lg' : 'bg-gray-100 text-gray-400'
+                  }`}>
+                    {msg.name.charAt(0)}
+                  </div>
+                </div>
+
+                <div className="flex-1 space-y-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                      <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">{msg.name}</h3>
+                      <div className="flex flex-wrap items-center gap-4 mt-1">
+                        <span className="flex items-center gap-1.5 text-xs font-bold text-gray-400">
+                          <span className="material-symbols-outlined text-sm">mail</span>
+                          {msg.email}
+                        </span>
+                        <span className="flex items-center gap-1.5 text-xs font-bold text-gray-400">
+                          <span className="material-symbols-outlined text-sm">phone</span>
+                          {msg.mobile}
+                        </span>
+                        <span className="flex items-center gap-1.5 text-xs font-bold text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full">
+                          <span className="material-symbols-outlined text-sm">schedule</span>
+                          {new Date(msg.createdAt).toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+
+                    {msg.status === 'unread' && (
+                      <button 
+                        onClick={() => handleReadMessage(msg._id)}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-600/20 active:scale-95 flex items-center gap-2"
+                      >
+                        <span className="material-symbols-outlined text-sm">check_circle</span>
+                        Mark as Read
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl">
+                    <p className="text-slate-700 font-medium leading-relaxed italic text-lg">
+                      "{msg.message}"
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+
   const toggleSidebar = () => setIsSidebarOpen((open) => !open);
 
   const handleLogout = () => {
@@ -1074,6 +1170,7 @@ const Admin = () => {
               {activeTab === 'Analytics' && renderAnalytics()}
               {activeTab === 'Audit Logs' && renderAuditLogs()}
               {activeTab === 'Users' && renderUsers()}
+              {activeTab === 'Messages' && renderMessages()}
               
               {/* Fallback for other tabs not yet implemented */}
               {!['Dashboard', 'Listings', 'Reports', 'Matchmaking', 'Users', 'Analytics', 'Audit Logs', 'History', 'Transfer Desk'].includes(activeTab) && (

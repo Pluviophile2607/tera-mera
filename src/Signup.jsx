@@ -26,6 +26,7 @@ const Signup = () => {
   const [searchParams] = useSearchParams();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
   const [area, setArea] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,6 +57,7 @@ const Signup = () => {
         body: JSON.stringify({
           fullName,
           email,
+          mobile,
           password,
           area,
         }),
@@ -127,6 +129,18 @@ const Signup = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="hello@neighbor.com" 
+                className="w-full p-4 border-[2px] border-black bg-white focus:outline-none transition-all font-bold text-sm md:text-base"
+                required
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-black/80 ml-0.5">MOBILE NUMBER</label>
+              <input 
+                type="tel" 
+                value={mobile}
+                onChange={(e) => setMobile(e.target.value)}
+                placeholder="+91 XXXXX XXXXX" 
                 className="w-full p-4 border-[2px] border-black bg-white focus:outline-none transition-all font-bold text-sm md:text-base"
                 required
               />
