@@ -73,12 +73,20 @@ const Navbar = () => {
             LOGOUT
           </button>
         ) : (
-          <Link 
-            to="/waitlist" 
-            className="bg-primary-custom text-on-primary font-black px-6 py-2.5 border-[2px] border-outline-custom shadow-[3px_3px_0px_0px_#000] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-y-0 active:shadow-none transition-all text-xs"
-          >
-            JOIN WAITLIST
-          </Link>
+          <div className="flex items-center gap-6">
+            <Link 
+              to="/login" 
+              className="text-xs font-black uppercase tracking-widest text-[#757777] hover:text-black transition-all"
+            >
+              LOGIN
+            </Link>
+            <Link 
+              to="/waitlist" 
+              className="bg-primary-custom text-on-primary font-black px-6 py-2.5 border-[2px] border-outline-custom shadow-[3px_3px_0px_0px_#000] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-y-0 active:shadow-none transition-all text-xs"
+            >
+              JOIN WAITLIST
+            </Link>
+          </div>
         )}
       </div>
 
@@ -158,14 +166,24 @@ const Navbar = () => {
             )}
 
             {!isAuthenticated ? (
-              <Link 
-                to="/waitlist" 
-                onClick={toggleMenu}
-                className="text-4xl sm:text-5xl font-black uppercase tracking-tighter relative group"
-              >
-                <span className="relative z-10 group-hover:text-secondary-container transition-colors">WAITLIST</span>
-                <span className="absolute left-0 -bottom-2 w-full h-4 bg-secondary-container -z-0 translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all"></span>
-              </Link>
+              <>
+                <Link 
+                  to="/login" 
+                  onClick={toggleMenu}
+                  className="text-4xl sm:text-5xl font-black uppercase tracking-tighter relative group"
+                >
+                  <span className="relative z-10 group-hover:text-primary-custom transition-colors">LOGIN</span>
+                  <span className="absolute left-0 -bottom-2 w-full h-4 bg-primary-container -z-0 translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all"></span>
+                </Link>
+                <Link 
+                  to="/waitlist" 
+                  onClick={toggleMenu}
+                  className="text-4xl sm:text-5xl font-black uppercase tracking-tighter relative group"
+                >
+                  <span className="relative z-10 group-hover:text-secondary-container transition-colors">WAITLIST</span>
+                  <span className="absolute left-0 -bottom-2 w-full h-4 bg-secondary-container -z-0 translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all"></span>
+                </Link>
+              </>
             ) : (
               <button 
                 onClick={() => { toggleMenu(); handleLogout(); }}

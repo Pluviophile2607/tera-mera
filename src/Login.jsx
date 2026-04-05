@@ -90,11 +90,8 @@ const Login = () => {
             />
           </div>
           <div className="flex flex-col gap-2 relative text-left">
-            <label className="font-bold uppercase tracking-widest text-sm text-on-surface flex justify-between items-end" htmlFor="password">
-              <span>Password</span>
-              <a className="text-[10px] font-black bg-surface-container-highest px-2 py-1 border-2 border-outline-custom hover:bg-primary-custom hover:text-on-primary transition-colors uppercase" href="#">
-                FORGOT IT?
-              </a>
+            <label className="font-bold uppercase tracking-widest text-sm text-on-surface" htmlFor="password">
+              Password
             </label>
             <input 
               className="w-full bg-surface-container-highest border-4 border-outline-custom p-4 font-body text-lg font-medium text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:bg-primary-container focus:ring-0 brutalist-shadow-sm transition-colors" 
@@ -132,10 +129,6 @@ const Login = () => {
           >
             New Here? Create Account
           </Link>
-          <div className="w-full mt-4 p-2 border-2 border-dashed border-outline-custom bg-surface-container-low text-[10px] font-bold uppercase text-on-surface-variant flex flex-col gap-1 items-center">
-            <span>Admin Access: zedinfo@zed.org</span>
-            <span>Password: Zed@org</span>
-          </div>
         </footer>
       </main>
     </div>

@@ -44,9 +44,14 @@ const Hero = () => {
               </button>
             </form>
           </div>
-          <div className="mt-8 md:mt-10 flex items-center justify-center lg:justify-start gap-2 font-bold text-xs md:text-sm uppercase text-on-surface">
-            <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>stars</span>
-            <span>Join 2,400+ neighbors already in the loop</span>
+          <div className="mt-8 md:mt-10 flex items-center justify-center lg:justify-start gap-4 font-bold text-xs md:text-sm uppercase text-on-surface">
+            <span className="text-on-surface-variant">Already have an account?</span>
+            <button 
+              onClick={() => navigate('/login')}
+              className="text-primary-custom hover:underline underline-offset-4 decoration-2"
+            >
+              Login here
+            </button>
           </div>
         </div>
         <div className="flex-1 relative w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto">
