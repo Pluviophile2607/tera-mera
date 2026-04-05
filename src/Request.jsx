@@ -14,7 +14,7 @@ const Request = () => {
     category: 'Tools',
     condition: 'Good as New', // For requested items, this could mean "preferred condition"
     type: 'Request',
-    location: user?.area || 'Silver Lake, CA',
+    location: user?.area || 'Palava',
     description: '',
     urgency: 'Medium',
   });
@@ -53,7 +53,7 @@ const Request = () => {
           category: 'Tools',
           condition: 'Good as New',
           type: 'Request',
-          location: user?.area || 'Silver Lake, CA',
+          location: user?.area || 'Palava',
           description: '',
           urgency: 'Medium',
         });

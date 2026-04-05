@@ -41,9 +41,11 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setErrorMessage('');
-    setSuccessMessage('');
+    if (!area) {
+      setErrorMessage('Please select your neighborhood.');
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const response = await fetch('/api/users', {
@@ -144,20 +146,21 @@ const Signup = () => {
 
             <div className="space-y-1.5">
               <label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-black/80 ml-0.5">SELECT YOUR AREA</label>
-              <div className="relative">
-                <select
-                  value={area}
-                  onChange={(e) => setArea(e.target.value)}
-                  className="w-full p-4 border-[2px] border-black bg-white focus:outline-none appearance-none font-bold text-sm md:text-base cursor-pointer"
-                  required
-                >
-                  <option value="">Choose your neighborhood</option>
-                  <option value="brooklyn">Brooklyn, NY</option>
-                  <option value="palava">Palava City, MH</option>
-                  <option value="thane">Thane, MH</option>
-                  <option value="berlin">Mitte, Berlin</option>
-                </select>
-                <span className="absolute right-6 top-1/2 -translate-y-1/2 material-symbols-outlined pointer-events-none font-black text-xl transform rotate-90">arrow_forward_ios</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {['Palava', 'Dombivali', 'Thane'].map((location) => (
+                  <button
+                    key={location}
+                    type="button"
+                    onClick={() => setArea(location.toLowerCase())}
+                    className={`p-4 border-[2px] border-black font-black uppercase tracking-tight text-sm transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-[2px] active:translate-x-[2px] ${
+                      area === location.toLowerCase() 
+                        ? 'bg-[#ffd709] translate-y-[-2px] translate-x-[-2px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]' 
+                        : 'bg-white hover:bg-[#f0f1f1]'
+                    }`}
+                  >
+                    {location}
+                  </button>
+                ))}
               </div>
             </div>
 

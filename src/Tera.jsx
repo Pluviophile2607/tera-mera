@@ -16,7 +16,7 @@ const Tera = () => {
     condition: 'Brand New',
     type: 'Gift',
     price: '',
-    location: 'Silver Lake, CA',
+    location: 'Palava',
     radius: 5,
     images: [],
   });
@@ -159,7 +159,7 @@ const Tera = () => {
           condition: 'Brand New',
           type: 'Gift',
           price: '',
-          location: 'Silver Lake, CA',
+          location: 'Palava',
           radius: 5,
           images: [],
         });
@@ -399,9 +399,9 @@ const Tera = () => {
                     value={formData.location}
                     onChange={(e) => setFormData({...formData, location: e.target.value})}
                   >
-                    <option>Silver Lake, CA</option>
-                    <option>Echo Park, CA</option>
-                    <option>Los Feliz, CA</option>
+                    <option value="palava">Palava</option>
+                    <option value="dombivali">Dombivali</option>
+                    <option value="thane">Thane</option>
                   </select>
                 </div>
                 <div>
