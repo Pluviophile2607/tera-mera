@@ -185,15 +185,18 @@ const ValuesSection = () => (
 const FoundationSection = () => (
   <section className="py-24 md:py-32 px-6 md:px-8 bg-white border-t-[3px] border-outline-custom">
     <div className="max-w-4xl mx-auto border-[4px] border-black p-12 md:p-20 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] text-center relative overflow-hidden bg-white group">
-        <div className="mb-10 inline-block bg-black text-white p-6 leading-none">
-          <span className="text-4xl font-black tracking-tighter uppercase whitespace-nowrap">ZED</span>
+        <div className="mb-10 inline-block">
+          <img 
+            src="https://cdn.designfast.io/image/2026-04-10/48fe01f1-0696-453c-94e6-921be9f1ab54.png" 
+            alt="ZED Foundation Logo" 
+            className="h-16 md:h-20 w-auto object-contain"
+          />
         </div>
         <h2 className="text-3xl md:text-5xl font-black uppercase mb-8 leading-tight">Powered by the ZED Foundation</h2>
         <p className="text-lg md:text-xl font-bold text-[#757777] mb-12 leading-relaxed">
           TeraMera is a flagship project of the ZED Foundation, a non-profit dedicated to engineering zero waste systems at the municipal level. Our commitment is to data privacy, local sovereignty, and long-term environmental restoration.
         </p>
-        <div className="w-16 h-1 bg-[#dbdddd] mx-auto mb-8"></div>
-        <a href="#" className="text-lg font-black uppercase border-b-4 border-primary-custom hover:bg-primary-custom hover:text-white transition-all px-2">Read our Environmental Pledge</a>
+        <div className="mb-8"></div>
     </div>
   </section>
 );
