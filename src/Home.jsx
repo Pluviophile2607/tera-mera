@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ListingCard from './components/ListingCard';
+import { apiUrl } from './lib/api';
 import heroImage from './assets/hero.webp';
 
 const Hero = () => {
@@ -184,6 +186,90 @@ const WhyJoin = () => (
 
 );
 
+const MeraPreview = () => {
+  const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const res = await fetch(apiUrl('/listings'));
+        if (res.ok) {
+          const data = await res.json();
+          // Show only top 3 recent items
+          setListings(data.slice(0, 3));
+        }
+      } catch (err) {
+        console.error('Error fetching listings for preview:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchListings();
+  }, []);
+
+  const handleClaimRedirect = () => {
+    navigate('/signup');
+  };
+
+  if (!loading && listings.length === 0) return null;
+
+  return (
+    <section className="py-20 md:py-32 px-4 md:px-8 border-t-4 border-outline-custom bg-surface-container-lowest relative overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-8 mb-16">
+          <div className="text-center lg:text-left">
+            <div className="inline-block bg-[#0E676F] text-white px-4 py-1 border-[3px] border-outline-custom shadow-[4px_4px_0px_0px_#000] rotate-1 mb-4">
+              <span className="text-xs font-black uppercase tracking-widest italic">Live Neighborhood Feed</span>
+            </div>
+            <h2 className="text-4xl sm:text-6xl md:text-7xl font-black uppercase leading-none tracking-tighter">
+              Active <span className="text-primary-custom italic">Treasures</span>
+            </h2>
+          </div>
+          
+          <Link 
+            to="/mera" 
+            className="group flex items-center gap-3 bg-white border-[3px] border-outline-custom px-8 py-4 font-black uppercase text-sm shadow-[6px_6px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[10px_10px_0px_0px_#000] active:translate-y-0 active:shadow-none transition-all"
+          >
+            Explore All on Mera
+            <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </Link>
+        </div>
+
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="animate-pulse bg-surface-container border-4 border-outline-custom h-[450px]"></div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {listings.map((item) => (
+              <ListingCard 
+                key={item._id} 
+                listing={item} 
+                onClaim={handleClaimRedirect} 
+                isRequested={false} 
+              />
+            ))}
+          </div>
+        )}
+
+        <div className="mt-16 p-8 border-4 border-dashed border-outline-custom bg-secondary-container/10 text-center">
+          <p className="text-xl font-bold uppercase italic text-on-surface-variant mb-6">Your neighborhood is sharing resources right now.</p>
+          <button 
+            onClick={() => navigate('/waitlist')}
+            className="bg-primary-custom text-on-primary font-black px-12 py-4 border-[3px] border-outline-custom shadow-[4px_4px_0px_0px_#000] hover:-translate-y-0.5 transition-all uppercase text-sm"
+          >
+            Claim Your Spot in the Loop
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const FinalCTA = () => (
   <section className="py-24 md:py-32 px-4 md:px-8 text-center bg-surface-custom border-t-4 border-outline-custom relative overflow-hidden">
     <div className="absolute top-0 left-0 w-full h-full waitlist-grid-bg opacity-30 -z-10"></div>
@@ -214,6 +300,7 @@ const Home = () => {
       <main>
         <Hero />
         <TwoSides />
+        <MeraPreview />
         <WhyJoin />
         <FinalCTA />
       </main>
