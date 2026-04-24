@@ -7,8 +7,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { apiUrl } from "./lib/api";
 import { useAuth } from "./context/AuthContext";
+const logoUrl = "https://cdn.designfast.io/image/2026-04-24/1c9f13ac-fb01-4fea-9853-149bfc9d3749.png";
 import { AnimatePresence } from "framer-motion";
-import logoSvg from "./assets/tera-mera logo.svg";
 
 const Hero = ({ onBrowseClick }) => (
   <section className="relative bg-white pt-6 pb-8 md:pt-2 md:pb-12 lg:pt-4 lg:pb-16 overflow-hidden">
@@ -563,7 +563,7 @@ export default function Home() {
               </button>
               
               <div className="mb-6 h-16 w-auto flex items-center justify-start">
-                <img src={logoSvg} alt="TeraMera" className="h-10 w-auto" />
+                <img src={logoUrl} alt="TeraMera" className="h-10 w-auto" />
               </div>
 
               <h3 className="mb-4 font-display text-3xl font-black uppercase tracking-tight">

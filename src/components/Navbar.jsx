@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import logoSvg from '../assets/tera-mera logo.svg';
+const logoUrl = "https://cdn.designfast.io/image/2026-04-24/1c9f13ac-fb01-4fea-9853-149bfc9d3749.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +20,7 @@ const Navbar = () => {
     <nav className="border-b-[3px] border-outline-custom bg-white px-4 md:px-12 py-4 md:py-5 flex justify-between items-center sticky top-0 z-50">
       <div className="flex items-center">
         <Link to="/" className="cursor-pointer transition-transform hover:scale-105 select-none inline-block">
-          <img src={logoSvg} alt="TeraMera" className="h-8 md:h-10 w-auto" />
+          <img src={logoUrl} alt="TeraMera" className="h-8 md:h-10 w-auto" />
         </Link>
       </div>
 
@@ -104,7 +104,7 @@ const Navbar = () => {
         <div className="fixed inset-0 z-[100] bg-[#f0f1f1] flex flex-col animate-in fade-in slide-in-from-top duration-300">
           <div className="border-b-[3px] border-outline-custom bg-white px-4 py-4 flex justify-between items-center">
             <Link to="/" onClick={toggleMenu} className="cursor-pointer inline-block">
-              <img src={logoSvg} alt="TeraMera" className="h-6 md:h-8 w-auto" />
+              <img src={logoUrl} alt="TeraMera" className="h-6 md:h-8 w-auto" />
             </Link>
             <button 
               onClick={toggleMenu}

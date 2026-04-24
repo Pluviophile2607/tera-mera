@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import logoSvg from '../assets/tera-mera logo.svg';
+import logoSvg from '../assets/tera-mera-logo.svg';
 
 const PixelPreloader = () => {
   const [loading, setLoading] = useState(true);

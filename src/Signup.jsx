@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Footer from './components/Footer';
-import logoSvg from './assets/tera-mera logo.svg';
+const logoUrl = "https://cdn.designfast.io/image/2026-04-24/1c9f13ac-fb01-4fea-9853-149bfc9d3749.png";
 
 const AuthHeader = () => {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const AuthHeader = () => {
         <span className="material-symbols-outlined text-2xl font-black">arrow_back</span>
       </button>
       <Link to="/" className="cursor-pointer transition-transform hover:scale-105 select-none">
-        <img src={logoSvg} alt="TeraMera" className="h-6 md:h-8 w-auto" />
+        <img src={logoUrl} alt="TeraMera" className="h-6 md:h-8 w-auto" />
       </Link>
     </header>
   );

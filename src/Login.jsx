@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { apiUrl } from './lib/api';
-import logoSvg from './assets/tera-mera logo.svg';
+const logoUrl = "https://cdn.designfast.io/image/2026-04-24/1c9f13ac-fb01-4fea-9853-149bfc9d3749.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const Login = () => {
         {/* Header */}
         <header className="flex flex-col gap-4 text-left">
           <Link to="/" className="inline-flex items-center gap-2 mb-2 group w-fit">
-            <img src={logoSvg} alt="TeraMera" className="h-6 md:h-8 w-auto" />
+            <img src={logoUrl} alt="TeraMera" className="h-6 md:h-8 w-auto" />
           </Link>
           <h1 className="font-headline text-5xl sm:text-6xl font-black leading-[0.9] tracking-tighter uppercase text-on-surface">
             Log Back<br/>
