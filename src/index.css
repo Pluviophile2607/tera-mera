@@ -57,6 +57,18 @@
   --font-body: "Space Grotesk", sans-serif;
   --font-label: "Space Grotesk", sans-serif;
 
+  --color-primary: #1BA18C;
+  --color-secondary: #FED330;
+  --color-accent-orange: #FF8E53;
+  --color-outline: #222222;
+  --color-surface: #F2F2F2;
+  --color-on-surface: #222222;
+  --color-dark: #111111;
+
+  --shadow-brutalist: 4px 4px 0px 0px #222222;
+  --shadow-brutalist-lg: 8px 8px 0px 0px #222222;
+  --shadow-brutalist-sm: 2px 2px 0px 0px #222222;
+
   --radius-default: 0px;
   --radius-lg: 0px;
   --radius-xl: 0px;
@@ -136,7 +148,7 @@
   animation: shake 0.5s ease-in-out;
 }
 
-.waitlist-grid-bg {
+.brutalist-grid-bg {
   background-image: radial-gradient(var(--color-outline-variant) 1px, transparent 0);
   background-size: 24px 24px;
 }

@@ -12,7 +12,7 @@ const Footer = () => (
       </span>
     </div>
     <div className="flex flex-wrap justify-center gap-4 md:gap-10 font-bold text-[10px] md:text-sm uppercase text-on-surface-variant">
-      {['Vision', 'Philosophy', 'Waitlist', 'Privacy', 'Contact'].map(link => (
+      {['Vision', 'Philosophy', 'Privacy', 'Contact'].map(link => (
         <Link 
           key={link} 
           to={`/${link.toLowerCase()}`} 

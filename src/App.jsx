@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Home from './Home';
-import Waitlist from './Waitlist';
+
 import Vision from './Vision';
 import Philosophy from './Philosophy';
 import Privacy from './Privacy';
@@ -47,7 +47,7 @@ function AppRoutes() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/waitlist" element={<Waitlist />} />
+
         <Route path="/vision" element={<Vision />} />
         <Route path="/philosophy" element={<Philosophy />} />
         <Route path="/privacy" element={<Privacy />} />

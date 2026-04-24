@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { useAuth } from './context/AuthContext';
 import { apiUrl } from './lib/api';
+import ExposureSlider from './components/ExposureSlider';
 
 const Tera = () => {
   const { user, isAuthenticated } = useAuth();
@@ -19,6 +20,7 @@ const Tera = () => {
     location: 'Palava',
     radius: 5,
     images: [],
+    duration: 7, // Default to 7 days
   });
 
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -173,6 +175,7 @@ const Tera = () => {
           location: 'Palava',
           radius: 5,
           images: [],
+          duration: 7,
         });
         setImagePreviews([]);
         // Re-fetch impact
@@ -413,10 +416,34 @@ const Tera = () => {
                 </div>
               )}
             </section>
-            
-            {/* Step 4: Location & Privacy */}
-            <section className="brutalist-card bg-surface-container p-8 relative">
+
+            {/* Step 4: Listing Duration */}
+            <section className="brutalist-card bg-surface-container-low p-8 relative">
               <div className="absolute -top-6 -left-4 bg-primary-custom text-on-primary px-4 py-2 font-black text-2xl border-4 border-outline-custom">04</div>
+              <h2 className="text-3xl font-headline font-black uppercase mb-6 mt-2">Listing Duration</h2>
+              <p className="text-sm font-bold uppercase mb-8 opacity-70">Slide to select how many days this item should stay active.</p>
+              
+              <div className="py-8 bg-white border-4 border-outline-custom shadow-[4px_4px_0px_black] mb-6">
+                <ExposureSlider 
+                  min={1} 
+                  max={60} 
+                  defaultValue={formData.duration || 7} 
+                  onChange={(val) => setFormData({ ...formData, duration: val })}
+                  accentColor="#FF4500"
+                />
+                <div className="text-center mt-4 font-black uppercase text-xs tracking-widest text-primary-custom">
+                  {formData.duration} Days Active
+                </div>
+              </div>
+
+              <p className="mt-4 text-[10px] font-black uppercase tracking-widest opacity-50 italic">
+                Item will be automatically moved to your Archive after {formData.duration} days.
+              </p>
+            </section>
+            
+            {/* Step 5: Location & Privacy */}
+            <section className="brutalist-card bg-surface-container p-8 relative">
+              <div className="absolute -top-6 -left-4 bg-primary-custom text-on-primary px-4 py-2 font-black text-2xl border-4 border-outline-custom">05</div>
               <h2 className="text-3xl font-headline font-black uppercase mb-6 mt-2">Location</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>

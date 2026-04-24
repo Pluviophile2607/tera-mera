@@ -54,7 +54,15 @@ const listingSchema = new mongoose.Schema(
     status: {
       type: String,
       default: 'pending',
-      enum: ['pending', 'available', 'claimed', 'rejected', 'hidden'],
+      enum: ['pending', 'available', 'claimed', 'rejected', 'hidden', 'archived'],
+    },
+    duration: {
+      type: Number, // In days
+      default: null,
+    },
+    expiresAt: {
+      type: Date,
+      default: null,
     },
     claimedBy: {
       type: mongoose.Schema.Types.ObjectId,

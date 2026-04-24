@@ -19,7 +19,7 @@ const Hero = () => {
             Closing the loop on neighborhood waste and building a future where your excess is another's abundance.
           </p>
           <button 
-            onClick={() => navigate('/waitlist')}
+            onClick={() => navigate('/signup')}
             className="w-full sm:w-auto bg-primary-custom text-on-primary text-lg md:text-xl font-black uppercase px-12 py-5 border-[3px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:shadow-none transition-all"
           >
             Explore the Loop
@@ -224,7 +224,7 @@ const FinalCTA = () => {
           BECOME <br/>THE LOOP.
         </h2>
         <p className="text-lg md:text-xl font-bold uppercase mb-12 text-black/80">
-          Join the waitlist to launch TeraMera in your neighborhood.
+          Join the community to launch TeraMera in your neighborhood.
         </p>
         <form onSubmit={handleSubmit} className="max-w-2xl mx-auto flex flex-col md:flex-row gap-0 border-[3px] border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white group focus-within:-translate-y-1 transition-all">
           <input 

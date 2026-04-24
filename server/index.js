@@ -12,6 +12,8 @@ import { Activity } from './models/Activity.js';
 import { Listing } from './models/Listing.js';
 import { ClaimRequest } from './models/ClaimRequest.js';
 import { Message } from './models/Message.js';
+import helmet from 'helmet';
+import compression from 'compression';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,16 +21,36 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const app = express();
+const isProduction = process.env.NODE_ENV === 'production';
+
+// Production Security & Performance
+app.use(helmet({
+  contentSecurityPolicy: false, // Disable CSP if it interferes with external assets, or configure properly
+}));
+app.use(compression());
+
+if (isProduction) {
+  app.set('trust proxy', 1); // Essential for rate limiting & secure cookies behind proxies (Heroku, Render, etc.)
+}
+
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+  ? process.env.ALLOWED_ORIGINS.split(',') 
+  : ['http://localhost:5173', 'http://localhost:3000'];
+
+app.use(cors({
+  origin: isProduction ? allowedOrigins : true,
+  credentials: true
+}));
+
+app.use(express.json({ limit: '10mb' })); // Reduced limit from 100mb for security, adjust as needed
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
 const port = Number(process.env.PORT) || 5000;
 const scrypt = promisify(crypto.scrypt);
 const SESSION_COOKIE_NAME = 'tera_session';
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7;
 const SESSION_SECRET = process.env.SESSION_SECRET || 'local-dev-session-secret';
 const rateLimitStores = new Map();
-
-app.use(cors());
-app.use(express.json({ limit: '100mb' }));
-app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
 // --- Seeding Logic ---
 async function seedAdminData() {
@@ -641,10 +663,10 @@ app.post('/api/listings', requireAuth, writeRateLimit, async (req, res) => {
       type,
       price: type === 'Sell' ? price : 0,
       location,
-      radius: radius || 5,
-      images: images || [],
       description,
       urgency: urgency || 'Anytime',
+      duration: duration || null,
+      expiresAt: duration ? new Date(Date.now() + duration * 24 * 60 * 60 * 1000) : null,
     });
 
     // Log this action for community activity feed
@@ -664,8 +686,26 @@ app.post('/api/listings', requireAuth, writeRateLimit, async (req, res) => {
 app.get('/api/listings', async (_req, res) => {
   try {
     await connectToDatabase();
+    
+    // Auto-archive expired listings
+    const now = new Date();
+    await Listing.updateMany(
+      { status: 'available', expiresAt: { $ne: null, $lt: now } },
+      { status: 'archived' }
+    );
+
     const listings = await Listing.find({ status: 'available' }).populate('userId', 'fullName email').sort({ createdAt: -1 });
     res.json(listings);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.get('/api/listings/archived', async (req, res) => {
+  try {
+    await connectToDatabase();
+    const archived = await Listing.find({ status: 'archived' }).populate('userId', 'fullName email').sort({ updatedAt: -1 });
+    res.json(archived);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -1154,6 +1194,17 @@ app.use((err, req, res, _next) => {
   console.error('Server error:', err);
   res.status(500).json({ message: err.message || 'Internal server error.' });
 });
+
+// --- Static File Serving (Production) ---
+if (isProduction) {
+  const distPath = path.resolve(__dirname, '../dist');
+  app.use(express.static(distPath));
+  app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api')) {
+      res.sendFile(path.join(distPath, 'index.html'));
+    }
+  });
+}
 
 export async function startServer() {
   try {

@@ -148,12 +148,12 @@ const Dashboard = () => {
   }, [isAuthenticated, navigate, user?.id, user?.area]);
 
   const historyItems = [
-    ...(myListings?.filter(item => item.status === 'claimed') || []),
+    ...(myListings?.filter(item => item.status === 'claimed' || item.status === 'archived') || []),
     ...(collectedItems || [])
   ].sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
 
   return (
-    <div className="min-h-screen bg-surface-custom text-on-surface font-body overflow-x-hidden waitlist-grid-bg">
+    <div className="min-h-screen bg-surface-custom text-on-surface font-body overflow-x-hidden brutalist-grid-bg">
       <Navbar />
       
       <main className="max-w-7xl mx-auto p-4 md:p-8 lg:p-12 mb-20 animate-in fade-in slide-in-from-bottom duration-700">

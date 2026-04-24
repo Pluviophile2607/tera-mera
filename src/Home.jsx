@@ -1,312 +1,484 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import ListingCard from './components/ListingCard';
-import { apiUrl } from './lib/api';
-import heroImage from './assets/hero.webp';
+import React from "react";
+import { motion } from "framer-motion";
+import { Check, Leaf, Menu, X } from "lucide-react";
+const heroImage = "https://cdn.designfast.io/image/2026-04-24/e6dff0a2-0bcc-48d4-be45-e53b9882b0a1.png";
+import { Link, useNavigate } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import { apiUrl } from "./lib/api";
 
-const Hero = () => {
-  const [email, setEmail] = useState('');
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    navigate(`/signup?email=${encodeURIComponent(email)}`);
-  };
-
-  return (
-    <section className="relative overflow-hidden pt-12 md:pt-20 pb-20 md:pb-32 px-4 md:px-8 border-b-4 border-outline-custom bg-surface-custom">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-        <div className="flex-1 z-10 text-center lg:text-left">
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.9] mb-8">
-            <span className="bg-secondary-container px-4 inline-block transform -rotate-1 mb-4 border-[3px] border-outline-custom shadow-[4px_4px_0px_0px_rgba(117,119,119,1)]">Tera Mere.</span><br/>
-            <span className="text-primary-custom italic bg-surface-container-lowest px-2 border-[2px] border-outline-custom shadow-[4px_4px_0px_0px_rgba(117,119,119,1)]">Mera Tera.</span>
-          </h1>
-          <p className="text-lg sm:text-xl md:text-2xl font-bold font-body uppercase tracking-wider text-on-surface-variant mb-10 md:mb-12 max-w-xl mx-auto lg:mx-0">
-            The neighborhood loop is coming soon.
-          </p>
-          <div className="relative max-w-xl mx-auto lg:mx-0 group">
-            <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 w-24 h-24 md:w-32 md:h-32 bg-secondary-fixed-dim border-4 border-outline-custom shadow-[4px_4px_0px_0px_rgba(117,119,119,1)] rotate-6 -z-10 opacity-60 group-hover:rotate-12 transition-transform"></div>
-            
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-0 relative z-10 border-[3px] md:border-[4px] border-outline-custom shadow-[6px_6px_0px_0px_#757777] md:shadow-[8px_8px_0px_0px_#757777] focus-within:-translate-y-1 focus-within:shadow-[10px_10px_0px_0px_#757777] transition-all">
-              <input 
-                className="flex-grow h-14 md:h-16 bg-surface-container-highest px-6 text-lg md:text-xl font-bold focus:bg-primary-container focus:outline-none transition-colors placeholder:text-on-surface-variant" 
-                placeholder="YOUR LOCAL EMAIL..." 
-                required 
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <button 
-                className="h-14 md:h-16 bg-primary-custom text-on-primary font-headline font-black text-lg md:text-xl uppercase px-8 hover:bg-primary-dim transition-all active:bg-black" 
-                type="submit"
-              >
-                Join Waitlist
-              </button>
-            </form>
+const Hero = () => (
+  <section className="relative bg-white pt-8 pb-16 md:pt-16 md:pb-24 lg:pt-24 lg:pb-32 overflow-hidden">
+    <div className="mx-auto max-w-7xl px-6">
+      <div className="grid gap-12 lg:gap-16 lg:grid-cols-2 lg:items-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center lg:text-left"
+        >
+          <div className="mb-6 inline-block bg-secondary px-3 py-1 font-display text-[10px] md:text-xs font-black uppercase tracking-widest">
+            Community First
           </div>
-          <div className="mt-8 md:mt-10 flex items-center justify-center lg:justify-start gap-4 font-bold text-xs md:text-sm uppercase text-on-surface">
-            <span className="text-on-surface-variant">Already have an account?</span>
-            <button 
-              onClick={() => navigate('/login')}
-              className="text-primary-custom hover:underline underline-offset-4 decoration-2"
-            >
-              Login here
+          <h1 className="mb-8 font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.85] uppercase tracking-tighter">
+            Tera Mera
+            <br />
+            <span className="text-primary italic">Mera Tera!</span>
+          </h1>
+          <p className="mx-auto lg:mx-0 mb-10 max-w-lg text-lg sm:text-xl md:text-2xl font-bold leading-tight opacity-90">
+            The neighborhood loop where giving is as rewarding as receiving.
+            Share what you have, wish for what you need.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
+            <Link to="/signup">
+              <button className="w-full sm:w-auto border-4 border-outline bg-primary px-8 py-4 font-display text-lg md:text-xl font-black uppercase tracking-widest text-white shadow-brutalist hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutalist-lg transition-all">
+                Start Sharing
+              </button>
+            </Link>
+            <button className="w-full sm:w-auto border-4 border-outline bg-white px-8 py-4 font-display text-lg md:text-xl font-black uppercase tracking-widest text-on-surface shadow-brutalist hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutalist-lg transition-all">
+              Browse Neighborhood
             </button>
           </div>
-        </div>
-        <div className="flex-1 relative w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto">
-          <div className="relative w-full aspect-square border-4 border-outline-custom bg-surface-container-low shadow-[8px_8px_0px_0px_rgba(0,102,102,1)] md:shadow-[12px_12px_0px_0px_rgba(0,102,102,1)] overflow-hidden">
-            <img 
-              alt="Local Community" 
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-105 hover:scale-100" 
+        </motion.div>
+
+        <div className="relative max-w-2xl mx-auto lg:max-w-none">
+          <div className="relative z-10 border-[6px] md:border-[10px] border-secondary bg-white p-2 shadow-brutalist-lg">
+            <img
               src={heroImage}
+              alt="Neighbors sharing"
+              className="h-full w-full object-cover"
             />
-            <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-tertiary-dim text-on-tertiary p-2 md:p-4 border-[2px] md:border-[3px] border-outline-custom shadow-[2px_2px_0px_0px_#000] md:shadow-[4px_4px_0px_0px_#000] rotate-6 z-20 animate-pulse-custom">
-              <span className="text-lg md:text-2xl font-black italic uppercase block leading-none">EARLY</span>
-              <span className="text-lg md:text-2xl font-black italic uppercase block leading-none">ACCESS</span>
-            </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-  );
-};
-
-const TwoSides = () => (
-  <section className="py-20 md:py-32 px-4 md:px-8 bg-surface-container-low overflow-hidden">
-    <div className="max-w-7xl mx-auto">
-      <div className="mb-16 md:mb-20 flex flex-col items-center md:items-start">
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase mb-4 text-center md:text-left leading-none tracking-tighter">Two Sides of the Loop</h2>
-        <div className="h-2 md:h-3 w-32 md:w-48 bg-primary-custom border-[2px] border-outline-custom shadow-[2px_2px_0px_0px_rgba(117,119,119,1)]"></div>
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-        <div className="relative group">
-          <div className="absolute inset-0 bg-outline-custom translate-x-2 translate-y-2 md:translate-x-4 md:translate-y-4"></div>
-          <div className="relative bg-surface-container-lowest border-4 border-outline-custom p-6 sm:p-8 md:p-12 flex flex-col h-full hover:-translate-y-1 hover:-translate-x-1 lg:hover:-translate-y-2 lg:hover:-translate-x-2 transition-transform">
-            <div className="flex justify-between items-start mb-6 md:mb-8">
-              <div className="w-12 h-12 md:w-16 md:h-16 bg-primary-container border-[2px] md:border-[3px] border-outline-custom flex items-center justify-center shadow-[3px_3px_0px_0px_#757777] md:shadow-[4px_4px_0px_0px_#757777]">
-                <span className="material-symbols-outlined text-3xl md:text-4xl text-primary-custom" style={{ fontVariationSettings: "'FILL' 1" }}>volunteer_activism</span>
-              </div>
-              <span className="bg-primary-custom text-on-primary font-black px-3 py-1 uppercase text-[10px] md:text-xs border-[2px] border-outline-custom shadow-[2px_2px_0px_0px_#000]">Side A</span>
-            </div>
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4 uppercase">Tera (Giver)</h3>
-            <p className="text-base sm:text-lg md:text-xl font-bold leading-relaxed mb-6 md:mb-8 flex-grow text-on-surface-variant italic">Share your surplus, your skills, or your space. From backyard lemons to professional mentoring, turn your 'Tera' into collective value.</p>
-            <ul className="space-y-3 md:space-y-4 border-t-2 md:border-t-4 border-surface-variant pt-6 md:pt-8">
-              {['List Items in 30s', 'Earn Karma Points', 'Build Local Trust'].map((text) => (
-                <li key={text} className="flex items-center gap-3 font-bold uppercase italic text-xs md:text-sm">
-                  <span className="material-symbols-outlined text-primary-custom font-black text-lg md:text-xl">check_circle</span> {text}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="relative group">
-          <div className="absolute inset-0 bg-secondary translate-x-2 translate-y-2 md:translate-x-4 md:translate-y-4 opacity-50"></div>
-          <div className="relative bg-surface-container-lowest border-4 border-outline-custom p-6 sm:p-8 md:p-12 flex flex-col h-full hover:-translate-y-1 hover:-translate-x-1 lg:hover:-translate-y-2 lg:hover:-translate-x-2 transition-transform">
-            <div className="flex justify-between items-start mb-6 md:mb-8">
-              <div className="w-12 h-12 md:w-16 md:h-16 bg-secondary-container border-[2px] md:border-[3px] border-outline-custom flex items-center justify-center shadow-[3px_3px_0px_0px_#757777] md:shadow-[4px_4px_0px_0px_#757777]">
-                <span className="material-symbols-outlined text-3xl md:text-4xl text-on-secondary-container" style={{ fontVariationSettings: "'FILL' 1" }}>handshake</span>
-              </div>
-              <span className="bg-secondary-fixed text-on-secondary-fixed font-black px-3 py-1 uppercase text-[10px] md:text-xs border-[2px] border-outline-custom shadow-[2px_2px_0px_0px_#000]">Side B</span>
-            </div>
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4 uppercase">Mera (Receiver)</h3>
-            <p className="text-base sm:text-lg md:text-xl font-bold leading-relaxed mb-6 md:mb-8 flex-grow text-on-surface-variant italic">Discover what’s available right around the corner. Borrow tools, receive fresh produce, or find local help without the friction of commerce.</p>
-            <ul className="space-y-3 md:space-y-4 border-t-2 md:border-t-4 border-surface-variant pt-6 md:pt-8">
-              {['Hyper-local Discovery', 'Real-time Requests', 'ZERO Transaction Fees'].map((text) => (
-                <li key={text} className="flex items-center gap-3 font-bold uppercase italic text-xs md:text-sm text-on-surface-variant">
-                  <span className="material-symbols-outlined text-secondary font-black text-lg md:text-xl">check_circle</span> {text}
-                </li>
-              ))}
-            </ul>
+          <div className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 z-20 -rotate-3 border-4 border-outline bg-accent-orange px-4 py-2 md:px-6 md:py-4 font-display text-sm md:text-xl font-black uppercase text-white shadow-brutalist">
+            240 Circular Items This Week
           </div>
         </div>
       </div>
     </div>
   </section>
-
 );
 
-const WhyJoin = () => (
-  <section className="py-20 md:py-32 px-4 md:px-8 border-t-4 border-outline-custom bg-surface-custom relative overflow-hidden">
-    <div className="max-w-7xl mx-auto">
-      <div className="flex flex-col lg:flex-row justify-between lg:items-end gap-10 md:gap-8 mb-16 md:mb-20 text-center lg:text-left">
-        <h2 className="text-4xl sm:text-5xl md:text-7xl font-black uppercase max-w-xl leading-none tracking-tighter">Why Join Early?</h2>
-        <p className="text-base sm:text-lg md:text-xl font-bold uppercase text-on-surface-variant max-w-sm italic border-l-4 border-primary-custom pl-4 md:pl-6 py-2 bg-surface-container-low hidden lg:block">The first 5,000 members get permanent ecosystem benefits.</p>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 md:gap-8">
-        <div className="md:col-span-1 lg:col-span-7 bg-primary-dim p-8 md:p-12 border-4 border-outline-custom shadow-[6px_6px_0px_0px_rgba(117,119,119,1)] md:shadow-[8px_8px_0px_0px_#757777] text-on-primary relative overflow-hidden group">
-          <div className="relative z-10">
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4 md:mb-6 uppercase">Exclusive Karma Badge</h3>
-            <p className="text-base md:text-lg font-bold opacity-90 mb-6 md:mb-8 max-w-md">Early adopters receive the 'Genesis' badge, granting permanent 2x Karma multipliers on all neighborly acts.</p>
-            <span className="material-symbols-outlined text-[6rem] md:text-[10rem] absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 opacity-10 rotate-12 group-hover:rotate-0 transition-transform duration-700" style={{ fontVariationSettings: "'FILL' 1" }}>workspace_premium</span>
+const Features = () => (
+  <section className="bg-[#F2F2F2] py-12 md:py-24">
+    <div className="mx-auto max-w-7xl px-6">
+      <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
+        <motion.div
+          whileHover={{ y: -4 }}
+          className="border-4 border-outline bg-white p-6 md:p-10 shadow-brutalist transition-shadow"
+        >
+          <div className="mb-8 flex h-16 w-16 items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="h-12 w-12 text-primary"
+            >
+              <path d="M9.3349 11.5022L11.5049 11.5027C13.9902 11.5027 16.0049 13.5174 16.0049 16.0027L9.00388 16.0018L9.00488 17.0027L17.0049 17.0019V16.0027C17.0049 14.9202 16.6867 13.8996 16.1188 13.0019L19.0049 13.0027C20.9972 13.0027 22.7173 14.1679 23.521 15.8541C21.1562 18.9747 17.3268 21.0027 13.0049 21.0027C10.2436 21.0027 7.90437 20.4121 6.00447 19.3779L6.00592 10.0737C7.25147 10.2521 8.39122 10.7583 9.3349 11.5022ZM4.00488 9.00268C4.51772 9.00268 4.94039 9.38872 4.99816 9.88606L5.00488 10.0018V19.0027C5.00488 19.555 4.55717 20.0027 4.00488 20.0027H2.00488C1.4526 20.0027 1.00488 19.555 1.00488 19.0027V10.0027C1.00488 9.45039 1.4526 9.00268 2.00488 9.00268H4.00488ZM13.6513 3.57806L14.0046 3.93183L14.3584 3.57806C15.3347 2.60175 16.9177 2.60175 17.894 3.57806C18.8703 4.55437 18.8703 6.13728 17.894 7.11359L14.0049 11.0027L10.1158 7.11359C9.13948 6.13728 9.13948 4.55437 10.1158 3.57806C11.0921 2.60175 12.675 2.60175 13.6513 3.57806Z"></path>
+            </svg>
           </div>
-        </div>
-        <div className="md:col-span-1 lg:col-span-5 bg-secondary-fixed p-8 md:p-12 border-4 border-outline-custom shadow-[6px_6px_0px_0px_rgba(117,119,119,1)] md:shadow-[8px_8px_0px_0px_#757777] flex flex-col justify-center lg:rotate-1">
-          <h3 className="text-xl sm:text-2xl md:text-3xl font-black mb-4 uppercase italic leading-tight">First Pick on Local Treasures</h3>
-          <p className="text-base md:text-lg font-bold text-on-secondary-fixed">Priority notifications for high-demand items and skills in your immediate neighborhood radius.</p>
-        </div>
-        <div className="md:col-span-1 lg:col-span-4 bg-tertiary-fixed p-8 md:p-12 border-4 border-outline-custom shadow-[6px_6px_0px_0px_rgba(117,119,119,1)] md:shadow-[8px_8px_0px_0px_#757777] lg:-rotate-1">
-          <span className="material-symbols-outlined text-5xl md:text-6xl mb-4 md:mb-6 text-on-tertiary-fixed">groups</span>
-          <h3 className="text-xl md:text-2xl font-black mb-2 uppercase text-on-tertiary-fixed">Founding Hub Access</h3>
-          <p className="text-xs md:text-sm font-black uppercase opacity-75 text-on-tertiary-fixed">Help shape the governance rules of your local ecosystem hub.</p>
-        </div>
-        <div className="md:col-span-1 lg:col-span-8 bg-surface-container-highest border-4 border-outline-custom p-8 md:p-12 shadow-[6px_6px_0px_0px_rgba(117,119,119,1)] md:shadow-[8px_8px_0px_0px_#757777] flex flex-col lg:flex-row items-center gap-8 md:gap-10 group relative transition-all duration-300">
-          <div className="flex-1 text-center lg:text-left">
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4 uppercase">Verified Founder Status</h3>
-            <p className="text-base md:text-lg font-bold text-on-surface-variant mb-6 leading-snug">Skip the verification queue forever. Your profile is permanently 'Verified' at the Genesis level, granting immediate trust and priority matching in all neighborhood exchanges.</p>
-            <div className="flex items-center justify-center lg:justify-start gap-4">
-              <div className="relative text-on-surface-variant font-black italic opacity-60 slash-price inline-block px-1 text-sm md:text-base">
-                SKIP-THE-QUEUE PRIORITY
-              </div>
-              <div className="bg-primary-custom text-on-primary text-[10px] md:text-xs font-black uppercase px-2 py-1 rotate-[-2deg] border-2 border-outline-custom shadow-[2px_2px_0px_0px_#000]">
-                GENESIS VERIFIED
-              </div>
-            </div>
+          <h3 className="mb-4 font-display text-3xl md:text-4xl font-black uppercase tracking-tight">
+            Tera (The Giver)
+          </h3>
+          <p className="mb-8 text-lg md:text-xl font-bold opacity-70 leading-snug">
+            You have items that deserve a second life. A bike your child
+            outgrew, a vintage mixer, or extra garden harvest. In TeraMera,
+            givers are the heartbeat of the ecosystem.
+          </p>
+          <ul className="space-y-4">
+            {[
+              "Declutter with purpose",
+              "Build neighborhood karma",
+              "Track your planetary impact",
+            ].map((item, i) => (
+              <li
+                key={i}
+                className="flex items-center gap-3 font-bold text-sm md:text-base"
+              >
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/20 text-primary">
+                  <Check className="h-4 w-4 stroke-[4]" />
+                </div>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </motion.div>
+
+        <motion.div
+          whileHover={{ y: -4 }}
+          className="border-4 border-outline bg-secondary p-6 md:p-10 shadow-brutalist transition-shadow"
+        >
+          <div className="mb-8 flex h-16 w-16 items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="h-12 w-12 text-[#5b4b00]"
+            >
+              <path d="M15.0049 2.00281C17.214 2.00281 19.0049 3.79367 19.0049 6.00281C19.0049 6.73184 18.8098 7.41532 18.4691 8.00392L23.0049 8.00281V10.0028H21.0049V20.0028C21.0049 20.5551 20.5572 21.0028 20.0049 21.0028H4.00488C3.4526 21.0028 3.00488 20.5551 3.00488 20.0028V10.0028H1.00488V8.00281L5.54065 8.00392C5.19992 7.41532 5.00488 6.73184 5.00488 6.00281C5.00488 3.79367 6.79574 2.00281 9.00488 2.00281C10.2001 2.00281 11.2729 2.52702 12.0058 3.35807C12.7369 2.52702 13.8097 2.00281 15.0049 2.00281ZM11.0049 10.0028H5.00488V19.0028H11.0049V10.0028ZM19.0049 10.0028H13.0049V19.0028H19.0049V10.0028ZM9.00488 4.00281C7.90031 4.00281 7.00488 4.89824 7.00488 6.00281C7.00488 7.05717 7.82076 7.92097 8.85562 7.99732L9.00488 8.00281H11.0049V6.00281C11.0049 5.00116 10.2686 4.1715 9.30766 4.02558L9.15415 4.00829L9.00488 4.00281ZM15.0049 4.00281C13.9505 4.00281 13.0867 4.81869 13.0104 5.85355L13.0049 6.00281V8.00281H15.0049C16.0592 8.00281 16.923 7.18693 16.9994 6.15207L17.0049 6.00281C17.0049 4.89824 16.1095 4.00281 15.0049 4.00281Z"></path>
+            </svg>
           </div>
-          <div className="relative">
-            <div className="w-full sm:w-48 h-24 md:h-32 border-4 border-outline-custom bg-surface-container-lowest flex flex-col items-center justify-center rotate-3 md:rotate-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] group-hover:rotate-0 transition-all duration-500 overflow-hidden group-hover:verified-hologram">
-              <span className="material-symbols-outlined text-4xl md:text-5xl text-primary-custom mb-1 transition-colors group-hover:text-on-primary" style={{ fontVariationSettings: "'FILL' 1" }}>verified_user</span>
-              <span className="text-[10px] md:text-xs font-black uppercase tracking-tighter opacity-70 group-hover:text-on-primary group-hover:opacity-100">STATUS: ELITE</span>
-              <div className="absolute inset-0 animate-glimmer opacity-0 group-hover:opacity-100 pointer-events-none"></div>
-            </div>
-            {/* Stamp effect on hover */}
-            <div className="absolute -top-6 -right-6 md:-top-8 md:-right-8 w-20 h-20 md:w-28 md:h-28 pointer-events-none opacity-0 group-hover:opacity-100 group-hover:animate-stamp transition-opacity duration-300 z-20">
-              <div className="w-full h-full bg-primary-container border-4 border-primary-custom flex items-center justify-center rotate-12 shadow-[4px_4px_0px_0px_#000]">
-                <span className="text-primary-custom font-black text-lg md:text-xl uppercase italic leading-none text-center">TRUSTED<br/>GENESIS</span>
-              </div>
-            </div>
-          </div>
-        </div>
+          <h3 className="mb-4 font-display text-3xl md:text-4xl font-black uppercase tracking-tight">
+            Mera (The Receiver)
+          </h3>
+          <p className="mb-8 text-lg md:text-xl font-bold opacity-70 leading-snug">
+            You have a need, a wish, or a curiosity. Why buy new when your
+            neighbor has exactly what you're looking for? Receivers keep the
+            loop moving.
+          </p>
+          <ul className="space-y-4">
+            {[
+              "Find local treasures for free",
+              "Connect with like-minded locals",
+              "Reduce waste in your city",
+            ].map((item, i) => (
+              <li
+                key={i}
+                className="flex items-center gap-3 font-bold text-sm md:text-base"
+              >
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black/10 text-black">
+                  <Check className="h-4 w-4 stroke-[4]" />
+                </div>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </motion.div>
       </div>
     </div>
   </section>
-
 );
 
-const MeraPreview = () => {
-  const [listings, setListings] = useState([]);
-  const [loading, setLoading] = useState(true);
+const LoopSection = () => (
+  <section className="bg-white py-12 md:py-24">
+    <div className="mx-auto max-w-7xl px-6">
+      <div className="mb-12 md:mb-16">
+        <h2 className="mb-4 font-display text-4xl md:text-6xl font-black uppercase tracking-tighter">
+          The Loop of Sharing
+        </h2>
+        <div className="h-2 w-24 bg-primary"></div>
+      </div>
+      <div className="grid gap-6 md:grid-cols-3">
+        {[
+          {
+            num: "01",
+            title: "Snap & Share",
+            desc: "Take a photo of your unused treasure. Describe its story and let it for your neighbors to see.",
+          },
+          {
+            num: "02",
+            title: "Make a Wish",
+            desc: "Need something? Post a 'Wish.' Neighbors can respond with items they're ready to pass on.",
+          },
+          {
+            num: "03",
+            title: "Loop Complete",
+            desc: "Meet up locally, exchange the item, and share a moment. The item finds a new home, and trust grows.",
+          },
+        ].map((step, i) => (
+          <div
+            key={i}
+            className="border-4 border-outline bg-surface p-8 md:p-10 shadow-brutalist transition-transform hover:-translate-y-1"
+          >
+            <span className="mb-8 block font-display text-5xl md:text-7xl font-black text-outline/10">
+              {step.num}
+            </span>
+            <h4 className="mb-4 font-display text-xl md:text-2xl font-black uppercase tracking-tight">
+              {step.title}
+            </h4>
+            <p className="text-base md:text-lg font-bold opacity-60 leading-tight">
+              {step.desc}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+const Treasures = ({ items }) => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchListings = async () => {
-      try {
-        const res = await fetch(apiUrl('/listings'));
-        if (res.ok) {
-          const data = await res.json();
-          // Show only top 3 recent items
-          setListings(data.slice(0, 3));
-        }
-      } catch (err) {
-        console.error('Error fetching listings for preview:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchListings();
-  }, []);
-
-  const handleClaimRedirect = () => {
-    navigate('/signup');
-  };
-
-  if (!loading && listings.length === 0) return null;
-
   return (
-    <section className="py-20 md:py-32 px-4 md:px-8 border-t-4 border-outline-custom bg-surface-container-lowest relative overflow-hidden">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-8 mb-16">
-          <div className="text-center lg:text-left">
-            <div className="inline-block bg-[#0E676F] text-white px-4 py-1 border-[3px] border-outline-custom shadow-[4px_4px_0px_0px_#000] rotate-1 mb-4">
-              <span className="text-xs font-black uppercase tracking-widest italic">Live Neighborhood Feed</span>
-            </div>
-            <h2 className="text-4xl sm:text-6xl md:text-7xl font-black uppercase leading-none tracking-tighter">
-              Active <span className="text-primary-custom italic">Treasures</span>
+    <section className="bg-[#F2F2F2] py-12 md:py-24">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <h2 className="mb-2 font-display text-4xl md:text-6xl font-black uppercase tracking-tighter">
+              Nearby Treasures
             </h2>
+            <p className="font-display font-black uppercase tracking-widest text-primary/60 text-xs md:text-sm">
+              Available right now in your zip code
+            </p>
           </div>
-          
-          <Link 
-            to="/mera" 
-            className="group flex items-center gap-3 bg-white border-[3px] border-outline-custom px-8 py-4 font-black uppercase text-sm shadow-[6px_6px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[10px_10px_0px_0px_#000] active:translate-y-0 active:shadow-none transition-all"
-          >
-            Explore All on Mera
-            <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          <Link to="/mera" className="w-full md:w-auto">
+            <button className="w-full border-2 border-outline bg-white px-6 py-2 font-display text-xs md:text-sm font-black uppercase tracking-widest shadow-brutalist-sm hover:shadow-brutalist">
+              View All Items
+            </button>
           </Link>
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse bg-surface-container border-4 border-outline-custom h-[450px]"></div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {listings.map((item) => (
-              <ListingCard 
-                key={item._id} 
-                listing={item} 
-                onClaim={handleClaimRedirect} 
-                isRequested={false} 
-              />
-            ))}
-          </div>
-        )}
-
-        <div className="mt-16 p-8 border-4 border-dashed border-outline-custom bg-secondary-container/10 text-center">
-          <p className="text-xl font-bold uppercase italic text-on-surface-variant mb-6">Your neighborhood is sharing resources right now.</p>
-          <button 
-            onClick={() => navigate('/waitlist')}
-            className="bg-primary-custom text-on-primary font-black px-12 py-4 border-[3px] border-outline-custom shadow-[4px_4px_0px_0px_#000] hover:-translate-y-0.5 transition-all uppercase text-sm"
-          >
-            Claim Your Spot in the Loop
-          </button>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {items.length > 0 ? (
+            items.map((item, i) => (
+              <div
+                key={item._id || i}
+                className="border-4 border-outline bg-white shadow-brutalist transition-transform hover:-translate-y-1"
+              >
+                <div className="relative aspect-square overflow-hidden border-b-4 border-outline">
+                  <img
+                    src={item.images?.[0] || "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600"}
+                    alt={item.title}
+                    className="h-full w-full object-cover grayscale hover:grayscale-0 transition-all"
+                  />
+                  <div className="absolute top-4 left-4 bg-accent-orange px-2 py-0.5 font-display text-[10px] font-black uppercase text-white outline outline-2 outline-outline">
+                    {item.category}
+                  </div>
+                </div>
+                <div className="p-5">
+                  <h5 className="mb-1 font-display text-lg md:text-xl font-black uppercase leading-tight truncate">
+                    {item.title}
+                  </h5>
+                  <p className="mb-6 text-[10px] md:text-[11px] font-bold uppercase tracking-wider opacity-40">
+                    {item.location} • {new Date(item.createdAt).toLocaleDateString()}
+                  </p>
+                  <button 
+                    onClick={() => navigate('/login?redirect=mera')}
+                    className="w-full border-4 border-outline bg-secondary py-3 font-display text-xs md:text-sm font-black uppercase tracking-widest shadow-brutalist-sm hover:shadow-brutalist"
+                  >
+                    Claim Item
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full py-12 text-center border-4 border-dashed border-outline/20">
+              <p className="font-display font-black uppercase tracking-widest opacity-40">Scanning for treasures...</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
   );
 };
 
-const FinalCTA = () => (
-  <section className="py-24 md:py-32 px-4 md:px-8 text-center bg-surface-custom border-t-4 border-outline-custom relative overflow-hidden">
-    <div className="absolute top-0 left-0 w-full h-full waitlist-grid-bg opacity-30 -z-10"></div>
-    <div className="max-w-4xl mx-auto relative group">
-      <div className="absolute inset-0 bg-secondary-fixed translate-x-3 translate-y-3 md:translate-x-6 md:translate-y-6 -z-10 border-4 border-outline-custom"></div>
-      
-      <div className="bg-surface-container-lowest border-4 md:border-8 border-outline-custom p-8 sm:p-12 md:p-20 relative z-10 transition-transform group-hover:-translate-x-2 md:group-hover:-translate-x-3 group-hover:-translate-y-2 md:group-hover:-translate-y-3 shadow-[8px_8px_0px_0px_#757777] md:shadow-[12px_12px_0px_0px_#757777]">
-        <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase mb-6 md:mb-8 leading-none tracking-tighter">Ready to Close the Loop?</h2>
-        <p className="text-lg sm:text-xl md:text-2xl font-bold uppercase mb-10 md:mb-16 italic text-on-surface-variant">Spots are filling up by neighborhood. Don't let your street be last.</p>
-        <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-8">
-          <button 
-             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-             className="w-full sm:w-auto bg-primary-custom text-on-primary text-xl md:text-2xl font-black uppercase px-12 py-5 md:py-6 border-4 border-outline-custom shadow-[6px_6px_0px_0px_#000] md:shadow-[8px_8px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[10px_10px_0px_0px_#000] active:translate-y-0 active:shadow-none transition-all"
-          >
-            Join Waitlist
-          </button>
+const TrustSection = () => (
+  <section className="bg-dark py-16 md:py-32 text-white overflow-hidden">
+    <div className="mx-auto max-w-7xl px-6">
+      <div className="grid gap-16 md:gap-20 lg:grid-cols-2">
+        <div className="text-center lg:text-left">
+          <h2 className="mb-8 font-display text-5xl md:text-7xl font-black uppercase leading-[0.9] tracking-tighter text-secondary">
+            Trust is Local. Trust is You.
+          </h2>
+          <p className="mx-auto lg:mx-0 mb-12 md:mb-16 max-w-md text-lg md:text-xl font-bold opacity-60 leading-relaxed">
+            We aren't a marketplace; we're a community. Every user has a Karma
+            Score based on successful loops and verified local handoffs. No
+            shipping, no bots, just neighbors.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-10 md:gap-16">
+            <div>
+              <div className="font-display text-5xl md:text-6xl font-black">
+                98%
+              </div>
+              <div className="text-[10px] md:text-xs font-bold uppercase tracking-widest opacity-40">
+                Successful Handoffs
+              </div>
+            </div>
+            <div>
+              <div className="font-display text-5xl md:text-6xl font-black">
+                15k+
+              </div>
+              <div className="text-[10px] md:text-xs font-bold uppercase tracking-widest opacity-40">
+                Neighbors Joined
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-6 max-w-2xl mx-auto lg:max-w-none">
+          <div className="border-4 border-white/20 bg-white/5 p-6 md:p-8 backdrop-blur-sm card1 lg:translate-x-6">
+            <div className="mb-6 border-l-4 md:border-l-8 border-accent-orange pl-4 md:pl-6 font-display text-base md:text-lg font-bold leading-snug italic opacity-80">
+              "Met Sarah three blocks away to pick up some baking tins. We ended
+              up sharing recipes for an hour. This is what community feels
+              like."
+            </div>
+            <div className="font-display text-xs md:text-sm font-black uppercase tracking-widest text-[#FF8E53]">
+              — Shaharsh, Vasant Vihar
+            </div>
+          </div>
+
+          <div className="border-4 border-white/20 bg-white/5 p-6 md:p-8 backdrop-blur-sm card2 lg:-translate-x-5">
+            <div className="mb-6 border-l-4 md:border-l-8 border-primary pl-4 md:pl-6 font-display text-base md:text-lg font-bold leading-snug italic opacity-80">
+              "Gave away my old acoustic guitar to a teenager starting lessons.
+              Seeing the joy was better than any ₹5000 I could have made on a
+              resale app."
+            </div>
+            <div className="font-display text-xs md:text-sm font-black uppercase tracking-widest text-primary">
+              — Neelam, Palava
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
-
 );
 
-const Home = () => {
+const FAQItem = ({ question, answer }) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+
   return (
-    <div className="min-h-screen bg-surface-custom text-on-surface wine-body">
-      <Navbar />
-      <main>
-        <Hero />
-        <TwoSides />
-        <MeraPreview />
-        <WhyJoin />
-        <FinalCTA />
-      </main>
-      <Footer />
+    <div className="border-4 border-outline bg-white shadow-brutalist transition-all hover:shadow-brutalist-lg">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between p-6 md:p-8 text-left"
+      >
+        <span className="font-display text-lg md:text-xl font-black uppercase tracking-tight">
+          {question}
+        </span>
+        <motion.div
+          animate={{ rotate: isOpen ? 45 : 0 }}
+          className="flex-shrink-0 ml-4"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 4V20"
+              stroke="currentColor"
+              strokeWidth="4"
+              strokeLinecap="square"
+            />
+            <path
+              d="M4 12H20"
+              stroke="currentColor"
+              strokeWidth="4"
+              strokeLinecap="square"
+            />
+          </svg>
+        </motion.div>
+      </button>
+      <motion.div
+        initial={false}
+        animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
+        className="overflow-hidden"
+      >
+        <div className="px-6 pb-6 md:px-8 md:pb-8 border-t-4 border-outline bg-surface/30">
+          <p className="text-base md:text-lg font-bold opacity-70 mt-4">
+            {answer}
+          </p>
+        </div>
+      </motion.div>
     </div>
   );
 };
 
-export default Home;
+const FAQ = () => {
+  const questions = [
+    {
+      question: "What is a circular economy?",
+      answer:
+        "A circular model is a system where we keep products and materials in use for as long as possible. Instead of the traditional 'take-make-waste' model, we focus on sharing, reusing, and repurposing to minimize environmental impact.",
+    },
+    {
+      question: "Who are Teras and Meras?",
+      answer:
+        "Teras (Givers) are neighborhood heroes sharing items they no longer need. Meras (Receivers) are community members who give those items a second life. It's about closing the loop of sharing locally.",
+    },
+    {
+      question: "How does the 5% fee work?",
+      answer:
+        "For premium items that include a small transaction fee, we take a minimal 5% cut. This helps us keep the platform ad-free, run neighborhood verification programs, and maintain a secure community loop.",
+    },
+    {
+      question: "What is a karma score?",
+      answer:
+        "Karma Score tracks your positive impact in the neighborhood. It's earned through successful sharing, reliable meetups, and quality contributions. High Karma unlocks trust badges and priority access to popular items.",
+    },
+    {
+      question: "Is my identity safe?",
+      answer:
+        "Absolutely. We use local verification and moderated signups. Your exact address is never public—handoffs are coordinated through secure chats, and you control who sees your neighborhood profile.",
+    },
+  ];
+
+  return (
+    <section className="bg-white py-12 md:py-24">
+      <div className="mx-auto max-w-4xl px-6">
+        <div className="mb-12 md:mb-16">
+          <h2 className="mb-4 font-display text-4xl md:text-6xl font-black uppercase tracking-tighter text-primary">
+            COMMON QUESTIONS
+          </h2>
+          <div className="h-2 w-full bg-primary/20 relative">
+            <div className="absolute left-0 top-0 h-full w-24 bg-primary"></div>
+          </div>
+        </div>
+        <div className="space-y-4 md:space-y-6">
+          {questions.map((item, i) => (
+            <FAQItem key={i} question={item.question} answer={item.answer} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const CTA = () => (
+  <section className="relative bg-[#76efef] py-16 md:py-32 text-center overflow-hidden">
+    <div className="absolute right-[-10%] top-1/2 -translate-y-1/2 opacity-[0.05] md:opacity-[0.08] rotate-[12deg] pointer-events-none">
+      <Leaf className="h-[250px] w-[250px] md:h-[400px] md:w-[400px] text-dark shadow-brutalist" />
+    </div>
+
+    <div className="relative z-10 mx-auto max-w-4xl px-6">
+      <h2 className="mb-8 font-display text-4xl sm:text-5xl md:text-[72px] lg:text-[90px] font-black uppercase tracking-tight leading-[0.85] text-dark">
+        Ready to Close the
+        <br /> Loop?
+      </h2>
+      <p className="mb-10 md:mb-14 font-display text-xs md:text-base font-black uppercase tracking-widest text-dark opacity-90">
+        Your first neighbor is already waiting to meet you.
+      </p>
+      <div className="flex flex-col justify-center gap-6 sm:flex-row">
+        <Link to="/signup">
+          <button className="w-full sm:w-auto border-4 border-outline bg-dark px-10 py-4 font-display text-lg font-black uppercase tracking-widest text-white shadow-brutalist hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+            Join the Movement
+          </button>
+        </Link>
+      </div>
+    </div>
+  </section>
+);
+
+export default function Home() {
+  const [items, setItems] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await fetch(apiUrl("/listings"));
+        if (response.ok) {
+          const data = await response.json();
+          setItems(data.slice(0, 4));
+        }
+      } catch (error) {
+        console.error("Error fetching listings:", error);
+      }
+    };
+    fetchItems();
+  }, []);
+
+  return (
+    <div className="min-h-screen selection:bg-secondary">
+      <Navbar />
+      <Hero />
+      <Features />
+      <LoopSection />
+      <Treasures items={items} />
+      <TrustSection />
+      <FAQ />
+      <CTA />
+      <Footer />
+    </div>
+  );
+}

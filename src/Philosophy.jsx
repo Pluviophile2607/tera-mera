@@ -20,7 +20,7 @@ const Hero = () => {
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-6">
           <button 
-            onClick={() => navigate('/waitlist')}
+            onClick={() => navigate('/signup')}
             className="w-full sm:w-auto bg-primary-custom text-on-primary text-xl font-black uppercase px-12 py-5 border-[3px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:shadow-none transition-all"
           >
             Join the Movement
@@ -126,7 +126,7 @@ const MissionState = () => (
                     { val: "ZERO", label: "COMMISSION" },
                     { val: "100%", label: "PRIVATE" },
                     { val: "HYPER", label: "LOCAL" },
-                    { val: "BORN IN", label: "MUMBAI" }
+                    { val: "BORN IN", label: "Palava" }
                 ].map((item, idx) => (
                     <div key={idx} className="border-t-[2px] border-white/20 pt-6">
                         <div className="text-2xl font-black text-primary-container">{item.val}</div>
