@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logoSvg from '../assets/tera-mera logo.svg';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,8 +19,8 @@ const Navbar = () => {
   return (
     <nav className="border-b-[3px] border-outline-custom bg-white px-4 md:px-12 py-4 md:py-5 flex justify-between items-center sticky top-0 z-50">
       <div className="flex items-center">
-        <Link to="/" className="text-2xl md:text-3xl font-black text-primary-custom italic font-headline cursor-pointer transition-transform hover:scale-105 select-none tracking-tighter">
-          TeraMera
+        <Link to="/" className="cursor-pointer transition-transform hover:scale-105 select-none inline-block">
+          <img src={logoSvg} alt="TeraMera" className="h-8 md:h-10 w-auto" />
         </Link>
       </div>
 
@@ -102,8 +103,8 @@ const Navbar = () => {
       {isOpen && (
         <div className="fixed inset-0 z-[100] bg-[#f0f1f1] flex flex-col animate-in fade-in slide-in-from-top duration-300">
           <div className="border-b-[3px] border-outline-custom bg-white px-4 py-4 flex justify-between items-center">
-            <Link to="/" onClick={toggleMenu} className="text-2xl font-black text-primary-custom italic font-headline cursor-pointer tracking-tighter">
-              TeraMera
+            <Link to="/" onClick={toggleMenu} className="cursor-pointer inline-block">
+              <img src={logoSvg} alt="TeraMera" className="h-6 md:h-8 w-auto" />
             </Link>
             <button 
               onClick={toggleMenu}

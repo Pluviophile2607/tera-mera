@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { apiUrl } from './lib/api';
+import logoSvg from './assets/tera-mera logo.svg';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -58,8 +59,7 @@ const Login = () => {
         {/* Header */}
         <header className="flex flex-col gap-4 text-left">
           <Link to="/" className="inline-flex items-center gap-2 mb-2 group w-fit">
-            <span className="material-symbols-outlined text-primary-custom text-3xl font-bold group-hover:scale-110 transition-transform" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-            <span className="font-black tracking-widest uppercase italic font-headline text-primary-custom">TeraMera</span>
+            <img src={logoSvg} alt="TeraMera" className="h-6 md:h-8 w-auto" />
           </Link>
           <h1 className="font-headline text-5xl sm:text-6xl font-black leading-[0.9] tracking-tighter uppercase text-on-surface">
             Log Back<br/>

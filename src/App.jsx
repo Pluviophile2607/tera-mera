@@ -15,6 +15,7 @@ import Admin from './Admin';
 import Dashboard from './Dashboard';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navigate } from 'react-router-dom';
+import PixelPreloader from './components/PixelPreloader';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -102,6 +103,7 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
+      <PixelPreloader />
       <AppRoutes />
     </AuthProvider>
   );

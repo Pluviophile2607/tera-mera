@@ -6,9 +6,12 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { apiUrl } from "./lib/api";
+import { useAuth } from "./context/AuthContext";
+import { AnimatePresence } from "framer-motion";
+import logoSvg from "./assets/tera-mera logo.svg";
 
-const Hero = () => (
-  <section className="relative bg-white pt-8 pb-16 md:pt-16 md:pb-24 lg:pt-24 lg:pb-32 overflow-hidden">
+const Hero = ({ onBrowseClick }) => (
+  <section className="relative bg-white pt-0 pb-8 md:pt-2 md:pb-12 lg:pt-4 lg:pb-16 overflow-hidden">
     <div className="mx-auto max-w-7xl px-6">
       <div className="grid gap-12 lg:gap-16 lg:grid-cols-2 lg:items-center">
         <motion.div
@@ -25,7 +28,7 @@ const Hero = () => (
             <br />
             <span className="text-primary italic">Mera Tera!</span>
           </h1>
-          <p className="mx-auto lg:mx-0 mb-10 max-w-lg text-lg sm:text-xl md:text-2xl font-bold leading-tight opacity-90">
+          <p className="mx-auto lg:mx-0 mb-6 max-w-lg text-lg sm:text-xl md:text-2xl font-bold leading-tight opacity-90">
             The neighborhood loop where giving is as rewarding as receiving.
             Share what you have, wish for what you need.
           </p>
@@ -35,13 +38,16 @@ const Hero = () => (
                 Start Sharing
               </button>
             </Link>
-            <button className="w-full sm:w-auto border-4 border-outline bg-white px-8 py-4 font-display text-lg md:text-xl font-black uppercase tracking-widest text-on-surface shadow-brutalist hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutalist-lg transition-all">
+            <button 
+              onClick={onBrowseClick}
+              className="w-full sm:w-auto border-4 border-outline bg-white px-8 py-4 font-display text-lg md:text-xl font-black uppercase tracking-widest text-on-surface shadow-brutalist hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutalist-lg transition-all"
+            >
               Browse Neighborhood
             </button>
           </div>
         </motion.div>
 
-        <div className="relative max-w-2xl mx-auto lg:max-w-none">
+        <div className="relative max-w-xl mx-auto lg:max-w-lg">
           <div className="relative z-10 border-[6px] md:border-[10px] border-secondary bg-white p-2 shadow-brutalist-lg">
             <img
               src={heroImage}
@@ -59,7 +65,7 @@ const Hero = () => (
 );
 
 const Features = () => (
-  <section className="bg-[#F2F2F2] py-12 md:py-24">
+  <section className="bg-[#F2F2F2] pt-8 pb-6 md:pt-16 md:pb-12">
     <div className="mx-auto max-w-7xl px-6">
       <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
         <motion.div
@@ -149,7 +155,7 @@ const Features = () => (
 );
 
 const LoopSection = () => (
-  <section className="bg-white py-12 md:py-24">
+  <section className="bg-white pt-6 pb-6 md:pt-12 md:pb-12">
     <div className="mx-auto max-w-7xl px-6">
       <div className="mb-12 md:mb-16">
         <h2 className="mb-4 font-display text-4xl md:text-6xl font-black uppercase tracking-tighter">
@@ -199,7 +205,7 @@ const Treasures = ({ items }) => {
   const navigate = useNavigate();
 
   return (
-    <section className="bg-[#F2F2F2] py-12 md:py-24">
+    <section className="bg-[#F2F2F2] pt-6 pb-6 md:pt-12 md:pb-12">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
@@ -322,13 +328,21 @@ const TrustSection = () => (
   </section>
 );
 
-const FAQItem = ({ question, answer }) => {
+const FAQItem = ({ question, answer, onOpen }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+
+  const handleToggle = () => {
+    const nextState = !isOpen;
+    setIsOpen(nextState);
+    if (nextState && onOpen) {
+      onOpen();
+    }
+  };
 
   return (
     <div className="border-4 border-outline bg-white shadow-brutalist transition-all hover:shadow-brutalist-lg">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         className="w-full flex items-center justify-between p-6 md:p-8 text-left"
       >
         <span className="font-display text-lg md:text-xl font-black uppercase tracking-tight">
@@ -376,6 +390,8 @@ const FAQItem = ({ question, answer }) => {
 };
 
 const FAQ = () => {
+  const [openedIndices, setOpenedIndices] = React.useState(new Set());
+  
   const questions = [
     {
       question: "What is a circular economy?",
@@ -404,20 +420,40 @@ const FAQ = () => {
     },
   ];
 
+  const handleOpen = (index) => {
+    setOpenedIndices((prev) => {
+      const next = new Set(prev);
+      next.add(index);
+      return next;
+    });
+  };
+
+  const progressPercentage = (openedIndices.size / questions.length) * 100;
+
   return (
-    <section className="bg-white py-12 md:py-24">
+    <section className="bg-white pt-6 pb-12 md:pt-12 md:pb-24">
       <div className="mx-auto max-w-4xl px-6">
         <div className="mb-12 md:mb-16">
           <h2 className="mb-4 font-display text-4xl md:text-6xl font-black uppercase tracking-tighter text-primary">
             COMMON QUESTIONS
           </h2>
           <div className="h-2 w-full bg-primary/20 relative">
-            <div className="absolute left-0 top-0 h-full w-24 bg-primary"></div>
+            <motion.div 
+              initial={{ width: 0 }}
+              animate={{ width: `${progressPercentage}%` }}
+              className="absolute left-0 top-0 h-full bg-primary"
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            ></motion.div>
           </div>
         </div>
         <div className="space-y-4 md:space-y-6">
           {questions.map((item, i) => (
-            <FAQItem key={i} question={item.question} answer={item.answer} />
+            <FAQItem 
+              key={i} 
+              question={item.question} 
+              answer={item.answer} 
+              onOpen={() => handleOpen(i)}
+            />
           ))}
         </div>
       </div>
@@ -452,6 +488,20 @@ const CTA = () => (
 
 export default function Home() {
   const [items, setItems] = React.useState([]);
+  const [showModal, setShowModal] = React.useState(false);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (showModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showModal]);
 
   React.useEffect(() => {
     const fetchItems = async () => {
@@ -468,17 +518,77 @@ export default function Home() {
     fetchItems();
   }, []);
 
+  const handleBrowseClick = () => {
+    if (isAuthenticated) {
+      navigate("/mera");
+    } else {
+      setShowModal(true);
+    }
+  };
+
   return (
-    <div className="min-h-screen selection:bg-secondary">
+    <div className="min-h-screen selection:bg-secondary relative">
       <Navbar />
-      <Hero />
+      <Hero onBrowseClick={handleBrowseClick} />
       <Features />
       <LoopSection />
       <Treasures items={items} />
-      <TrustSection />
+      {/* <TrustSection /> */}
       <FAQ />
       <CTA />
       <Footer />
+
+      {/* Login Modal */}
+      <AnimatePresence>
+        {showModal && (
+          <div className="fixed inset-0 z-[11000] flex items-center justify-center p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowModal(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.9, y: 20, opacity: 0 }}
+              className="relative w-full max-w-md border-4 border-outline bg-white p-8 shadow-brutalist-lg"
+            >
+              <button 
+                onClick={() => setShowModal(false)}
+                className="absolute right-4 top-4 text-on-surface hover:rotate-90 transition-transform"
+              >
+                <X className="h-6 w-6" />
+              </button>
+              
+              <div className="mb-6 h-16 w-auto flex items-center justify-start">
+                <img src={logoSvg} alt="TeraMera" className="h-10 w-auto" />
+              </div>
+
+              <h3 className="mb-4 font-display text-3xl font-black uppercase tracking-tight">
+                Wait a Moment!
+              </h3>
+              <p className="mb-8 font-display text-sm font-bold uppercase tracking-widest text-on-surface opacity-70 leading-relaxed">
+                You need to be logged in to browse the neighborhood listings and connect with neighbors.
+              </p>
+
+              <div className="flex flex-col gap-4">
+                <Link to="/login" className="w-full">
+                  <button className="w-full border-4 border-outline bg-primary py-3 font-display text-sm font-black uppercase tracking-[0.2em] text-white shadow-brutalist hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                    Log In Now
+                  </button>
+                </Link>
+                <Link to="/signup" className="w-full">
+                  <button className="w-full border-4 border-outline bg-white py-3 font-display text-sm font-black uppercase tracking-[0.2em] text-on-surface shadow-brutalist hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                    Create Account
+                  </button>
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

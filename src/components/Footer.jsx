@@ -1,11 +1,11 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
+import logoSvg from '../assets/tera-mera logo.svg';
 
 const Footer = () => (
   <footer className="bg-surface-container-high border-t-[3px] border-outline-custom px-6 md:px-12 py-10 md:py-12 flex flex-col md:flex-row justify-between items-center gap-10 md:gap-12">
     <div className="flex flex-col gap-3 items-center md:items-start text-center md:text-left group w-full md:w-auto">
-      <Link to="/" className="text-2xl md:text-3xl font-black uppercase tracking-tighter hover:text-primary-custom transition-colors cursor-pointer">
-        TeraMera
+      <Link to="/" className="cursor-pointer inline-block">
+        <img src={logoSvg} alt="TeraMera" className="h-8 md:h-10 w-auto hover:opacity-80 transition-opacity" />
       </Link>
       <span className="text-[10px] md:text-sm font-bold text-on-surface-variant uppercase tracking-tight italic bg-surface-container-highest px-3 py-1 border-[1px] border-outline-custom/50 inline-block">
         © 2026 TeraMera. Built for the Neighborhood.
