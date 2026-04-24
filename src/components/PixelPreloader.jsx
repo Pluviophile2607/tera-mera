@@ -49,7 +49,7 @@ const PixelPreloader = () => {
             <img 
               src={logoSvg} 
               alt="Tera Mera" 
-              className="h-24 md:h-32 w-auto opacity-90"
+              className="h-16 md:h-32 w-auto opacity-90"
             />
           </motion.div>
         </motion.div>

@@ -11,7 +11,7 @@ import { AnimatePresence } from "framer-motion";
 import logoSvg from "./assets/tera-mera logo.svg";
 
 const Hero = ({ onBrowseClick }) => (
-  <section className="relative bg-white pt-0 pb-8 md:pt-2 md:pb-12 lg:pt-4 lg:pb-16 overflow-hidden">
+  <section className="relative bg-white pt-6 pb-8 md:pt-2 md:pb-12 lg:pt-4 lg:pb-16 overflow-hidden">
     <div className="mx-auto max-w-7xl px-6">
       <div className="grid gap-12 lg:gap-16 lg:grid-cols-2 lg:items-center">
         <motion.div
