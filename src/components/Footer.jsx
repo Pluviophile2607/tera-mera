@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-const logoUrl = "https://cdn.designfast.io/image/2026-04-24/1c9f13ac-fb01-4fea-9853-149bfc9d3749.png";
+const logoUrl = "https://cdn.designfast.io/image/2026-04-24/8e2b8b99-262e-4f37-976d-54efc96987a6.png";
 
 const Footer = () => (
   <footer className="bg-surface-container-high border-t-[3px] border-outline-custom px-6 md:px-12 py-10 md:py-12 flex flex-col md:flex-row justify-between items-center gap-10 md:gap-12">

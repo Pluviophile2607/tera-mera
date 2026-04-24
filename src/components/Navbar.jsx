@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-const logoUrl = "https://cdn.designfast.io/image/2026-04-24/1c9f13ac-fb01-4fea-9853-149bfc9d3749.png";
+const logoUrl = "https://cdn.designfast.io/image/2026-04-24/8e2b8b99-262e-4f37-976d-54efc96987a6.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
